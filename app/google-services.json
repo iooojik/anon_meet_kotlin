@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "717112870374",
+    "project_id": "anon-meet",
+    "storage_bucket": "anon-meet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717112870374:android:779eadd790698a531b0227",
+        "android_client_info": {
+          "package_name": "iooojik.anon.meet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717112870374-5cs7qhm4f83g7vqldo6e6p9i007mamth.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "iooojik.anon.meet",
+            "certificate_hash": "413b588d625f86bf10f72bd3bcfaf15455b25c86"
+          }
+        },
+        {
+          "client_id": "717112870374-p88hnqu0h35fui9abic68lkmgds0nkds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "iooojik.anon.meet",
+            "certificate_hash": "63f09797151312a4ccf5a5b8c62ed6187c8b622b"
+          }
+        },
+        {
+          "client_id": "717112870374-rql394crukah754qs75m7fpmpk0gp5e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMuzNCJVUqyTOyH_Ozb1fLU2WitAy4l1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717112870374-rql394crukah754qs75m7fpmpk0gp5e6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "717112870374-qn6m757gvp34q8b1eudjes7stiaksutt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "iooojik.anon.meet"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-6737046334774794~7029402696"
+    }
+  ],
+  "configuration_version": "1"
+}
