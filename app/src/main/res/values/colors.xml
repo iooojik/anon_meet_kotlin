@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- light mode -->
+    <color name="light_mode_primary">#FFFFF9EC</color>
+    <color name="light_mode_primary_variant">#FFFFE4C7</color>
+    <color name="light_mode_primary_dark">#FFF9ECFF</color>
+    <color name="light_mode_secondary">#FFFFE4C7</color>
+    <color name="light_mode_secondary_variant">#FF309397</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="kRed">#FFE46472</color>
+    <color name="kLavender">#FFD5E4FE</color>
+    <color name="kBlue">#FF6488E4</color>
+    <color name="kLightGreen">#FFD9E6DC</color>
+    <color name="kGreen">#FF309397</color>
+    <color name="kDarkBlue">#FF0D253F</color>
+    <color name="primaryBlue">#ff2972ff</color>
+    <color name="light_mode_text_primary">#ff222222</color>
+    <color name="light_mode_text_secondary">#ff94959b</color>
+    <color name="textWhiteGrey">#ff94959b</color>
+    <color name="light_meBubble">#fff1f1f5</color>
+    <color name="light_notMeBubble">#FFFFF9EC</color>
+    <!-- dark mode -->
+    <color name="dark_mode_primary">#ff1f253d</color>
+    <color name="dark_mode_primary_variant">#ff201b2c</color>
+    <color name="dark_mode_primary_dark">#ff242333</color>
+    <color name="dark_mode_secondary">#ff242333</color>
+    <color name="dark_mode_secondary_variant">#FF309397</color>
+    <color name="kPalePink">#FFFED4D6</color>
+    <color name="meBubble">#ff6c5ece</color>
+    <color name="dark_notMeBubble">#FFFFF9EC</color>
+    <color name="dark_mode_text_primary">#FFFFFFFF</color>
+    <color name="dark_mode_text_secondary">#FFFFFFFF</color>
+
 </resources>
