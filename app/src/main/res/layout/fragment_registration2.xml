@@ -45,7 +45,7 @@
                 android:layout_margin="@dimen/standard_margin"
                 android:backgroundTint="?attr/colorAccent"
                 android:gravity="center"
-                app:icon="@drawable/outline_dark_mode_24"
+                app:icon="@drawable/outline_calendar_today_24"
                 app:iconTint="?android:textColor" />
 
         </LinearLayout>
