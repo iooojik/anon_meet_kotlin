@@ -19,7 +19,7 @@
     <color name="light_mode_text_secondary">#ff94959b</color>
     <color name="textWhiteGrey">#ff94959b</color>
     <color name="light_meBubble">#fff1f1f5</color>
-    <color name="light_notMeBubble">#FFFFF9EC</color>
+    <color name="light_notMeBubble">#FF309397</color>
     <!-- dark mode -->
     <color name="dark_mode_primary">#ff1f253d</color>
     <color name="dark_mode_primary_variant">#ff201b2c</color>

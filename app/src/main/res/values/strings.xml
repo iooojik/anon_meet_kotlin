@@ -1,14 +1,24 @@
 <resources>
     <string name="app_name">Anon Meet</string>
-    <string name="login_fragment_name">Авторизация</string>
+    <string name="login_fragment_title">Авторизация</string>
+    <!--<string name="register_fragment_title">Давай знакомиться! Придумай себе ник и пароль!</string>-->
+    <string name="register_fragment1_title">Регистрация</string>
+    <string name="register_fragment2_title">Регистрация</string>
+    <string name="settings_title">Настройки</string>
+    <string name="register_fragment_subtitle">Никто, кроме тебя, не будет их знать</string>
     <string name="turn_on_dark_mode">Включить ночной режим</string>
     <string name="turn_off_dark_mode">Выключить ночной режим</string>
     <string name="turn_on_off_dark_mode">Включить/Выключить ночной режим</string>
     <string name="nickname">Никнейм</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
+    <string name="go_next">Продолжить</string>
+    <string name="date_hint">дд.мм.гггг</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="filters_title">Выберите параметры</string>
     <string name="copyright">© iooojik</string>
+    <string name="send_message">Отправить сообщение</string>
+    <string name="message">Сообщение…</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

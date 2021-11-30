@@ -45,28 +45,13 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <Button
-            android:id="@+id/login_Button"
+            android:id="@+id/go_to_next_page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/standard_margin"
-            android:text="@string/login" />
-
-        <Button
-            android:id="@+id/go_to_registration_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/standard_margin"
-            style="@style/textButtonStyle"
-            android:text="@string/register" />
+            android:text="@string/go_next" />
 
     </LinearLayout>
 

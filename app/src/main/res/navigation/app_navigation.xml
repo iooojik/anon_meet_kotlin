@@ -3,16 +3,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/auth_navigation">
 
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="iooojik.anon.meet.activity.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="iooojik.anon.meet.ui.auth.LoginFragment"
-        android:label="@string/login_fragment_name"
-        tools:layout="@layout/fragment_login" />
+    <navigation
+        android:id="@+id/auth_navigation"
+        app:startDestination="@id/loginFragment">
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="iooojik.anon.meet.ui.auth.login.LoginFragment"
+            android:label="@string/login_fragment_title"
+            tools:layout="@layout/fragment_login">
+            <action
+                android:id="@+id/action_loginFragment_to_registrationFragment1"
+                app:destination="@id/registrationFragment1" />
+        </fragment>
+        <fragment
+            android:id="@+id/registrationFragment1"
+            android:name="iooojik.anon.meet.ui.auth.registration.RegistrationFragment1"
+            android:label="@string/register_fragment1_title"
+            tools:layout="@layout/fragment_registration1">
+            <action
+                android:id="@+id/action_registrationFragment1_to_registrationFragment2"
+                app:destination="@id/registrationFragment2" />
+        </fragment>
+        <fragment
+            android:id="@+id/registrationFragment2"
+            android:name="iooojik.anon.meet.ui.auth.registration.RegistrationFragment2"
+            android:label="@string/register_fragment2_title"
+            tools:layout="@layout/fragment_registration2" />
+        <action
+            android:id="@+id/action_global_filtersFragment"
+            app:destination="@id/main_process_navigation" />
+    </navigation>
+    <navigation
+        android:id="@+id/main_process_navigation"
+        app:startDestination="@id/filtersFragment">
+        <fragment
+            android:id="@+id/filtersFragment"
+            android:name="iooojik.anon.meet.ui.filters.FiltersFragment"
+            android:label="@string/filters_title"
+            tools:layout="@layout/fragment_filters">
+            <action
+                android:id="@+id/action_filtersFragment_to_settingsFragment"
+                app:destination="@id/settingsFragment" />
+            <action
+                android:id="@+id/action_filtersFragment_to_chatProcessFragment"
+                app:destination="@id/chatProcessFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="iooojik.anon.meet.ui.settings.SettingsFragment"
+            android:label="@string/settings_title"
+            tools:layout="@layout/fragment_settings" />
+        <fragment
+            android:id="@+id/chatProcessFragment"
+            android:name="iooojik.anon.meet.ui.chat.ChatProcessFragment"
+            android:label="fragment_chat_process"
+            tools:layout="@layout/fragment_chat_process" />
+    </navigation>
+
 </navigation>
