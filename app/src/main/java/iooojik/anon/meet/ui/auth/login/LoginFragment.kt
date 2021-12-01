@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.FragmentLoginBinding
+import iooojik.anon.meet.models.User
 
 class LoginFragment : Fragment(), LoginFragmentLogic {
     private lateinit var binding: FragmentLoginBinding
@@ -22,9 +23,21 @@ class LoginFragment : Fragment(), LoginFragmentLogic {
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.go_to_registration_button -> {
                 findNavController().navigate(R.id.action_loginFragment_to_registrationFragment1)
+            }
+            R.id.login_Button -> {
+                User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
+                User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
+                if (checkNicknameAndPasswordLength(
+                        requireView(),
+                        resources,
+                        binding.passwordTextField.editText!!.text.trim().toString()
+                    )
+                ) {
+                    auth(findNavController(), requireActivity(), binding)
+                }
             }
         }
     }

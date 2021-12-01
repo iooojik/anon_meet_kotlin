@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
+import iooojik.anon.meet.net.rest.RetrofitHelper
 
 class MainActivity : AppCompatActivity(), ActivityMainLogic {
     private lateinit var binding: ActivityMainBinding
@@ -13,6 +14,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        RetrofitHelper.doRetrofit()
         setUpToolBar(binding, findNavController(R.id.nav_host_fragment))
         setToolBarMenuClickListener(binding, resources, theme)
     }

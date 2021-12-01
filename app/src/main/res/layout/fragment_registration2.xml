@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nickname_text_field"
+                android:id="@+id/birthdate_text_field"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_margin"
@@ -38,6 +38,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+
+                android:id="@+id/select_birth_date"
                 style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,10 +54,10 @@
 
 
         <ProgressBar
-            android:id="@+id/progressBar2"
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1" />
 
         <Button

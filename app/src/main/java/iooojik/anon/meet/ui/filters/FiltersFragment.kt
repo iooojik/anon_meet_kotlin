@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 import iooojik.anon.meet.R
+import iooojik.anon.meet.log
 
 
 class FiltersFragment : Fragment() {

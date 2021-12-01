@@ -19,6 +19,9 @@
     <string name="copyright">© iooojik</string>
     <string name="send_message">Отправить сообщение</string>
     <string name="message">Сообщение…</string>
+    <string name="wrong_nickname">Некорректный никнейм</string>
+    <string name="short_nickname">Короткий никнейм</string>
+    <string name="short_password">Короткий пароль</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
