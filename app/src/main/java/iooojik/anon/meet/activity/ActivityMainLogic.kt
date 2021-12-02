@@ -1,32 +1,103 @@
 package iooojik.anon.meet.activity
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
+import iooojik.anon.meet.log
+import iooojik.anon.meet.models.LoginResponse
+import iooojik.anon.meet.models.User
+import iooojik.anon.meet.models.UserViewModel
+import iooojik.anon.meet.net.rest.RetrofitHelper
+import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
+import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
 
 interface ActivityMainLogic {
 
-    fun setUpToolBar(binding: ActivityMainBinding, navController: NavController) {
-        val toolbar = binding.appBarMain.topAppBar
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.loginFragment,
+    fun checkUserTokenAndAuth(
+        activity: Activity,
+        navController: NavController
+    ) {
+        val preferencesManager = SharedPreferencesManager(activity)
+        preferencesManager.initPreferences()
+        if (preferencesManager.getValue(
+                SharedPrefsKeys.USER_TOKEN,
+                ""
+            ) != null && preferencesManager.getValue(SharedPrefsKeys.USER_TOKEN, "")?.toString()
+                ?.trim()?.isNotBlank() == true
+        ) {
+            authWithUUID(
+                "${
+                    preferencesManager.getValue(
+                        SharedPrefsKeys.TOKEN_HEADER,
+                        ""
+                    )
+                } ${
+                    preferencesManager.getValue(
+                        SharedPrefsKeys.USER_TOKEN,
+                        ""
+                    )
+                }", preferencesManager.getValue(
+                    SharedPrefsKeys.USER_UUID,
+                    ""
+                )!!.toString()
             )
+            try {
+                navController.navigate(R.id.action_global_filtersFragment)
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    fun setUpToolBar(
+        binding: ActivityMainBinding,
+        navController: NavController,
+        activity: AppCompatActivity
+    ) {
+        activity.setSupportActionBar(binding.appBarMain.topAppBar)
+        activity.setupActionBarWithNavController(
+            navController,
+            AppBarConfiguration(navController.graph)
         )
-        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration)
+    }
+
+    fun authWithUUID(token: String, uuid: String) {
+        RetrofitHelper.authService.loginWithUUID(token, User(uuid = uuid))
+            .enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null)
+                            UserViewModel.changeUserInfo(response.body()!!)
+                    } else log(response.errorBody().toString())
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    RetrofitHelper.onFailure(t)
+                }
+
+            })
     }
 
     fun setToolBarMenuClickListener(
         binding: ActivityMainBinding,
         resources: Resources,
-        theme: Resources.Theme
+        theme: Resources.Theme,
+        navController: NavController
     ) {
         //слушатель на нажатое меню в тулбаре
         getCurrentThemeModeAndSetIcon(binding, resources, theme)
@@ -39,6 +110,9 @@ interface ActivityMainLogic {
                     if (it.isChecked)
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                R.id.go_to_settings -> {
+                    navController.navigate(R.id.action_filtersFragment_to_settingsFragment)
                 }
             }
             return@setOnMenuItemClickListener true

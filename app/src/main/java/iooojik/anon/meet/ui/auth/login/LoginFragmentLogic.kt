@@ -9,6 +9,7 @@ import iooojik.anon.meet.databinding.FragmentLoginBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.models.LoginResponse
 import iooojik.anon.meet.models.User
+import iooojik.anon.meet.models.UserViewModel
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
@@ -52,11 +53,8 @@ interface LoginFragmentLogic : View.OnClickListener {
     fun setUserInfoFromResponse(response: Response<LoginResponse>, activity: Activity){
         if (response.body() is LoginResponse) {
             val body = response.body() as LoginResponse
-            User.mUuid = body.user.uuid
-            User.mBirthDate = body.user.birthDate
-            User.mFilter = body.user.filter
-            User.mLastLogin = body.user.lastLogin
-            User.mUserLogin = body.user.userLogin
+            if (response.body() != null)
+                UserViewModel.changeUserInfo(body.user)
 
             val prefsManager = SharedPreferencesManager(activity)
             prefsManager.initPreferences()

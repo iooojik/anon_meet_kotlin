@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/dark_mode"
+        android:id="@+id/go_to_settings"
         android:icon="@drawable/outline_settings_24"
         app:showAsAction="always"
         android:title="@string/settings_title" />

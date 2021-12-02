@@ -3,4 +3,5 @@
     <dimen name="navigation_routes_dimen">8dp</dimen>
     <dimen name="standard_margin">16dp</dimen>
     <dimen name="message_input_dimen">4dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

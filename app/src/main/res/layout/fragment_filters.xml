@@ -1,103 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".ui.filters.FiltersFragment">
 
+    <data>
+        <variable
+            name="user"
+            type="iooojik.anon.meet.models.UserViewModel" />
+    </data>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RadioButton" />
-        </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RadioButton
-                android:id="@+id/radioButton3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RadioButton" />
-
-        </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/textView3"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView4"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/your_sex" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{user.Companion.userMutableLiveData.filter.mySex.equals(`male`)}"
+                    android:text="@string/male_sex" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{user.Companion.userMutableLiveData.filter.mySex.equals(`female`)}"
+                    android:text="@string/female_sex" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:orientation="vertical">
 
-        <SeekBar
-            android:id="@+id/seekBar"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/interlocutor_sex" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{user.Companion.userMutableLiveData.filter.interlocutorSex.equals(`male`)}"
+                    android:text="@string/male_sex" />
+
+                <RadioButton
+                    android:id="@+id/radioButton4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{user.Companion.userMutableLiveData.filter.interlocutorSex.equals(`female`)}"
+                    android:text="@string/female_sex" />
+
+                <RadioButton
+                    android:id="@+id/radioButton5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{user.Companion.userMutableLiveData.filter.interlocutorSex.equals(`nm`)}"
+                    android:text="@string/no_matter_sex" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/interlocutor_age" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{String.format(`%.0f`, user.Companion.userMutableLiveData.filter.interlocutorAgesRange[0])+` - `+String.format(`%.0f`, user.Companion.userMutableLiveData.filter.interlocutorAgesRange[1])}" />
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/age_range_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:valueFrom="0.0"
+                android:valueTo="100.0"
+                android:stepSize="1.0"
+                app:values="@{user.Companion.userMutableLiveData.filter.interlocutorAgesRange}" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

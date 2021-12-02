@@ -22,6 +22,15 @@
     <string name="wrong_nickname">Некорректный никнейм</string>
     <string name="short_nickname">Короткий никнейм</string>
     <string name="short_password">Короткий пароль</string>
+    <string name="male_sex">Мужской</string>
+    <string name="female_sex">Женский</string>
+    <string name="no_matter_sex">Не имеет значения</string>
+    <string name="your_sex">Ваш пол</string>
+    <string name="interlocutor_sex">Пол собеседника</string>
+    <string name="interlocutor_age">Возраст собеседника</string>
+    <string name="find">Найти</string>
+    <string name="text_view_age">%1$s, %2$s лет</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

@@ -4,6 +4,7 @@ import iooojik.anon.meet.models.LoginResponse
 import iooojik.anon.meet.models.User
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 
@@ -14,5 +15,8 @@ interface AuthService {
 
     @POST("auth/registration/")
     fun registration(@Body user: User) : Call<User>
+
+    @POST("auth/uuid.login/")
+    fun loginWithUUID(@Header("Authorization") token: String, @Body user: User) : Call<User>
 
 }
