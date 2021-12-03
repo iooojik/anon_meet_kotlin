@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
         setToolBarMenuClickListener(binding, resources, theme, findNavController(R.id.nav_host_fragment))
         checkUserTokenAndAuth(context = this, findNavController(R.id.nav_host_fragment))
         ProviderInstaller.installIfNeeded(applicationContext)
-
     }
 
     override fun onSupportNavigateUp(): Boolean =

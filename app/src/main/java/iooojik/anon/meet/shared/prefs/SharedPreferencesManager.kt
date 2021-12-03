@@ -40,4 +40,8 @@ class SharedPreferencesManager(private val context: Context) {
         }
         return r
     }
+
+    fun clearAll(){
+        preferences?.edit()?.clear()?.apply()
+    }
 }

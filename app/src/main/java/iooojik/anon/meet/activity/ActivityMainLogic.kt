@@ -1,6 +1,5 @@
 package iooojik.anon.meet.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -9,13 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.log
-import iooojik.anon.meet.models.LoginResponse
 import iooojik.anon.meet.models.User
 import iooojik.anon.meet.models.UserViewModel
 import iooojik.anon.meet.net.rest.RetrofitHelper
@@ -24,7 +21,6 @@ import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 interface ActivityMainLogic {
 
@@ -58,10 +54,18 @@ interface ActivityMainLogic {
             )
             try {
                 navController.navigate(R.id.action_global_filtersFragment)
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
-
+            preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+            if (preferencesManager.getValue(
+                    SharedPrefsKeys.CHAT_ROOM_UUID,
+                    ""
+                ) != null && preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
+                    .toString().trim().isNotBlank()
+            ) {
+                navController.navigate(R.id.chatProcessFragment)
+            }
         }
     }
 
