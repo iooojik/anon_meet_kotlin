@@ -1,6 +1,7 @@
 package iooojik.anon.meet.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
@@ -28,10 +29,10 @@ import java.lang.Exception
 interface ActivityMainLogic {
 
     fun checkUserTokenAndAuth(
-        activity: Activity,
+        context: Context,
         navController: NavController
     ) {
-        val preferencesManager = SharedPreferencesManager(activity)
+        val preferencesManager = SharedPreferencesManager(context)
         preferencesManager.initPreferences()
         if (preferencesManager.getValue(
                 SharedPrefsKeys.USER_TOKEN,

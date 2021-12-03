@@ -9,9 +9,9 @@ class Filter(
     @SerializedName("interlocutorAges")
     var interlocutorAges: String = mInterlocutorAges,
     @SerializedName("interlocutorSex")
-    val interlocutorSex: String = mInterlocutorSex,
+    var interlocutorSex: String = mInterlocutorSex,
     @SerializedName("mySex")
-    val mySex: String = mMySex,
+    var mySex: String = mMySex,
 
 
     ) {

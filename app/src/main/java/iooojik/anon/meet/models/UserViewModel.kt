@@ -23,6 +23,10 @@ class UserViewModel : ViewModel() {
             userMutableLiveData.value = User()
         }
 
+        fun newModel(){
+            userMutableLiveData.value = User()
+        }
+
         init {
             userMutableLiveData.value = User()
         }

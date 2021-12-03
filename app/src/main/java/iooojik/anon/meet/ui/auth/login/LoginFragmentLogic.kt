@@ -1,6 +1,7 @@
 package iooojik.anon.meet.ui.auth.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.res.Resources
 import android.view.View
 import androidx.navigation.NavController
@@ -32,7 +33,7 @@ interface LoginFragmentLogic : View.OnClickListener {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        setUserInfoFromResponse(response = response, activity = activity)
+                        setUserInfoFromResponse(response = response, context = activity.applicationContext)
                         navController.navigate(R.id.action_global_filtersFragment)
                     }
                 } else if(binding != null) RetrofitHelper.onUnsuccessfulResponse(
@@ -50,13 +51,13 @@ interface LoginFragmentLogic : View.OnClickListener {
         })
     }
 
-    fun setUserInfoFromResponse(response: Response<LoginResponse>, activity: Activity){
+    fun setUserInfoFromResponse(response: Response<LoginResponse>, context: Context){
         if (response.body() is LoginResponse) {
             val body = response.body() as LoginResponse
             if (response.body() != null)
                 UserViewModel.changeUserInfo(body.user)
 
-            val prefsManager = SharedPreferencesManager(activity)
+            val prefsManager = SharedPreferencesManager(context)
             prefsManager.initPreferences()
             prefsManager.saveValue(SharedPrefsKeys.USER_TOKEN, body.tokenData.token)
             prefsManager.saveValue(
