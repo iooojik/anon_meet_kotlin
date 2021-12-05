@@ -17,13 +17,7 @@ class LoginFragment : Fragment(), LoginFragmentLogic {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater)
         setListeners(binding)
-        setHasOptionsMenu(true)
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.top_app_bar_auth_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onClick(v: View?) {

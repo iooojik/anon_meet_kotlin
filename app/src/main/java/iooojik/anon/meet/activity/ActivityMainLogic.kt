@@ -21,11 +21,12 @@ import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.ConfirmationBottomSheet
+import iooojik.anon.meet.ui.ThemeSwitcher
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface ActivityMainLogic {
+interface ActivityMainLogic : ThemeSwitcher {
 
     fun checkUserTokenAndAuth(
         context: Context,
@@ -113,12 +114,13 @@ interface ActivityMainLogic {
         binding.appBarMain.topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.dark_mode -> {
+                    changeTheme(activity.applicationContext)
                     //переключатель темы приложения
-                    it.isChecked = !it.isChecked
-                    it.icon = getMenuThemeIcon(it.isChecked, resources, theme)
-                    if (it.isChecked)
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    //it.isChecked = !it.isChecked
+                    //it.icon = getMenuThemeIcon(it.isChecked, resources, theme)
+                    //if (it.isChecked)
+                    //    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    //else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
                 R.id.go_to_settings -> {
                     navController.navigate(R.id.action_filtersFragment_to_settingsFragment)

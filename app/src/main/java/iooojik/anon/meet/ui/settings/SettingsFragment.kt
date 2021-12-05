@@ -31,9 +31,7 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         when (buttonView!!.id) {
             R.id.theme_change_switch -> {
-                if (isChecked)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                changeTheme(requireContext())
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.slider.RangeSlider
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
+import iooojik.anon.meet.log
 
 interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListener,
     CompoundButton.OnCheckedChangeListener {
@@ -24,6 +25,7 @@ interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListe
     }
 
     fun hideBackButton(activity: AppCompatActivity) {
+        log(activity.supportActionBar == null)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
