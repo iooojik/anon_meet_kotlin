@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/message_text_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="@dimen/message_input_dimen"
         android:layout_gravity="center"
+        android:layout_margin="@dimen/message_input_dimen"
+        android:layout_weight="1"
         android:hint="@string/message">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -28,10 +28,10 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/message_input_dimen"
         android:backgroundTint="?attr/colorAccent"
-        app:srcCompat="@drawable/outline_send_24"
-        app:iconTint="?android:textColor"
-        app:fabSize="mini"
+        android:contentDescription="@string/send_message"
         android:elevation="0dp"
-        android:contentDescription="@string/send_message" />
+        app:fabSize="mini"
+        app:iconTint="?android:textColor"
+        app:srcCompat="@drawable/outline_send_24" />
 
 </LinearLayout>

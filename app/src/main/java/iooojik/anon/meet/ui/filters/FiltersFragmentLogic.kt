@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.slider.RangeSlider
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
 
-interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListener, CompoundButton.OnCheckedChangeListener {
-    fun setListeners(binding: FragmentFiltersBinding){
+interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListener,
+    CompoundButton.OnCheckedChangeListener {
+    fun setListeners(binding: FragmentFiltersBinding) {
         binding.ageRangeSlider.addOnChangeListener(this)
         binding.searchButton.setOnClickListener(this)
 
@@ -21,9 +22,11 @@ interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListe
         binding.interlocutorSexFemale.setOnCheckedChangeListener(this)
         binding.interlocutorSexNm.setOnCheckedChangeListener(this)
     }
-    fun hideBackButton(activity: AppCompatActivity){
+
+    fun hideBackButton(activity: AppCompatActivity) {
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
+
     fun blockGoBack(activity: ComponentActivity, fragment: Fragment) {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

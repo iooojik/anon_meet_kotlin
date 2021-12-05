@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 
 class UserViewModel : ViewModel() {
-    companion object{
+    companion object {
         var userMutableLiveData = MutableLiveData<User>()
 
         fun changeUserInfo(newUserInfo: User) {
@@ -18,12 +18,12 @@ class UserViewModel : ViewModel() {
             userMutableLiveData.value = User()
         }
 
-        fun changeInterlocutorAges(interlocutorAges : String){
+        fun changeInterlocutorAges(interlocutorAges: String) {
             User.mFilter.interlocutorAges = interlocutorAges
             userMutableLiveData.value = User()
         }
 
-        fun newModel(){
+        fun newModel() {
             userMutableLiveData.value = User()
         }
 

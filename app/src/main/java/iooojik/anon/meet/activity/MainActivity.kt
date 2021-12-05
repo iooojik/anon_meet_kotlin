@@ -17,7 +17,13 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
         setContentView(binding.root)
         RetrofitHelper.doRetrofit()
         setUpToolBar(binding, findNavController(R.id.nav_host_fragment), this)
-        setToolBarMenuClickListener(binding, resources, theme, findNavController(R.id.nav_host_fragment), this)
+        setToolBarMenuClickListener(
+            binding,
+            resources,
+            theme,
+            findNavController(R.id.nav_host_fragment),
+            this
+        )
         checkUserTokenAndAuth(context = this, findNavController(R.id.nav_host_fragment))
         ProviderInstaller.installIfNeeded(applicationContext)
     }

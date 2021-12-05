@@ -5,8 +5,8 @@ import android.content.res.Resources
 import android.widget.CompoundButton
 import iooojik.anon.meet.databinding.FragmentSettingsBinding
 
-interface SettingsFragmentLogic :  CompoundButton.OnCheckedChangeListener{
-    fun setListeners(binding: FragmentSettingsBinding, resources: Resources){
+interface SettingsFragmentLogic : CompoundButton.OnCheckedChangeListener {
+    fun setListeners(binding: FragmentSettingsBinding, resources: Resources) {
         binding.themeChangeSwitch.isChecked =
             (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
         binding.themeChangeSwitch.setOnCheckedChangeListener(this)

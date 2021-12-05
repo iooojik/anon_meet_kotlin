@@ -1,4 +1,3 @@
 package iooojik.anon.meet.ui.colors
 
-class Colors {
-}
+class Colors

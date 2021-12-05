@@ -1,10 +1,14 @@
 package iooojik.anon.meet.ui.chat
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,25 +16,20 @@ import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
-import iooojik.anon.meet.log
 import iooojik.anon.meet.models.MessageModel
-import iooojik.anon.meet.models.TypingModel
 import iooojik.anon.meet.models.User
 import iooojik.anon.meet.net.sockets.SocketConnections
+import iooojik.anon.meet.net.sockets.SocketService
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
-import ua.naiksoftware.stomp.dto.StompMessage
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private lateinit var binding: FragmentChatProcessBinding
-    private lateinit var preferencesManager: SharedPreferencesManager
     private lateinit var adapter: MessagesAdapter
 
     companion object {
-        var ROOM_UUID = ""
+        const val adapterIntentFilterName = "adapterIntentFilter"
     }
 
     override fun onCreateView(
@@ -39,76 +38,60 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     ): View {
         binding = FragmentChatProcessBinding.inflate(inflater)
         binding.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
-        checkAndConnectToChat()
-        adapter = MessagesAdapter(MessagesViewModel.messages, layoutInflater, requireContext())
+        adapter = MessagesAdapter(layoutInflater)
         binding.messagesRecView.adapter = adapter
         hideBackButton(requireActivity() as AppCompatActivity)
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)
+        Intent(requireActivity(), SocketService::class.java).also { intent ->
+            requireActivity().applicationContext.startService(intent)
+        }
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(mMessageReceiver, IntentFilter(adapterIntentFilterName))
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.top_app_bar_chat_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+    private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
 
-    private fun checkAndConnectToChat() {
-        val prefs = SharedPreferencesManager(requireContext())
-        SocketConnections.connectToServer(
-            prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "").toString() + " " + prefs.getValue(
-                SharedPrefsKeys.USER_TOKEN,
-                ""
-            ).toString()
-        )
-        preferencesManager = SharedPreferencesManager(requireContext())
-        preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-        val roomUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
-        if (roomUuid != null && roomUuid.toString().trim().isNotBlank())
-            ROOM_UUID = roomUuid.toString()
-        SocketConnections.connectToTopic("/topic/$ROOM_UUID/message.topic", ::onMessageReceived)
-    }
+            val typing = intent.extras?.getBoolean("typing")
+            if (typing != null && typing == true) {
+                if (typing) {
 
-    private fun onMessageReceived(topicMessage: StompMessage) {
-        if (topicMessage.payload.trim().isNotBlank()) {
-            when {
-                topicMessage.payload.contains("typing") -> {
-                    val typingModel = Gson().fromJson(topicMessage.payload, TypingModel::class.java)
-                    TypingModel.mTyping = typingModel.typing
-                    TypingModel.mTypingUser = typingModel.typingUser
                 }
-                topicMessage.payload.contains("endChat") -> {
-                    val preferencesManager = SharedPreferencesManager(requireContext())
-                    preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-                    preferencesManager.clearAll()
+            } else {
+                adapter.notifyItemInserted(MessagesViewModel.messages.size - 1)
+            }
+            val endChat = intent.extras?.getBoolean("endChat")
+            if (endChat != null) {
+                if (endChat) {
                     findNavController().navigate(R.id.filtersFragment)
-                    SocketConnections.resetSubscriptions()
-                }
-                else -> {
-                    val msg = Gson().fromJson(topicMessage.payload, MessageModel::class.java)
-                    val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    msg.date = sdf.format(Date())
-                    msg.isMine = User.mUuid == msg.author.uuid
-                    adapter.addMessages(listOf(msg))
-                    binding.messagesRecView.smoothScrollToPosition(adapter.messages.size - 1)
                 }
             }
         }
     }
 
-    override fun onDestroyView() {
-        SocketConnections.resetSubscriptions()
-        super.onDestroyView()
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_app_bar_chat_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(mMessageReceiver)
+        super.onDestroy()
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.send_message -> {
+                val preferencesManager = SharedPreferencesManager(requireContext())
+                preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
                 val messageText = binding.messageInputLayout.messageTextField.editText!!.text
                 if (messageText.trim().isNotBlank()) {
                     SocketConnections.sendStompMessage(
-                        "/app/send.message.$ROOM_UUID",
+                        "/app/send.message.$rUuid",
                         Gson().toJson(
                             MessageModel(
                                 author = User(),
@@ -128,9 +111,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 }
 
 class MessagesAdapter(
-    val messages: MutableList<MessageModel> = mutableListOf(),
-    private val inflater: LayoutInflater,
-    private val context: Context
+    private val inflater: LayoutInflater
 ) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -140,16 +121,8 @@ class MessagesAdapter(
         return MessagesViewHolder(RecyclerViewMessageItemBinding.inflate(inflater, parent, false))
     }
 
-    fun addMessages(newMessages: List<MessageModel>) {
-        newMessages.forEach {
-            messages.add(it)
-            notifyItemInserted(messages.size - 1)
-        }
-    }
-
     override fun onBindViewHolder(holder: MessagesAdapter.MessagesViewHolder, position: Int) {
-        val msgModel = messages[position]
-        log(msgModel.author.uuid)
+        val msgModel = MessagesViewModel.messages[position]
         if (msgModel.isMine) {
             holder.itemBinding.messageText.text = msgModel.text
             holder.itemBinding.timeText.text = msgModel.date
@@ -162,7 +135,7 @@ class MessagesAdapter(
     }
 
     override fun getItemCount(): Int {
-        return messages.size
+        return MessagesViewModel.messages.size
     }
 
     inner class MessagesViewHolder(val itemBinding: RecyclerViewMessageItemBinding) :

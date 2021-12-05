@@ -24,7 +24,7 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.go_to_next_page -> {
                 User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
                 User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()

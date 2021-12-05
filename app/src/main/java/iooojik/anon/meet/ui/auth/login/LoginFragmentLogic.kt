@@ -33,10 +33,13 @@ interface LoginFragmentLogic : View.OnClickListener {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        setUserInfoFromResponse(response = response, context = activity.applicationContext)
+                        setUserInfoFromResponse(
+                            response = response,
+                            context = activity.applicationContext
+                        )
                         navController.navigate(R.id.action_global_filtersFragment)
                     }
-                } else if(binding != null) RetrofitHelper.onUnsuccessfulResponse(
+                } else if (binding != null) RetrofitHelper.onUnsuccessfulResponse(
                     binding.root,
                     response.errorBody(),
                     activity
@@ -51,7 +54,7 @@ interface LoginFragmentLogic : View.OnClickListener {
         })
     }
 
-    fun setUserInfoFromResponse(response: Response<LoginResponse>, context: Context){
+    fun setUserInfoFromResponse(response: Response<LoginResponse>, context: Context) {
         if (response.body() is LoginResponse) {
             val body = response.body() as LoginResponse
             if (response.body() != null)

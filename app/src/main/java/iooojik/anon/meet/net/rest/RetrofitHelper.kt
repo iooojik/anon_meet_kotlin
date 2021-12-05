@@ -19,6 +19,7 @@ class RetrofitHelper {
     companion object {
         @JvmStatic
         lateinit var retrofit: Retrofit
+
         @JvmStatic
         lateinit var authService: AuthService
 
@@ -36,7 +37,11 @@ class RetrofitHelper {
         }
 
 
-        fun onUnsuccessfulResponse(view: View?, response: ResponseBody?, activity: Activity? = null) {
+        fun onUnsuccessfulResponse(
+            view: View?,
+            response: ResponseBody?,
+            activity: Activity? = null
+        ) {
             //обработчик ошибок запроса
             try {
                 if (view != null) {

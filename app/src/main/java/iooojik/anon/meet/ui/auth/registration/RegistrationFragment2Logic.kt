@@ -18,7 +18,11 @@ interface RegistrationFragment2Logic : View.OnClickListener, LoginFragmentLogic 
         binding.selectBirthDate.setOnClickListener(this)
     }
 
-    fun register(binding: FragmentRegistration2Binding, navController : NavController, activity : Activity){
+    fun register(
+        binding: FragmentRegistration2Binding,
+        navController: NavController,
+        activity: Activity
+    ) {
         binding.progressBar.visibility = View.VISIBLE
         RetrofitHelper.authService.registration(User()).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -31,6 +35,7 @@ interface RegistrationFragment2Logic : View.OnClickListener, LoginFragmentLogic 
                     activity
                 )
             }
+
             override fun onFailure(call: Call<User>, t: Throwable) {
                 RetrofitHelper.onFailure(t)
                 binding.progressBar.visibility = View.INVISIBLE
@@ -39,7 +44,7 @@ interface RegistrationFragment2Logic : View.OnClickListener, LoginFragmentLogic 
         })
     }
 
-    fun formatDate(date : String) : String{
+    fun formatDate(date: String): String {
         val dateArr = date.split('.')
         dateArr.forEach {
             log(it.toInt())

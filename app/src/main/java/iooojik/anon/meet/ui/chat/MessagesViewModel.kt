@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import iooojik.anon.meet.models.MessageModel
 
 class MessagesViewModel : ViewModel() {
-    companion object{
+    companion object {
         var messages = mutableListOf<MessageModel>()
-
     }
 }

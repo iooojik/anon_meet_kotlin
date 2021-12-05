@@ -13,7 +13,7 @@ import iooojik.anon.meet.databinding.FragmentSettingsBinding
 import iooojik.anon.meet.models.UserViewModel
 
 
-class SettingsFragment : Fragment(), SettingsFragmentLogic{
+class SettingsFragment : Fragment(), SettingsFragmentLogic {
     private lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(
@@ -29,7 +29,7 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic{
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        when(buttonView!!.id){
+        when (buttonView!!.id) {
             R.id.theme_change_switch -> {
                 if (isChecked)
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

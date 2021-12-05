@@ -8,7 +8,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ConfirmationBottomSheetLayoutBinding
 
-class ConfirmationBottomSheet(private val message : String,private val yesFunction: () -> Unit) : BottomSheetDialogFragment(), View.OnClickListener {
+class ConfirmationBottomSheet(private val message: String, private val yesFunction: () -> Unit) :
+    BottomSheetDialogFragment(), View.OnClickListener {
     private lateinit var binding: ConfirmationBottomSheetLayoutBinding
 
     override fun onCreateView(
@@ -22,8 +23,9 @@ class ConfirmationBottomSheet(private val message : String,private val yesFuncti
         binding.message.text = message
         return binding.root
     }
+
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.button_yes -> {
                 yesFunction()
                 this.dismiss()

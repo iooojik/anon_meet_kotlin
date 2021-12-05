@@ -1,6 +1,5 @@
 package iooojik.anon.meet.ui.filters
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.CompoundButton
@@ -16,7 +15,6 @@ import iooojik.anon.meet.models.StackModel
 import iooojik.anon.meet.models.User
 import iooojik.anon.meet.models.UserViewModel
 import iooojik.anon.meet.net.sockets.SocketConnections
-import iooojik.anon.meet.net.sockets.SocketService
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import ua.naiksoftware.stomp.dto.StompMessage
@@ -39,36 +37,32 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)
-        Intent(requireActivity(), SocketService::class.java).also { intent ->
-            requireActivity().startService(intent)
-        }
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_settings_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.search_button -> {
-                findingBottomSheet.show(requireActivity().supportFragmentManager, SearchBottomSheet.TAG)
-                val prefs = SharedPreferencesManager(requireContext())
-                SocketConnections.connectToServer(prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "").toString() + " " + prefs.getValue(
-                    SharedPrefsKeys.USER_TOKEN,
-                    ""
-                ).toString())
+                findingBottomSheet.show(
+                    requireActivity().supportFragmentManager,
+                    SearchBottomSheet.TAG
+                )
+                SocketConnections.connectToServer(requireContext())
                 SocketConnections.connectToTopic("/topic/${User.mUuid}/find", ::onChatFound)
                 SocketConnections.sendStompMessage("/app/find.${User.mUuid}", Gson().toJson(User()))
             }
         }
     }
 
-    private fun onChatFound(topicMessage: StompMessage){
+    private fun onChatFound(topicMessage: StompMessage) {
         val prefs = SharedPreferencesManager(requireContext())
         prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-        if(topicMessage.payload.trim().isNotBlank()){
+        if (topicMessage.payload.trim().isNotBlank()) {
             val foundChatMode = Gson().fromJson(topicMessage.payload, StackModel::class.java)
             prefs.saveValue(SharedPrefsKeys.CHAT_ROOM_UUID, foundChatMode.uuid)
             SocketConnections.resetSubscriptions()
@@ -90,7 +84,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         when (buttonView!!.id) {
             R.id.my_sex_male -> User.mFilter.mySex = if (isChecked) "male" else "female"
             R.id.my_sex_female -> User.mFilter.mySex = if (isChecked) "female" else "male"
-            R.id.interlocutor_sex_male ->  if (isChecked)
+            R.id.interlocutor_sex_male -> if (isChecked)
                 User.mFilter.interlocutorSex = "male"
             R.id.interlocutor_sex_female -> if (isChecked)
                 User.mFilter.interlocutorSex = "female"

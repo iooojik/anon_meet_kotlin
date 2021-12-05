@@ -136,6 +136,7 @@ interface ActivityMainLogic {
                             }", Gson().toJson(User())
                         )
                         prefs.clearAll()
+
                     }.show(activity.supportFragmentManager, ConfirmationBottomSheet.TAG)
 
                 }

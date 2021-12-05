@@ -1,10 +1,13 @@
 package iooojik.anon.meet.net.sockets
 
+import android.content.Context
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import iooojik.anon.meet.log
+import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
+import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import ua.naiksoftware.stomp.Stomp
@@ -24,7 +27,13 @@ class SocketConnections {
         @JvmStatic
         val topics = mutableMapOf<String, Disposable>()
 
-        fun connectToServer(token: String) {
+        fun connectToServer(context: Context) {
+            val prefs = SharedPreferencesManager(context)
+            val token =
+                prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "").toString() + " " + prefs.getValue(
+                    SharedPrefsKeys.USER_TOKEN,
+                    ""
+                ).toString()
             stompClient = Stomp
                 .over(
                     Stomp.ConnectionProvider.OKHTTP,
@@ -52,12 +61,12 @@ class SocketConnections {
             log("stomp: ${stompClient.isConnected} token: $token")
         }
 
-        fun aaa(topicMessage : StompMessage){
+        fun aaa(topicMessage: StompMessage) {
             log("Received ${topicMessage.payload}")
             //addItem(mGson.fromJson(topicMessage.getPayload(), EchoModel::class.java))
         }
 
-        fun connectToTopic(path: String, onSubscribeFun:(topicMessage : StompMessage) -> Unit) {
+        fun connectToTopic(path: String, onSubscribeFun: (topicMessage: StompMessage) -> Unit) {
             val disposableTopic: Disposable = stompClient.topic(path)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,11 +77,11 @@ class SocketConnections {
             topics[path] = disposableTopic
         }
 
-        fun sendStompMessage(path: String, body: String){
-            stompClient.send(path, body).subscribe();
+        fun sendStompMessage(path: String, body: String) {
+            stompClient.send(path, body).subscribe()
         }
 
-        fun disconnect(){
+        fun disconnect() {
             resetSubscriptions()
             stompClient.disconnect()
         }

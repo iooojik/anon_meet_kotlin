@@ -40,7 +40,7 @@ class SharedPreferencesManager(private val context: Context) {
         return r
     }
 
-    fun clearAll(){
+    fun clearAll() {
         preferences?.edit()?.clear()?.apply()
     }
 }

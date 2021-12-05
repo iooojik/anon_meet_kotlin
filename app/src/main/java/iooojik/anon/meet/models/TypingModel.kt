@@ -7,10 +7,11 @@ data class TypingModel(
     val typing: Boolean = mTyping,
     @SerializedName("typingUser")
     val typingUser: User = mTypingUser
-){
-    companion object{
+) {
+    companion object {
         @JvmStatic
         var mTyping: Boolean = false
+
         @JvmStatic
         var mTypingUser: User = User()
     }

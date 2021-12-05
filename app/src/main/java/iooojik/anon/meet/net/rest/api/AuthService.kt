@@ -11,12 +11,12 @@ import retrofit2.http.POST
 interface AuthService {
 
     @POST("auth/login/")
-    fun login(@Body user: User) : Call<LoginResponse>
+    fun login(@Body user: User): Call<LoginResponse>
 
     @POST("auth/registration/")
-    fun registration(@Body user: User) : Call<User>
+    fun registration(@Body user: User): Call<User>
 
     @POST("auth/uuid.login/")
-    fun loginWithUUID(@Header("Authorization") token: String, @Body user: User) : Call<User>
+    fun loginWithUUID(@Header("Authorization") token: String, @Body user: User): Call<User>
 
 }

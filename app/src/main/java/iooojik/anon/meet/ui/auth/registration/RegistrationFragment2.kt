@@ -28,7 +28,7 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.select_birth_date -> {
                 val datePicker = MaterialDatePicker.Builder.datePicker().build()
                 datePicker.addOnPositiveButtonClickListener {
@@ -45,7 +45,6 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
             }
         }
     }
-
 
 
 }
