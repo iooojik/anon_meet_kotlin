@@ -21,7 +21,7 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar"
+            app:menu="@menu/top_app_bar_auth_menu"
             app:title="@string/app_name" />
 
     </com.google.android.material.appbar.AppBarLayout>

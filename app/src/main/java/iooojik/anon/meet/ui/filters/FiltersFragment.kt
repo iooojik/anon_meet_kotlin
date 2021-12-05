@@ -12,7 +12,6 @@ import com.google.android.material.slider.RangeSlider
 import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
-import iooojik.anon.meet.log
 import iooojik.anon.meet.models.StackModel
 import iooojik.anon.meet.models.User
 import iooojik.anon.meet.models.UserViewModel

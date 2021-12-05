@@ -2,7 +2,6 @@ package iooojik.anon.meet.net.rest
 
 import android.app.Activity
 import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import iooojik.anon.meet.log

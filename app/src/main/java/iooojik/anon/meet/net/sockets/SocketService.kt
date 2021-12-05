@@ -3,7 +3,6 @@ package iooojik.anon.meet.net.sockets
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import iooojik.anon.meet.log
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 

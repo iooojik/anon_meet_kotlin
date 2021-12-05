@@ -10,14 +10,17 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.models.User
 import iooojik.anon.meet.models.UserViewModel
 import iooojik.anon.meet.net.rest.RetrofitHelper
+import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+import iooojik.anon.meet.ui.ConfirmationBottomSheet
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -102,7 +105,8 @@ interface ActivityMainLogic {
         binding: ActivityMainBinding,
         resources: Resources,
         theme: Resources.Theme,
-        navController: NavController
+        navController: NavController,
+        activity: AppCompatActivity
     ) {
         //слушатель на нажатое меню в тулбаре
         getCurrentThemeModeAndSetIcon(binding, resources, theme)
@@ -118,6 +122,22 @@ interface ActivityMainLogic {
                 }
                 R.id.go_to_settings -> {
                     navController.navigate(R.id.action_filtersFragment_to_settingsFragment)
+                }
+                R.id.finish_chat -> {
+                    ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
+                        val prefs = SharedPreferencesManager(activity.applicationContext)
+                        prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                        SocketConnections.sendStompMessage(
+                            "/app/end.chat.${
+                                prefs.getValue(
+                                    SharedPrefsKeys.CHAT_ROOM_UUID,
+                                    ""
+                                ).toString()
+                            }", Gson().toJson(User())
+                        )
+                        prefs.clearAll()
+                    }.show(activity.supportFragmentManager, ConfirmationBottomSheet.TAG)
+
                 }
             }
             return@setOnMenuItemClickListener true

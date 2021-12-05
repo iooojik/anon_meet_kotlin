@@ -1,6 +1,5 @@
 package iooojik.anon.meet.shared.prefs
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 
