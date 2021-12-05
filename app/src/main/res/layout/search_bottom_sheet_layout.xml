@@ -15,6 +15,7 @@
 
     <Button
         android:id="@+id/cancel_search_button"
+        style="@style/buttonStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"

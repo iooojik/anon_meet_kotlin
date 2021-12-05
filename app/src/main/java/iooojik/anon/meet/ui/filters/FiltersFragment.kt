@@ -30,7 +30,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
     ): View {
         binding = FragmentFiltersBinding.inflate(inflater)
         binding.lifecycleOwner = this
-        hideBackButton(requireActivity() as AppCompatActivity)
+        hideBackButton(findNavController(), requireActivity() as AppCompatActivity)
         binding.user = ViewModelProvider(this).get(
             UserViewModel::class.java
         )

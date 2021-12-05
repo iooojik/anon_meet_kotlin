@@ -136,7 +136,7 @@ class SocketService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID2, "Foreground Channel",
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_LOW
             )
             channel.description = "Foreground Channel"
             channel.enableLights(true)

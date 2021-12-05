@@ -59,8 +59,10 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
             if (typing != null && typing == true) {
                 if (typing) {
 
+                }else{
+                    
                 }
-            } else {
+            } else if (typing == null){
                 adapter.notifyItemInserted(MessagesViewModel.messages.size - 1)
             }
             val endChat = intent.extras?.getBoolean("endChat")

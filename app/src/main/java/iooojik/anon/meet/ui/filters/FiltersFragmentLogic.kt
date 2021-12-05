@@ -6,7 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.slider.RangeSlider
+import iooojik.anon.meet.R
+import iooojik.anon.meet.activity.MainActivity
+import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
 import iooojik.anon.meet.log
 
@@ -24,8 +30,7 @@ interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListe
         binding.interlocutorSexNm.setOnCheckedChangeListener(this)
     }
 
-    fun hideBackButton(activity: AppCompatActivity) {
-        log(activity.supportActionBar == null)
+    fun hideBackButton(navController: NavController, activity: AppCompatActivity) {
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 

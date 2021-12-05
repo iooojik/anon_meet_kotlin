@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -56,11 +55,10 @@ interface ActivityMainLogic : ThemeSwitcher {
                     ""
                 )!!.toString()
             )
-            try {
+            log("${navController.currentDestination?.id} ${R.id.filtersFragment}")
+            if (navController.currentDestination?.id != R.id.filtersFragment)
                 navController.navigate(R.id.action_global_filtersFragment)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+
             preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
             if (preferencesManager.getValue(
                     SharedPrefsKeys.CHAT_ROOM_UUID,

@@ -8,23 +8,31 @@
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/subtitle1"
+        android:layout_marginTop="@dimen/standard_margin_2"
+        android:layout_gravity="center"
         android:text="TextView" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/standard_margin_large"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/yes" />
+            android:text="@string/yes"
+            style="@style/buttonStyle" />
 
         <Button
             android:id="@+id/button_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin_large"
+            style="@style/buttonStyle"
             android:text="@string/no" />
     </LinearLayout>
 

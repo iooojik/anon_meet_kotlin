@@ -13,7 +13,7 @@ interface ChatProcessLogic : View.OnClickListener {
     }
 
     fun hideBackButton(activity: AppCompatActivity) {
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
     }
 
     fun blockGoBack(activity: ComponentActivity, fragment: Fragment) {
