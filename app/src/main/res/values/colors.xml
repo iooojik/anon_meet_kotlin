@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- light mode -->
-    <color name="light_mode_primary">#FFFFF9EC</color>
-    <color name="light_mode_primary_variant">#FFFFE4C7</color>
-    <color name="light_mode_primary_dark">#FFF9ECFF</color>
-    <color name="light_mode_secondary">#FFFFE4C7</color>
-    <color name="light_mode_secondary_variant">#FF309397</color>
+    <color name="primaryColor">#ffecb3</color>
+    <color name="primaryLightColor">#ffffe5</color>
+    <color name="primaryDarkColor">#cbba83</color>
+    <color name="secondaryColor">#00897b</color>
+    <color name="secondaryLightColor">#4ebaaa</color>
+    <color name="secondaryDarkColor">#005b4f</color>
+    <color name="primaryTextColor">#222222</color>
+    <color name="secondaryTextColor">#efefef</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="kRed">#FFE46472</color>
@@ -15,8 +19,6 @@
     <color name="kGreen">#FF309397</color>
     <color name="kDarkBlue">#FF0D253F</color>
     <color name="primaryBlue">#ff2972ff</color>
-    <color name="light_mode_text_primary">#ff222222</color>
-    <color name="light_mode_text_secondary">#ff94959b</color>
     <color name="textWhiteGrey">#ff94959b</color>
     <color name="light_meBubble">#fff1f1f5</color>
     <color name="light_notMeBubble">#FF309397</color>

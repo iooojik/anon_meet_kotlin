@@ -18,6 +18,8 @@
 
         <TextView
             android:id="@+id/user_credentials"
+            style="@style/headline6"
+            android:layout_margin="@dimen/standard_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{@string/text_view_age(String.format(`%s`, user.Companion.userMutableLiveData.userLogin), String.format(`%s`, user.Companion.userMutableLiveData.filter.myAge))}" />

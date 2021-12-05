@@ -27,11 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/message_input_dimen"
-        android:backgroundTint="?attr/colorAccent"
         android:contentDescription="@string/send_message"
         android:elevation="0dp"
         app:fabSize="mini"
-        app:iconTint="?android:textColor"
         app:srcCompat="@drawable/outline_send_24" />
 
 </LinearLayout>

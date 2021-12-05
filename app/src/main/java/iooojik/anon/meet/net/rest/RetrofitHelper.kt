@@ -1,11 +1,14 @@
 package iooojik.anon.meet.net.rest
 
+
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
+import iooojik.anon.meet.R
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.api.AuthService
+import iooojik.anon.meet.showSnackbar
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -64,8 +67,11 @@ class RetrofitHelper {
             }
         }
 
-        fun onFailure(t: Throwable) {
+        fun onFailure(t: Throwable, view: View? = null, activity: Activity? = null) {
             log("FAILURE $t", TAG)
+            if (activity != null && view != null){
+                showSnackbar(view, activity.resources.getString(R.string.error_request))
+            }
         }
 
     }

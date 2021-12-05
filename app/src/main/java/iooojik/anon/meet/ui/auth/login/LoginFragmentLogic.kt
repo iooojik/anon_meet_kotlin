@@ -47,7 +47,9 @@ interface LoginFragmentLogic : View.OnClickListener {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                RetrofitHelper.onFailure(t)
+                if (binding != null) {
+                    RetrofitHelper.onFailure(t, binding.root, activity)
+                } else RetrofitHelper.onFailure(t)
                 binding?.progressBar?.visibility = View.INVISIBLE
             }
 
