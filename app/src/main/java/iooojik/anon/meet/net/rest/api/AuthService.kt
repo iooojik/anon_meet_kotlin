@@ -19,4 +19,5 @@ interface AuthService {
     @POST("auth/uuid.login/")
     fun loginWithUUID(@Header("Authorization") token: String, @Body user: User): Call<User>
 
+
 }

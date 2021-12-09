@@ -57,13 +57,6 @@ class SocketConnections {
             resetSubscriptions()
             compositeDisposable.add(disposable)
             stompClient.connect()
-            connectToTopic("", ::aaa)
-            log("stomp: ${stompClient.isConnected} token: $token")
-        }
-
-        fun aaa(topicMessage: StompMessage) {
-            log("Received ${topicMessage.payload}")
-            //addItem(mGson.fromJson(topicMessage.getPayload(), EchoModel::class.java))
         }
 
         fun connectToTopic(path: String, onSubscribeFun: (topicMessage: StompMessage) -> Unit) {

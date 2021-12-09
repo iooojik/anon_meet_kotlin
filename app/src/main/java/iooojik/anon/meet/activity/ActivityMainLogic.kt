@@ -55,7 +55,7 @@ interface ActivityMainLogic : ThemeSwitcher {
                     ""
                 )!!.toString()
             )
-            log("${navController.currentDestination?.id} ${R.id.filtersFragment}")
+
             if (navController.currentDestination?.id != R.id.filtersFragment)
                 navController.navigate(R.id.action_global_filtersFragment)
 

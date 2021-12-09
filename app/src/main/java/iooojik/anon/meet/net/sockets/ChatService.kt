@@ -14,10 +14,8 @@ import com.google.gson.Gson
 import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.MessageModel
-import iooojik.anon.meet.data.models.MessagesViewModel
 import iooojik.anon.meet.data.models.TypingModel
 import iooojik.anon.meet.data.models.User
-import iooojik.anon.meet.log
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.chat.ChatProcessFragment
@@ -112,7 +110,7 @@ class ChatService : Service() {
                         }
 
                         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setSmallIcon(R.drawable.ic_launcher_foreground)
                             .setContentTitle(msg.author.userLogin)
                             .setContentText(msg.text)
                             .setAutoCancel(true)

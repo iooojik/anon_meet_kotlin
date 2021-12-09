@@ -13,9 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.common.api.internal.LifecycleFragment
 import com.google.gson.Gson
-import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.MessageModel
 import iooojik.anon.meet.data.models.MessagesViewModel
@@ -26,9 +24,6 @@ import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
-
-
-
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
@@ -61,6 +56,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
             intent.putExtra("pendingIntent", pendingIntent)
             requireActivity().applicationContext.startService(intent)
         }
+
         MessagesViewModel.messages.observe(viewLifecycleOwner, userListUpdateObserver)
         return binding.root
     }
@@ -81,8 +77,6 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                 }else{
                     
                 }
-            } else if (typing == null){// && MessagesViewModel.messages.value != null){
-                //adapter.notifyItemInserted(MessagesViewModel.messages.value!!.size - 1)
             }
             val endChat = intent.extras?.getBoolean("endChat")
             if (endChat != null) {

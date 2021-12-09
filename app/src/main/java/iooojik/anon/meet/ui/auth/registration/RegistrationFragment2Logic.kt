@@ -5,7 +5,6 @@ import android.view.View
 import androidx.navigation.NavController
 import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentRegistration2Binding
-import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.ui.auth.login.LoginFragmentLogic
 import retrofit2.Call
@@ -46,9 +45,6 @@ interface RegistrationFragment2Logic : View.OnClickListener, LoginFragmentLogic 
 
     fun formatDate(date: String): String {
         val dateArr = date.split('.')
-        dateArr.forEach {
-            log(it.toInt())
-        }
         return "${dateArr[0].toInt()}.${dateArr[1].toInt()}.${dateArr[2].toInt()}"
     }
 }
