@@ -1,10 +1,7 @@
 package iooojik.anon.meet.net.sockets
 
-import android.app.ActivityManager
+import android.app.*
 import android.app.ActivityManager.RunningAppProcessInfo
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -14,24 +11,26 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
+import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.MessageModel
+import iooojik.anon.meet.data.models.MessagesViewModel
+import iooojik.anon.meet.data.models.TypingModel
+import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.log
-import iooojik.anon.meet.models.MessageModel
-import iooojik.anon.meet.models.TypingModel
-import iooojik.anon.meet.models.User
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.chat.ChatProcessFragment
-import iooojik.anon.meet.ui.chat.MessagesViewModel
 import ua.naiksoftware.stomp.dto.StompMessage
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SocketService : Service() {
+class ChatService : Service() {
 
     private lateinit var preferencesManager: SharedPreferencesManager
     private var roomUuid = ""
+    private var data: PendingIntent? = null
 
     companion object {
         const val NOTIFICATION_ID = 101
@@ -51,6 +50,8 @@ class SocketService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        data = intent!!.getParcelableExtra("pendingIntent")
+
         checkAndConnectToChat()
         return START_REDELIVER_INTENT
     }
@@ -66,7 +67,6 @@ class SocketService : Service() {
 
     private fun onMessageReceived(topicMessage: StompMessage) {
         if (topicMessage.payload.trim().isNotBlank()) {
-            log(topicMessage)
             when {
                 topicMessage.payload.contains("typing") -> {
                     val typingModel = Gson().fromJson(topicMessage.payload, TypingModel::class.java)
@@ -83,6 +83,7 @@ class SocketService : Service() {
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     intent.putExtra("endChat", true)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                    AppDatabase.instance.messageDao.clearTable()
                     SocketConnections.resetSubscriptions()
                     stopSelf()
                     stopForeground(true)
@@ -92,10 +93,10 @@ class SocketService : Service() {
                     val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
                     msg.date = sdf.format(Date())
                     msg.isMine = User.mUuid == msg.author.uuid
-                    MessagesViewModel.messages.add(msg)
+                    AppDatabase.instance.messageDao.insert(msg)
+                    //MessagesViewModel.messages.add(msg)
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-                    log(isForeground(this))
                     if (!isForeground(this)) {
                         val notificationManager = NotificationManagerCompat.from(this)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -129,9 +130,7 @@ class SocketService : Service() {
     }
 
     private fun runAsForeground() {
-        //Intent notificationIntent = new Intent(this, RecorderMainActivity.class);
-        //PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,
-        //notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+
         val notificationManager = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(

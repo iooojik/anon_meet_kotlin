@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentRegistration2Binding
-import iooojik.anon.meet.models.User
 import java.text.SimpleDateFormat
 import java.util.*
 

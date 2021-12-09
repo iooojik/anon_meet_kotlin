@@ -8,7 +8,7 @@
 
         <variable
             name="user"
-            type="iooojik.anon.meet.models.UserViewModel" />
+            type="iooojik.anon.meet.data.models.UserViewModel" />
     </data>
 
     <LinearLayout

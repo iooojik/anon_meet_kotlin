@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.security.ProviderInstaller
+import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
-import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
 
 class MainActivity : AppCompatActivity(), ActivityMainLogic {
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         RetrofitHelper.doRetrofit()
-        changeTheme(this, false)
+        //changeTheme(this, false)
         setUpToolBar(binding, findNavController(R.id.nav_host_fragment), this)
         setToolBarMenuClickListener(
             binding,
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
         )
         checkUserTokenAndAuth(context = this, findNavController(R.id.nav_host_fragment))
         ProviderInstaller.installIfNeeded(applicationContext)
+        AppDatabase.initDatabase(this)
     }
 
     override fun onSupportNavigateUp(): Boolean =

@@ -1,7 +1,7 @@
 package iooojik.anon.meet.net.rest.api
 
-import iooojik.anon.meet.models.LoginResponse
-import iooojik.anon.meet.models.User
+import iooojik.anon.meet.data.models.LoginResponse
+import iooojik.anon.meet.data.models.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header

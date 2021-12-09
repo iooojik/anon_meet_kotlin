@@ -2,9 +2,7 @@ package iooojik.anon.meet.ui
 
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatDelegate
-import iooojik.anon.meet.log
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 

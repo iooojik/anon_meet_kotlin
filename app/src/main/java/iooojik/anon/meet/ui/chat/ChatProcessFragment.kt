@@ -8,25 +8,37 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.common.api.internal.LifecycleFragment
 import com.google.gson.Gson
+import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.MessageModel
+import iooojik.anon.meet.data.models.MessagesViewModel
+import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
-import iooojik.anon.meet.models.MessageModel
-import iooojik.anon.meet.models.User
+import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
-import iooojik.anon.meet.net.sockets.SocketService
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+
+
+
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private lateinit var binding: FragmentChatProcessBinding
     private lateinit var adapter: MessagesAdapter
+    private var userListUpdateObserver: Observer<MutableList<MessageModel>> = Observer<MutableList<MessageModel>> {
+       adapter.updateMessages(it)
+        adapter.notifyItemInserted(it.size - 1)
+        //recyclerView.updateUserList(userArrayList)
+    }
 
     companion object {
         const val adapterIntentFilterName = "adapterIntentFilter"
@@ -44,17 +56,24 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)
-        Intent(requireActivity(), SocketService::class.java).also { intent ->
+        Intent(requireActivity(), ChatService::class.java).also { intent ->
+            val pendingIntent = requireActivity().createPendingResult(100, Intent(), 0)
+            intent.putExtra("pendingIntent", pendingIntent)
             requireActivity().applicationContext.startService(intent)
         }
+        MessagesViewModel.messages.observe(viewLifecycleOwner, userListUpdateObserver)
+        return binding.root
+    }
+
+
+    override fun onResume() {
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(mMessageReceiver, IntentFilter(adapterIntentFilterName))
-        return binding.root
+        super.onResume()
     }
 
     private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-
             val typing = intent.extras?.getBoolean("typing")
             if (typing != null && typing == true) {
                 if (typing) {
@@ -62,8 +81,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                 }else{
                     
                 }
-            } else if (typing == null){
-                adapter.notifyItemInserted(MessagesViewModel.messages.size - 1)
+            } else if (typing == null){// && MessagesViewModel.messages.value != null){
+                //adapter.notifyItemInserted(MessagesViewModel.messages.value!!.size - 1)
             }
             val endChat = intent.extras?.getBoolean("endChat")
             if (endChat != null) {
@@ -96,6 +115,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                         "/app/send.message.$rUuid",
                         Gson().toJson(
                             MessageModel(
+                                id = -1,
                                 author = User(),
                                 text = messageText.toString()
                             )
@@ -115,6 +135,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 class MessagesAdapter(
     private val inflater: LayoutInflater
 ) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
+    var messages : MutableList<MessageModel> = mutableListOf()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -124,7 +145,8 @@ class MessagesAdapter(
     }
 
     override fun onBindViewHolder(holder: MessagesAdapter.MessagesViewHolder, position: Int) {
-        val msgModel = MessagesViewModel.messages[position]
+        val msgModel = messages[position]
+        //val msgModel = MessagesViewModel.messages[position]
         if (msgModel.isMine) {
             holder.itemBinding.messageText.text = msgModel.text
             holder.itemBinding.timeText.text = msgModel.date
@@ -136,8 +158,12 @@ class MessagesAdapter(
         }
     }
 
+    fun updateMessages(list: MutableList<MessageModel>){
+        messages = list
+    }
+
     override fun getItemCount(): Int {
-        return MessagesViewModel.messages.size
+        return messages.size
     }
 
     inner class MessagesViewHolder(val itemBinding: RecyclerViewMessageItemBinding) :

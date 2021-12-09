@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentRegistration1Binding
-import iooojik.anon.meet.models.User
 
 
 class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {

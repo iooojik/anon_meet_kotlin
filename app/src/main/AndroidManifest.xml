@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".net.sockets.SocketService" />
+        <service android:name=".net.sockets.ChatService" />
     </application>
 
 </manifest>

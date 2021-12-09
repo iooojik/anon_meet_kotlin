@@ -1,4 +1,4 @@
-package iooojik.anon.meet.models
+package iooojik.anon.meet.data.models
 
 import com.google.gson.annotations.SerializedName
 

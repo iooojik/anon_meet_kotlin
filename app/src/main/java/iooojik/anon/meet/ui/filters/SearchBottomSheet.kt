@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.SearchBottomSheetLayoutBinding
-import iooojik.anon.meet.models.User
 import iooojik.anon.meet.net.sockets.SocketConnections
 
 class SearchBottomSheet : BottomSheetDialogFragment(), View.OnClickListener {

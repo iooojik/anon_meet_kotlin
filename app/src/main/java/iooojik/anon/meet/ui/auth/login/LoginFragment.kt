@@ -1,12 +1,14 @@
 package iooojik.anon.meet.ui.auth.login
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentLoginBinding
-import iooojik.anon.meet.models.User
 
 class LoginFragment : Fragment(), LoginFragmentLogic {
     private lateinit var binding: FragmentLoginBinding

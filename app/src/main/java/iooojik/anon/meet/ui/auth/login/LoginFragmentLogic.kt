@@ -6,11 +6,11 @@ import android.content.res.Resources
 import android.view.View
 import androidx.navigation.NavController
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.LoginResponse
+import iooojik.anon.meet.data.models.User
+import iooojik.anon.meet.data.models.UserViewModel
 import iooojik.anon.meet.databinding.FragmentLoginBinding
 import iooojik.anon.meet.log
-import iooojik.anon.meet.models.LoginResponse
-import iooojik.anon.meet.models.User
-import iooojik.anon.meet.models.UserViewModel
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys

@@ -11,10 +11,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.gson.Gson
 import iooojik.anon.meet.R
+import iooojik.anon.meet.data.models.User
+import iooojik.anon.meet.data.models.UserViewModel
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.log
-import iooojik.anon.meet.models.User
-import iooojik.anon.meet.models.UserViewModel
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
