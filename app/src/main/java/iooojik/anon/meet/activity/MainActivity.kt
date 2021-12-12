@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         RetrofitHelper.doRetrofit()
+        //Application.getInstance().
         //changeTheme(this, false)
         setUpToolBar(binding, findNavController(R.id.nav_host_fragment), this)
         setToolBarMenuClickListener(

@@ -56,7 +56,7 @@ interface ActivityMainLogic : ThemeSwitcher {
                 )!!.toString()
             )
 
-            if (navController.currentDestination?.id != R.id.filtersFragment)
+            if (navController.currentDestination?.id == R.id.loginFragment)
                 navController.navigate(R.id.action_global_filtersFragment)
 
             preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
