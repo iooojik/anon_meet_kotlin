@@ -4,11 +4,13 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.material.textfield.TextInputLayout
 import iooojik.anon.meet.ActivityRule
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.User
-import iooojik.anon.meet.md5
-import iooojik.anon.meet.net.rest.RetrofitHelper
+import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,37 +22,45 @@ class LoginInstrumentedTest {
     @Rule
     @JvmField
     val activityRule = ActivityRule()
+    private lateinit var prefsManager: SharedPreferencesManager
+
 
     @Before
     fun beforeMethod(){
+        prefsManager = SharedPreferencesManager(activityRule.activityTestRule.activity.applicationContext)
+        prefsManager.initPreferences()
         activityRule.activityTestRule.activity.runOnUiThread {
-            activityRule.navController.navigate(R.id.loginFragment)
+            prefsManager.clearAll()
+            if (activityRule.navController.currentDestination!!.id == R.id.filtersFragment)
+                activityRule.navController.navigate(R.id.action_global_auth_navigation)
         }
     }
 
     @Test
     fun registerButtonTest() {
-        assert(activityRule.navController.currentDestination!!.id == R.id.loginFragment)
         onView(withId(R.id.go_to_registration_button)).perform(ViewActions.click())
         assert(activityRule.navController.currentDestination!!.id == R.id.registrationFragment1)
-        /*val loginFragment = launchFragmentInContainer<LoginFragment>()
-        loginFragment.onFragment{fragment ->
-            Navigation.setViewNavController(fragment.requireView(), activityRule.navController)
-            activityRule.navController.navigate(R.id.loginFragment)
-
-            onView(withId(R.id.go_to_registration_button)).perform(click())
-            assert(activityRule.navController.currentDestination!!.id == R.id.registrationFragment1)
-        }*/
-
     }
 
-    //@Test
-    fun authTest() {
-        //true creds iooojik:123456
-        RetrofitHelper.doRetrofit()
-        val response =
-            RetrofitHelper.authService.login(User(userLogin = "iooojik", password = md5("1234156")))
-                .execute()
-        assert(response.isSuccessful)
+    @Test
+    fun authTestWithUI(){
+        onView(withId(R.id.nickname_text_field)).check { view, exception ->
+            if (view is TextInputLayout) {
+                view.editText!!.setText("iooojik")
+            } else throw exception
+        }
+        onView(withId(R.id.password_text_field)).check { view, exception ->
+            if (view is TextInputLayout) {
+                view.editText!!.setText("123456")
+            } else throw exception
+        }
+        runBlocking {
+            launch(this.coroutineContext) {
+                onView(withId(R.id.login_Button)).perform(ViewActions.click())
+            }.join()
+            delay(10000L)
+            prefsManager.clearAll()
+            assert(activityRule.navController.currentDestination!!.id == R.id.filtersFragment)
+        }
     }
 }
