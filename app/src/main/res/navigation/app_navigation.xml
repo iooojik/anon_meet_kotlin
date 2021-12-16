@@ -33,7 +33,7 @@
             tools:layout="@layout/fragment_registration2" />
         <action
             android:id="@+id/action_global_filtersFragment"
-            app:destination="@id/main_process_navigation" />
+            app:destination="@id/loginFragment" />
     </navigation>
     <navigation
         android:id="@+id/main_process_navigation"
@@ -64,6 +64,9 @@
             android:name="iooojik.anon.meet.ui.chat.ChatProcessFragment"
             android:label="fragment_chat_process"
             tools:layout="@layout/fragment_chat_process" />
+        <action
+            android:id="@+id/action_global_auth_navigation"
+            app:destination="@id/auth_navigation" />
     </navigation>
 
 </navigation>
