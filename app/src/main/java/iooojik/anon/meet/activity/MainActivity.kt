@@ -1,7 +1,6 @@
 package iooojik.anon.meet.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.security.ProviderInstaller
@@ -12,7 +11,7 @@ import iooojik.anon.meet.net.rest.RetrofitHelper
 
 class MainActivity : AppCompatActivity(), ActivityMainLogic {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

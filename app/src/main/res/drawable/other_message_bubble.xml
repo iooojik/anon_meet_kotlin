@@ -6,7 +6,7 @@
     <solid android:color="?attr/colorSecondaryVariant" />
 
     <corners
-        android:radius="40dp"
+        android:radius="@dimen/message_bubble_corners"
         android:topLeftRadius="5dp" />
 
 </shape>

@@ -14,16 +14,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:background="@drawable/other_message_bubble"
-        android:maxWidth="400dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/other_message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:background="@android:color/transparent"
             android:padding="5dp"
+            android:textAlignment="textStart"
             android:textColor="@color/white"
             tools:text="@tools:sample/lorem" />
 
@@ -31,7 +31,7 @@
             android:id="@+id/other_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/message_input_dimen"
             android:layout_marginEnd="@dimen/message_input_dimen"
             android:background="@android:color/transparent"
@@ -46,16 +46,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:background="@drawable/my_message_bubble"
-        android:maxWidth="400dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:background="@android:color/transparent"
             android:padding="5dp"
+            android:textAlignment="textStart"
             android:textColor="@color/white"
             tools:text="@tools:sample/lorem" />
 
@@ -63,7 +63,7 @@
             android:id="@+id/time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/message_input_dimen"
             android:layout_marginEnd="@dimen/message_input_dimen"
             android:background="@android:color/transparent"

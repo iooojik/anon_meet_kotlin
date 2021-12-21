@@ -9,17 +9,14 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.data.models.UserViewModel
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
-import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
-import iooojik.anon.meet.ui.ConfirmationBottomSheet
 import iooojik.anon.meet.ui.ThemeSwitcher
 import retrofit2.Call
 import retrofit2.Callback
@@ -113,32 +110,9 @@ interface ActivityMainLogic : ThemeSwitcher {
             when (it.itemId) {
                 R.id.dark_mode -> {
                     changeTheme(activity.applicationContext)
-                    //переключатель темы приложения
-                    //it.isChecked = !it.isChecked
-                    //it.icon = getMenuThemeIcon(it.isChecked, resources, theme)
-                    //if (it.isChecked)
-                    //    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    //else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
                 R.id.go_to_settings -> {
                     navController.navigate(R.id.action_filtersFragment_to_settingsFragment)
-                }
-                R.id.finish_chat -> {
-                    ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
-                        val prefs = SharedPreferencesManager(activity.applicationContext)
-                        prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-                        SocketConnections.sendStompMessage(
-                            "/app/end.chat.${
-                                prefs.getValue(
-                                    SharedPrefsKeys.CHAT_ROOM_UUID,
-                                    ""
-                                ).toString()
-                            }", Gson().toJson(User())
-                        )
-                        prefs.clearAll()
-
-                    }.show(activity.supportFragmentManager, ConfirmationBottomSheet.TAG)
-
                 }
             }
             return@setOnMenuItemClickListener true

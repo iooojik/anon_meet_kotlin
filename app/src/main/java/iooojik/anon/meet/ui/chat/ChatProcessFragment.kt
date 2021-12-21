@@ -4,8 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Resources
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,25 +18,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import iooojik.anon.meet.R
+import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.data.models.MessageModel
 import iooojik.anon.meet.data.models.MessagesViewModel
 import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
+import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+import iooojik.anon.meet.ui.ConfirmationBottomSheet
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private lateinit var binding: FragmentChatProcessBinding
     private lateinit var adapter: MessagesAdapter
-    private var userListUpdateObserver: Observer<MutableList<MessageModel>> = Observer<MutableList<MessageModel>> {
-       adapter.updateMessages(it)
-        adapter.notifyItemInserted(it.size - 1)
-        //recyclerView.updateUserList(userArrayList)
-    }
+    private var userListUpdateObserver: Observer<MutableList<MessageModel>> =
+        Observer<MutableList<MessageModel>> {
+            adapter.updateMessages(it)
+            adapter.notifyItemInserted(it.size - 1)
+
+            //recyclerView.updateUserList(userArrayList)
+        }
 
     companion object {
         const val adapterIntentFilterName = "adapterIntentFilter"
@@ -44,13 +52,14 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentChatProcessBinding.inflate(inflater)
-        binding.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
+        binding.mainLayout.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = MessagesAdapter(layoutInflater)
-        binding.messagesRecView.adapter = adapter
+        binding.mainLayout.messagesRecView.adapter = adapter
         hideBackButton(requireActivity() as AppCompatActivity)
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)
+
         Intent(requireActivity(), ChatService::class.java).also { intent ->
             val pendingIntent = requireActivity().createPendingResult(100, Intent(), 0)
             intent.putExtra("pendingIntent", pendingIntent)
@@ -63,6 +72,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 
 
     override fun onResume() {
+        hideToolBar(activity as MainActivity)
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(mMessageReceiver, IntentFilter(adapterIntentFilterName))
         super.onResume()
@@ -73,9 +83,9 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
             val typing = intent.extras?.getBoolean("typing")
             if (typing != null && typing == true) {
                 if (typing) {
-
-                }else{
-                    
+                    binding.topChatBar.typingMessage.text = resources.getString(R.string.typing)
+                } else {
+                    binding.topChatBar.typingMessage.text = " "
                 }
             }
             val endChat = intent.extras?.getBoolean("endChat")
@@ -87,14 +97,14 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.top_app_bar_chat_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(mMessageReceiver)
         super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        showToolBar(activity = activity as MainActivity)
+        super.onDestroyView()
     }
 
     override fun onClick(v: View?) {
@@ -103,7 +113,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                 val preferencesManager = SharedPreferencesManager(requireContext())
                 preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
                 val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
-                val messageText = binding.messageInputLayout.messageTextField.editText!!.text
+                val messageText =
+                    binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
                 if (messageText.trim().isNotBlank()) {
                     SocketConnections.sendStompMessage(
                         "/app/send.message.$rUuid",
@@ -115,12 +126,28 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                             )
                         )
                     )
-                    binding.messageInputLayout.messageTextField.editText!!.text.clear()
+                    binding.mainLayout.messageInputLayout.messageTextField.editText!!.text.clear()
                 }
             }
             R.id.messages_rec_view -> {
-                binding.messageInputLayout.messageTextField.clearFocus()
+                binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
 
+            }
+            R.id.exit_chat -> {
+                ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
+                    val prefs = SharedPreferencesManager(requireContext())
+                    prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                    SocketConnections.sendStompMessage(
+                        "/app/end.chat.${
+                            prefs.getValue(
+                                SharedPrefsKeys.CHAT_ROOM_UUID,
+                                ""
+                            ).toString()
+                        }", Gson().toJson(User())
+                    )
+                    prefs.clearAll()
+
+                }.show(requireActivity().supportFragmentManager, ConfirmationBottomSheet.TAG)
             }
         }
     }
@@ -129,7 +156,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 class MessagesAdapter(
     private val inflater: LayoutInflater
 ) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
-    var messages : MutableList<MessageModel> = mutableListOf()
+    var messages: MutableList<MessageModel> = mutableListOf()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -145,14 +172,22 @@ class MessagesAdapter(
             holder.itemBinding.messageText.text = msgModel.text
             holder.itemBinding.timeText.text = msgModel.date
             holder.itemBinding.otherMessageBubble.visibility = View.GONE
+            setBubbleWidth(holder.itemBinding.myMessageBubble, msgModel.text.length)
         } else {
             holder.itemBinding.otherMessageText.text = msgModel.text
             holder.itemBinding.otherTimeText.text = msgModel.date
             holder.itemBinding.myMessageBubble.visibility = View.GONE
+            setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
         }
     }
 
-    fun updateMessages(list: MutableList<MessageModel>){
+    private fun setBubbleWidth(bubble: View, textLength: Int) {
+        val maxWidth = Resources.getSystem().displayMetrics.widthPixels
+        //if (textLength >= 40)
+            bubble.layoutParams.width = (maxWidth * (textLength / 100f) + maxWidth/8).toInt()
+    }
+
+    fun updateMessages(list: MutableList<MessageModel>) {
         messages = list
     }
 

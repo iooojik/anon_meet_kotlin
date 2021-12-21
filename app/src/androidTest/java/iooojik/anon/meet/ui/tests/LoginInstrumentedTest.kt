@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 class LoginInstrumentedTest {
     @Rule
     @JvmField
-    val activityRule = ActivityRule()
+    val activityRule = ActivityRule(R.id.loginFragment)
     private lateinit var prefsManager: SharedPreferencesManager
 
 
@@ -29,11 +29,7 @@ class LoginInstrumentedTest {
     fun beforeMethod(){
         prefsManager = SharedPreferencesManager(activityRule.activityTestRule.activity.applicationContext)
         prefsManager.initPreferences()
-        activityRule.activityTestRule.activity.runOnUiThread {
-            prefsManager.clearAll()
-            if (activityRule.navController.currentDestination!!.id == R.id.filtersFragment)
-                activityRule.navController.navigate(R.id.action_global_auth_navigation)
-        }
+        prefsManager.clearAll()
     }
 
     @Test

@@ -41,6 +41,7 @@
         <item name="android:paddingRight">12dp</item>
         <item name="android:minWidth">48dp</item>
         <item name="android:minHeight">48dp</item>
+        <item name="borderWidth">0dp</item>
     </style>
 
     <style name="buttonStyle" parent="Widget.MaterialComponents.Button">
@@ -63,6 +64,13 @@
         <item name="labelBehavior">gone</item>
         <item name="thumbColor">?attr/colorAccent</item>
         <item name="trackColor">?attr/colorSecondaryVariant</item>
+    </style>
 
+    <style name="message_input_layout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="hintTextColor">?android:attr/textColor</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="colorPrimary">?android:attr/textColor</item>
+        <item name="android:layout_margin">@dimen/message_input_dimen</item>
     </style>
 </resources>

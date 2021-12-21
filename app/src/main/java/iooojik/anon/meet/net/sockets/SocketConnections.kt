@@ -28,14 +28,10 @@ class SocketConnections {
         val topics = mutableMapOf<String, Disposable>()
 
         fun connectToServer(context: Context) {
+            resetSubscriptions()
             val prefs = SharedPreferencesManager(context)
-            val token =
-                prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "").toString() + " " + prefs.getValue(
-                    SharedPrefsKeys.USER_TOKEN,
-                    ""
-                ).toString()
-            stompClient = Stomp
-                .over(
+            val token = prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "").toString() + " " + prefs.getValue(SharedPrefsKeys.USER_TOKEN, "").toString()
+            stompClient = Stomp.over(
                     Stomp.ConnectionProvider.OKHTTP,
                     StaticSockets.SOCKET_URL,
                     mapOf("Authorization" to token),
@@ -44,28 +40,43 @@ class SocketConnections {
                     ).build()
                 )
                 .withClientHeartbeat(StaticSockets.SERVER_HEARTBEAT)
-            val disposable = stompClient.lifecycle().subscribe { lifecycleEvent ->
+            val disposable = stompClient.lifecycle().subscribe ({ lifecycleEvent ->
                 when (lifecycleEvent.type) {
                     LifecycleEvent.Type.OPENED -> log("Stomp connection opened")
-                    LifecycleEvent.Type.ERROR -> lifecycleEvent.exception.printStackTrace()
+                    LifecycleEvent.Type.ERROR -> log("Stomp connection error ${lifecycleEvent.exception}")
                     LifecycleEvent.Type.CLOSED -> log("Stomp connection closed")
                     else -> {
 
                     }
                 }
+
+            }, { throwable -> //log("Error on subscribe topic $throwable")
+                throwable.printStackTrace()
+                }, {
+
             }
-            resetSubscriptions()
+            )
+
             compositeDisposable.add(disposable)
             stompClient.connect()
         }
 
         fun connectToTopic(path: String, onSubscribeFun: (topicMessage: StompMessage) -> Unit) {
-            val disposableTopic: Disposable = stompClient.topic(path)
+
+            val disposableTopic: Disposable = stompClient.topic(path.replace("//", "/"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    it.printStackTrace()
+                }
                 .subscribe({ topicMessage ->
                     onSubscribeFun(topicMessage)
-                }) { throwable -> log("Error on subscribe topic $throwable") }
+                }, { throwable ->
+                    throwable.printStackTrace()
+
+                }, {
+
+                })
             compositeDisposable.add(disposableTopic)
             topics[path] = disposableTopic
         }

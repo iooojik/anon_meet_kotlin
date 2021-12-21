@@ -5,11 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 
 interface ChatProcessLogic : View.OnClickListener {
     fun setListeners(binding: FragmentChatProcessBinding) {
-        binding.messageInputLayout.sendMessage.setOnClickListener(this)
+        binding.mainLayout.messageInputLayout.sendMessage.setOnClickListener(this)
+        binding.topChatBar.exitChat.setOnClickListener(this)
     }
 
     fun hideBackButton(activity: AppCompatActivity) {
@@ -23,5 +25,13 @@ interface ChatProcessLogic : View.OnClickListener {
             }
         }
         activity.onBackPressedDispatcher.addCallback(fragment.viewLifecycleOwner, callback)
+    }
+
+    fun hideToolBar(activity: MainActivity){
+        activity.supportActionBar?.hide()
+    }
+
+    fun showToolBar(activity: MainActivity){
+        activity.supportActionBar?.show()
     }
 }

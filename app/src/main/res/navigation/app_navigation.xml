@@ -62,7 +62,7 @@
         <fragment
             android:id="@+id/chatProcessFragment"
             android:name="iooojik.anon.meet.ui.chat.ChatProcessFragment"
-            android:label="fragment_chat_process"
+            android:label="@string/anonim"
             tools:layout="@layout/fragment_chat_process" />
         <action
             android:id="@+id/action_global_auth_navigation"
