@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.MessageModel
+import iooojik.anon.meet.data.models.SeenModel
 import iooojik.anon.meet.data.models.TypingModel
 import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
@@ -67,6 +68,7 @@ class ChatService : Service() {
         if (topicMessage.payload.trim().isNotBlank()) {
             when {
                 topicMessage.payload.contains("typing") -> {
+                    //пользователь набирает сообщение
                     val typingModel = Gson().fromJson(topicMessage.payload, TypingModel::class.java)
                     TypingModel.mTyping = typingModel.typing
                     TypingModel.mTypingUser = typingModel.typingUser
@@ -75,6 +77,7 @@ class ChatService : Service() {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                 }
                 topicMessage.payload.contains("endChat") -> {
+                    //завершается чат
                     preferencesManager = SharedPreferencesManager(this)
                     preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
                     preferencesManager.clearAll()
@@ -83,16 +86,26 @@ class ChatService : Service() {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     AppDatabase.instance.messageDao.clearTable()
                     SocketConnections.resetSubscriptions()
-                    stopSelf()
                     stopForeground(true)
+                    AppDatabase.instance.clearAllTables()
+                    stopSelf()
+                }
+                topicMessage.payload.contains("seen") -> {
+                    val seenModel = Gson().fromJson(topicMessage.payload, SeenModel::class.java)
+                    if (seenModel.seen){
+                        AppDatabase.instance.messageDao.getAll().forEach {
+                            it.seen = seenModel.seen
+                            AppDatabase.instance.messageDao.update(message = it)
+                        }
+                    }
                 }
                 else -> {
+                    //получение сообщения
                     val msg = Gson().fromJson(topicMessage.payload, MessageModel::class.java)
                     val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
                     msg.date = sdf.format(Date())
                     msg.isMine = User.mUuid == msg.author.uuid
                     AppDatabase.instance.messageDao.insert(msg)
-                    //MessagesViewModel.messages.add(msg)
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     if (!isForeground(this)) {
@@ -119,16 +132,24 @@ class ChatService : Service() {
                         with(notificationManager) {
                             notify(NOTIFICATION_ID, builder.build()) // посылаем уведомление
                         }
+                    } else{
+                        val preferencesManager = SharedPreferencesManager(this)
+                        preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                        val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
+                        SocketConnections.sendStompMessage(
+                            "/app/seen.$rUuid",
+                            Gson().toJson(
+                                SeenModel(true)
+                            )
+                        )
                     }
-
-
                 }
             }
         }
     }
 
     private fun runAsForeground() {
-
+        //создание канала с уведомлениями
         val notificationManager = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -142,8 +163,8 @@ class ChatService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
         val notification = NotificationCompat.Builder(this, CHANNEL_ID2)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentText(getString(R.string.app_name)) //.setContentIntent(pendingIntent)
+            .setSmallIcon(R.drawable.ic_anon_icon)
+            .setContentText(getString(R.string.active_chat)) //.setContentIntent(pendingIntent)
             .build()
         startForeground(NOTIFICATION_ID2, notification)
     }
@@ -159,4 +180,5 @@ class ChatService : Service() {
         }
         return false
     }
+
 }

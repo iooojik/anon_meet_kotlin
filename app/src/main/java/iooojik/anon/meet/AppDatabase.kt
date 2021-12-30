@@ -10,7 +10,7 @@ import iooojik.anon.meet.data.models.MessageModel
 
 @Database(
     entities = [MessageModel::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract val messageDao:MessageDao

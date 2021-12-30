@@ -6,12 +6,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import iooojik.anon.meet.activity.MainActivity
+import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 
 interface ChatProcessLogic : View.OnClickListener {
-    fun setListeners(binding: FragmentChatProcessBinding) {
+    fun setListeners(binding: FragmentChatProcessBinding, topBarBinding: ChatProcessTopBarBinding) {
         binding.mainLayout.messageInputLayout.sendMessage.setOnClickListener(this)
-        binding.topChatBar.exitChat.setOnClickListener(this)
+        topBarBinding.exitChat.setOnClickListener(this)
     }
 
     fun hideBackButton(activity: AppCompatActivity) {

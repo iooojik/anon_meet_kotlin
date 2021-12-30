@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/message_layout"
     android:layout_width="match_parent"
@@ -27,17 +28,32 @@
             android:textColor="@color/white"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
-            android:id="@+id/other_time_text"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/message_input_dimen"
-            android:layout_marginEnd="@dimen/message_input_dimen"
-            android:background="@android:color/transparent"
-            android:text="@tools:sample/lorem"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:layout_marginEnd="@dimen/message_input_dimen">
+
+            <TextView
+                android:id="@+id/other_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="@tools:sample/lorem"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <!--<ImageView
+                android:id="@+id/message_seen_not_my_bubble"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/outline_done_24"
+                android:contentDescription="@string/message_seen" />-->
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -59,17 +75,33 @@
             android:textColor="@color/white"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
-            android:id="@+id/time_text"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/message_input_dimen"
             android:layout_marginEnd="@dimen/message_input_dimen"
-            android:background="@android:color/transparent"
-            android:text="@tools:sample/lorem"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
+                android:text="@tools:sample/lorem"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/message_seen_my_bubble"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/outline_done_24"
+                android:contentDescription="@string/message_seen" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

@@ -7,12 +7,6 @@
     tools:context=".ui.chat.ChatProcessFragment">
 
     <include
-        android:id="@+id/top_chat_bar"
-        layout="@layout/chat_process_top_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
         layout="@layout/chat_process_main"
         android:id="@+id/main_layout"
         android:layout_width="match_parent"

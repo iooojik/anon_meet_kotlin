@@ -1,23 +1,26 @@
 package iooojik.anon.meet.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import iooojik.anon.meet.data.models.MessageModel
 
 
 @Dao
 interface MessageDao {
     @Query("SELECT * FROM messages")
-    fun getAll(): LiveData<MutableList<MessageModel>>
+    fun getAllToObserve(): LiveData<MutableList<MessageModel>>
+
+    @Query("SELECT * FROM messages")
+    fun getAll(): List<MessageModel>
 
     @Insert
     fun insert(message: MessageModel)
 
     @Delete
     fun delete(message: MessageModel)
+
+    @Update
+    fun update(message: MessageModel)
 
     @Query("DELETE FROM messages")
     fun clearTable()

@@ -8,7 +8,7 @@ class MessagesViewModel : ViewModel() {
     companion object {
         val messages : LiveData<MutableList<MessageModel>>
             get(){
-                return AppDatabase.instance.messageDao.getAll()
+                return AppDatabase.instance.messageDao.getAllToObserve()
             }
     }
 }

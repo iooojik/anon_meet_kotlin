@@ -38,7 +38,10 @@
     <string name="typing">печатает…</string>
     <string name="finish_chat_confirmation">Вы действительно хотите завершить чат?</string>
     <string name="error_request">Ошибка выполнения запроса</string>
+    <string name="active_chat">У вас есть незавершённый чат</string>
+    <string name="image_under_title" translatable="false">image_under_title</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="message_seen">message_seen</string>
 
 
 </resources>

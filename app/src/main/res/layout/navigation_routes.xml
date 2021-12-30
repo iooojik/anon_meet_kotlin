@@ -24,6 +24,22 @@
             app:menu="@menu/top_app_bar_auth_menu"
             app:title="@string/app_name" />
 
+        <include
+            android:id="@+id/top_chat_bar"
+            layout="@layout/chat_process_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="4dp"
+            android:scaleType="fitStart"
+            android:layout_marginStart="@dimen/standard_margin"
+            app:srcCompat="@drawable/accent"
+            android:contentDescription="@string/image_under_title" />
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include

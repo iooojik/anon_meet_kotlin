@@ -16,7 +16,9 @@ data class MessageModel(
     @SerializedName("author")
     @Ignore
     val author: User,
-    var isMine: Boolean = User.mUuid == author.uuid
+    var isMine: Boolean = User.mUuid == author.uuid,
+    @SerializedName("seen")
+    var seen: Boolean = isMine
 ) {
-    constructor() : this(null, "", "", User(), false)
+    constructor() : this(null, "", "", User(), false, false)
 }

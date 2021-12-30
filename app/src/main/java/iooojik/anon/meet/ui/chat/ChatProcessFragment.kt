@@ -10,21 +10,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.data.models.MessageModel
 import iooojik.anon.meet.data.models.MessagesViewModel
+import iooojik.anon.meet.data.models.SeenModel
 import iooojik.anon.meet.data.models.User
+import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
-import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
@@ -35,6 +38,7 @@ import iooojik.anon.meet.ui.ConfirmationBottomSheet
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private lateinit var binding: FragmentChatProcessBinding
     private lateinit var adapter: MessagesAdapter
+    private lateinit var topChatBarBinding: ChatProcessTopBarBinding
     private var userListUpdateObserver: Observer<MutableList<MessageModel>> =
         Observer<MutableList<MessageModel>> {
             adapter.updateMessages(it)
@@ -53,12 +57,14 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     ): View {
         binding = FragmentChatProcessBinding.inflate(inflater)
         binding.mainLayout.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = MessagesAdapter(layoutInflater)
+        adapter = MessagesAdapter(layoutInflater, requireContext())
         binding.mainLayout.messagesRecView.adapter = adapter
+        topChatBarBinding = (requireActivity() as MainActivity).binding.appBarMain.topChatBar
+        topChatBarBinding.root.visibility = View.VISIBLE
         hideBackButton(requireActivity() as AppCompatActivity)
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
-        setListeners(binding)
+        setListeners(binding, topChatBarBinding)
 
         Intent(requireActivity(), ChatService::class.java).also { intent ->
             val pendingIntent = requireActivity().createPendingResult(100, Intent(), 0)
@@ -75,6 +81,15 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         hideToolBar(activity as MainActivity)
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(mMessageReceiver, IntentFilter(adapterIntentFilterName))
+        val preferencesManager = SharedPreferencesManager(requireContext())
+        preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+        val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
+        SocketConnections.sendStompMessage(
+            "/app/seen.$rUuid",
+            Gson().toJson(
+                SeenModel(true)
+            )
+        )
         super.onResume()
     }
 
@@ -83,9 +98,9 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
             val typing = intent.extras?.getBoolean("typing")
             if (typing != null && typing == true) {
                 if (typing) {
-                    binding.topChatBar.typingMessage.text = resources.getString(R.string.typing)
+                    topChatBarBinding.typingMessage.text = resources.getString(R.string.typing)
                 } else {
-                    binding.topChatBar.typingMessage.text = " "
+                    topChatBarBinding.typingMessage.text = " "
                 }
             }
             val endChat = intent.extras?.getBoolean("endChat")
@@ -104,6 +119,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 
     override fun onDestroyView() {
         showToolBar(activity = activity as MainActivity)
+        topChatBarBinding.root.visibility = View.GONE
         super.onDestroyView()
     }
 
@@ -154,7 +170,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 }
 
 class MessagesAdapter(
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater,
+    private val context: Context
 ) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
     var messages: MutableList<MessageModel> = mutableListOf()
 
@@ -172,6 +189,20 @@ class MessagesAdapter(
             holder.itemBinding.messageText.text = msgModel.text
             holder.itemBinding.timeText.text = msgModel.date
             holder.itemBinding.otherMessageBubble.visibility = View.GONE
+            if (msgModel.seen)
+                holder.itemBinding.messageSeenMyBubble.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.outline_done_all_24, null
+                    )
+                )
+            else
+                holder.itemBinding.messageSeenMyBubble.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.outline_done_24, null
+                    )
+                )
             setBubbleWidth(holder.itemBinding.myMessageBubble, msgModel.text.length)
         } else {
             holder.itemBinding.otherMessageText.text = msgModel.text
@@ -184,7 +215,7 @@ class MessagesAdapter(
     private fun setBubbleWidth(bubble: View, textLength: Int) {
         val maxWidth = Resources.getSystem().displayMetrics.widthPixels
         //if (textLength >= 40)
-            bubble.layoutParams.width = (maxWidth * (textLength / 100f) + maxWidth/8).toInt()
+        bubble.layoutParams.width = (maxWidth * (textLength / 100f) + maxWidth / 8).toInt()
     }
 
     fun updateMessages(list: MutableList<MessageModel>) {
