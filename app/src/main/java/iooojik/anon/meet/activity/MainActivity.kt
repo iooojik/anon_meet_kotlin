@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
             findNavController(R.id.nav_host_fragment),
             this
         )
-        SocketConnections.connectToServer(this)
+        //SocketConnections.connectToServer(this)
         checkUserTokenAndAuth(context = this, findNavController(R.id.nav_host_fragment))
         ProviderInstaller.installIfNeeded(applicationContext)
         AppDatabase.initDatabase(this)

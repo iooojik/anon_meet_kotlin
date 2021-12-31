@@ -12,7 +12,7 @@ android {
         applicationId "iooojik.anon.meet"
         minSdk 23
         targetSdk 31
-        versionCode 1
+        versionCode 3
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -6,11 +6,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Resources
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -21,10 +24,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
-import iooojik.anon.meet.data.models.MessageModel
-import iooojik.anon.meet.data.models.MessagesViewModel
-import iooojik.anon.meet.data.models.SeenModel
-import iooojik.anon.meet.data.models.User
+import iooojik.anon.meet.data.models.*
 import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
@@ -39,11 +39,12 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private lateinit var binding: FragmentChatProcessBinding
     private lateinit var adapter: MessagesAdapter
     private lateinit var topChatBarBinding: ChatProcessTopBarBinding
+    private lateinit var rUuid: String
     private var userListUpdateObserver: Observer<MutableList<MessageModel>> =
         Observer<MutableList<MessageModel>> {
             adapter.updateMessages(it)
             adapter.notifyItemInserted(it.size - 1)
-
+            binding.mainLayout.messagesRecView.scrollToPosition(it.size - 1)
             //recyclerView.updateUserList(userArrayList)
         }
 
@@ -55,6 +56,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        SocketConnections.connectToServer(requireContext())
+
         binding = FragmentChatProcessBinding.inflate(inflater)
         binding.mainLayout.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = MessagesAdapter(layoutInflater, requireContext())
@@ -73,9 +76,47 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
 
         MessagesViewModel.messages.observe(viewLifecycleOwner, userListUpdateObserver)
+        inputMessageTextWatcher()
         return binding.root
     }
 
+    private fun inputMessageTextWatcher(){
+        binding.mainLayout.messageInputLayout.messageTextField.editText!!.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if (s?.toString().isNullOrBlank()){
+                    SocketConnections.sendStompMessage(
+                        "/app/typing.$rUuid",
+                        Gson().toJson(
+                            TypingModel(false)
+                        )
+                    )
+                }
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s?.toString().isNullOrBlank()){
+                    SocketConnections.sendStompMessage(
+                        "/app/typing.$rUuid",
+                        Gson().toJson(
+                            TypingModel(true)
+                        )
+                    )
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.toString().isNullOrBlank()){
+                    SocketConnections.sendStompMessage(
+                        "/app/typing.$rUuid",
+                        Gson().toJson(
+                            TypingModel(false)
+                        )
+                    )
+                }
+            }
+
+        })
+    }
 
     override fun onResume() {
         hideToolBar(activity as MainActivity)
@@ -83,7 +124,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
             .registerReceiver(mMessageReceiver, IntentFilter(adapterIntentFilterName))
         val preferencesManager = SharedPreferencesManager(requireContext())
         preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-        val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
+        rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "") as String
         SocketConnections.sendStompMessage(
             "/app/seen.$rUuid",
             Gson().toJson(
@@ -126,9 +167,6 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.send_message -> {
-                val preferencesManager = SharedPreferencesManager(requireContext())
-                preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-                val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
                 val messageText =
                     binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
                 if (messageText.trim().isNotBlank()) {

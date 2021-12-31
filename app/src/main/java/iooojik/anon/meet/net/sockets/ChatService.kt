@@ -70,11 +70,11 @@ class ChatService : Service() {
                 topicMessage.payload.contains("typing") -> {
                     //пользователь набирает сообщение
                     val typingModel = Gson().fromJson(topicMessage.payload, TypingModel::class.java)
-                    TypingModel.mTyping = typingModel.typing
-                    TypingModel.mTypingUser = typingModel.typingUser
-                    val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
-                    intent.putExtra("typing", true)
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                    if (typingModel.typingUser.uuid != User.mUuid) {
+                        val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
+                        intent.putExtra("typing", typingModel.typing)
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                    }
                 }
                 topicMessage.payload.contains("endChat") -> {
                     //завершается чат
