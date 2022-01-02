@@ -1,108 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/message_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/message_input_dimen"
-    android:orientation="horizontal"
-    android:padding="@dimen/message_input_dimen">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/other_message_bubble"
-        android:layout_width="wrap_content"
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="message"
+            type="iooojik.anon.meet.data.models.MessageViewModel" />
+    </data>
+
+
+    <FrameLayout
+        android:id="@+id/message_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:background="@drawable/other_message_bubble"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/message_input_dimen"
+        android:orientation="horizontal"
+        android:padding="@dimen/message_input_dimen">
 
-        <TextView
-            android:id="@+id/other_message_text"
+
+        <LinearLayout
+            android:id="@+id/other_message_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:background="@android:color/transparent"
-            android:padding="5dp"
-            android:textAlignment="textStart"
-            android:textColor="@color/white"
-            tools:text="@tools:sample/lorem" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginStart="@dimen/message_input_dimen"
-            android:layout_marginEnd="@dimen/message_input_dimen">
+            android:visibility="@{message.messageMutableLiveData.mine ? View.GONE : View.VISIBLE}"
+            android:background="@drawable/other_message_bubble"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/other_time_text"
+                android:id="@+id/other_message_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:background="@android:color/transparent"
-                android:text="@tools:sample/lorem"
+                android:padding="5dp"
+                android:textAlignment="textStart"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:text="@{message.messageMutableLiveData.text}"
+                tools:text="@tools:sample/lorem" />
 
-            <!--<ImageView
-                android:id="@+id/message_seen_not_my_bubble"
-                android:layout_width="0dp"
-                android:layout_height="12dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/outline_done_24"
-                android:contentDescription="@string/message_seen" />-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginStart="@dimen/message_input_dimen"
+                android:layout_marginEnd="@dimen/message_input_dimen">
+
+                <TextView
+                    android:id="@+id/other_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    tools:text="@tools:sample/lorem"
+                    android:textColor="@color/white"
+                    android:text="@{message.messageMutableLiveData.date}"
+                    android:textSize="12sp" />
+
+                <!--<ImageView
+                    android:id="@+id/message_seen_not_my_bubble"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/outline_done_24"
+                    android:contentDescription="@string/message_seen" />-->
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/my_message_bubble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="@drawable/my_message_bubble"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/message_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:background="@android:color/transparent"
-            android:padding="5dp"
-            android:textAlignment="textStart"
-            android:textColor="@color/white"
-            tools:text="@tools:sample/lorem" />
 
         <LinearLayout
+            android:id="@+id/my_message_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginStart="@dimen/message_input_dimen"
-            android:layout_marginEnd="@dimen/message_input_dimen"
-            android:orientation="horizontal">
+            android:layout_gravity="end"
+            android:visibility="@{message.messageMutableLiveData.mine ? View.VISIBLE : View.GONE}"
+            android:background="@drawable/my_message_bubble"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/time_text"
+                android:id="@+id/message_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_gravity="start"
                 android:background="@android:color/transparent"
-                android:text="@tools:sample/lorem"
+                android:padding="5dp"
+                android:textAlignment="textStart"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:text="@{message.messageMutableLiveData.text}"
+                tools:text="@tools:sample/lorem" />
 
-            <ImageView
-                android:id="@+id/message_seen_my_bubble"
-                android:layout_width="0dp"
-                android:layout_height="12dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/outline_done_24"
-                android:contentDescription="@string/message_seen" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginStart="@dimen/message_input_dimen"
+                android:layout_marginEnd="@dimen/message_input_dimen"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{message.messageMutableLiveData.date}"
+                    android:background="@android:color/transparent"
+                    tools:text="@tools:sample/lorem"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/message_seen_my_bubble"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="1"
+                    android:src="@{message.messageMutableLiveData.seen ? @drawable/outline_done_all_24 : @drawable/outline_done_24}"
+                    tools:srcCompat="@drawable/outline_done_24"
+                    android:contentDescription="@string/message_seen" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-
-
-</FrameLayout>
+    </FrameLayout>
+</layout>

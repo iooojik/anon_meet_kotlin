@@ -5,7 +5,6 @@
     tools:context=".ui.filters.FiltersFragment">
 
     <data>
-
         <variable
             name="user"
             type="iooojik.anon.meet.data.models.UserViewModel" />

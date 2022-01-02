@@ -57,7 +57,6 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         savedInstanceState: Bundle?
     ): View {
         SocketConnections.connectToServer(requireContext())
-
         binding = FragmentChatProcessBinding.inflate(inflater)
         binding.mainLayout.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = MessagesAdapter(layoutInflater, requireContext())
@@ -68,6 +67,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding, topChatBarBinding)
+
 
         Intent(requireActivity(), ChatService::class.java).also { intent ->
             val pendingIntent = requireActivity().createPendingResult(100, Intent(), 0)
@@ -161,11 +161,16 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     override fun onDestroyView() {
         showToolBar(activity = activity as MainActivity)
         topChatBarBinding.root.visibility = View.GONE
+        topChatBarBinding.typingMessage.text = " "
         super.onDestroyView()
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
+            R.id.chat_view -> {
+                if (activity != null) hideKeyBoard(requireActivity(), binding.root)
+                binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
+            }
             R.id.send_message -> {
                 val messageText =
                     binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
@@ -182,10 +187,6 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                     )
                     binding.mainLayout.messageInputLayout.messageTextField.editText!!.text.clear()
                 }
-            }
-            R.id.messages_rec_view -> {
-                binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
-
             }
             R.id.exit_chat -> {
                 ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
@@ -222,29 +223,12 @@ class MessagesAdapter(
 
     override fun onBindViewHolder(holder: MessagesAdapter.MessagesViewHolder, position: Int) {
         val msgModel = messages[position]
+        val messageViewModel = MessageViewModel().updateModel(msgModel)
+        holder.itemBinding.message = messageViewModel
         //val msgModel = MessagesViewModel.messages[position]
         if (msgModel.isMine) {
-            holder.itemBinding.messageText.text = msgModel.text
-            holder.itemBinding.timeText.text = msgModel.date
-            holder.itemBinding.otherMessageBubble.visibility = View.GONE
-            if (msgModel.seen)
-                holder.itemBinding.messageSeenMyBubble.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        context.resources,
-                        R.drawable.outline_done_all_24, null
-                    )
-                )
-            else
-                holder.itemBinding.messageSeenMyBubble.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        context.resources,
-                        R.drawable.outline_done_24, null
-                    )
-                )
             setBubbleWidth(holder.itemBinding.myMessageBubble, msgModel.text.length)
         } else {
-            holder.itemBinding.otherMessageText.text = msgModel.text
-            holder.itemBinding.otherTimeText.text = msgModel.date
             holder.itemBinding.myMessageBubble.visibility = View.GONE
             setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
         }
