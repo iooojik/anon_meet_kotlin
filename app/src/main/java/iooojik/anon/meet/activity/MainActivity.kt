@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.security.ProviderInstaller
+import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
             findNavController(R.id.nav_host_fragment),
             this
         )
+        AdUtil.loadInterstitialAd(this)
         //SocketConnections.connectToServer(this)
         checkUserTokenAndAuth(context = this, findNavController(R.id.nav_host_fragment))
         ProviderInstaller.installIfNeeded(applicationContext)

@@ -28,6 +28,7 @@ public class Application extends android.app.Application {
         super.onCreate();
         applicationInstance = this;
         setTheme(this);
+        AdUtil.Companion.initializeAd(this);
     }
 
     public static void setTheme(Context context) {

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.ads.AdRequest
+import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.UserViewModel
 import iooojik.anon.meet.databinding.FragmentSettingsBinding
@@ -14,6 +16,10 @@ import iooojik.anon.meet.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment(), SettingsFragmentLogic {
     private lateinit var binding: FragmentSettingsBinding
+
+    companion object {
+        var windowOpenedCounter = 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,8 +29,18 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
         binding.user = ViewModelProvider(this).get(
             UserViewModel::class.java
         )
+        binding.adBanner.loadAd(AdRequest.Builder().build())
         setListeners(binding, resources)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        windowOpenedCounter++
+        if (windowOpenedCounter % 2 == 0) {
+            windowOpenedCounter = 0
+            AdUtil.loadInterstitialAd(requireActivity(), true)
+        }
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {

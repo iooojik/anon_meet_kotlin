@@ -9,31 +9,49 @@
             type="iooojik.anon.meet.data.models.UserViewModel" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/user_credentials"
-            style="@style/headline6"
-            android:layout_margin="@dimen/standard_margin"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_credentials"
+                style="@style/headline6"
+                android:layout_margin="@dimen/standard_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{@string/text_view_age(String.format(`%s`, user.Companion.userMutableLiveData.userLogin), String.format(`%s`, user.Companion.userMutableLiveData.filter.myAge))}" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/theme_change_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/turn_on_off_dark_mode" />
+
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ad_banner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{@string/text_view_age(String.format(`%s`, user.Companion.userMutableLiveData.userLogin), String.format(`%s`, user.Companion.userMutableLiveData.filter.myAge))}" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/theme_change_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/turn_on_off_dark_mode" />
-    </LinearLayout>
+            android:layout_marginTop="@dimen/standard_margin_large"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_id"
+            android:layout_gravity="bottom|center_horizontal"
+            >
+        </com.google.android.gms.ads.AdView>
+    </FrameLayout>
 
 </layout>

@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.AdRequest
 import com.google.android.material.slider.RangeSlider
 import com.google.gson.Gson
+import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.StackModel
 import iooojik.anon.meet.data.models.User
@@ -34,6 +36,8 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         binding.user = ViewModelProvider(this).get(
             UserViewModel::class.java
         )
+        binding.adBanner.loadAd(AdRequest.Builder().build())
+
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)
