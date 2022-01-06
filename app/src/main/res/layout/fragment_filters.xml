@@ -36,14 +36,14 @@
                     android:id="@+id/my_sex_male"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.userMutableLiveData.filter.mySex.equals(`male`)}"
+                    android:checked="@{user.Companion.currentUser.filter.mySex.equals(`male`)}"
                     android:text="@string/male_sex" />
 
                 <RadioButton
                     android:id="@+id/my_sex_female"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.userMutableLiveData.filter.mySex.equals(`female`)}"
+                    android:checked="@{user.Companion.currentUser.filter.mySex.equals(`female`)}"
                     android:text="@string/female_sex" />
             </RadioGroup>
         </LinearLayout>
@@ -68,21 +68,21 @@
                     android:id="@+id/interlocutor_sex_male"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.userMutableLiveData.filter.interlocutorSex.equals(`male`)}"
+                    android:checked="@{user.Companion.currentUser.filter.interlocutorSex.equals(`male`)}"
                     android:text="@string/male_sex" />
 
                 <RadioButton
                     android:id="@+id/interlocutor_sex_female"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.userMutableLiveData.filter.interlocutorSex.equals(`female`)}"
+                    android:checked="@{user.Companion.currentUser.filter.interlocutorSex.equals(`female`)}"
                     android:text="@string/female_sex" />
 
                 <RadioButton
                     android:id="@+id/interlocutor_sex_nm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.userMutableLiveData.filter.interlocutorSex.equals(`nm`)}"
+                    android:checked="@{user.Companion.currentUser.filter.interlocutorSex.equals(`nm`)}"
                     android:text="@string/no_matter_sex" />
 
             </RadioGroup>
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 style="@style/subtitle1"
-                android:text="@{String.format(`%.0f`, user.Companion.userMutableLiveData.filter.interlocutorAgesRange[0])+` - `+String.format(`%.0f`, user.Companion.userMutableLiveData.filter.interlocutorAgesRange[1])}" />
+                android:text="@{String.format(`%.0f`, user.Companion.currentUser.filter.interlocutorAgesRange[0])+` - `+String.format(`%.0f`, user.Companion.currentUser.filter.interlocutorAgesRange[1])}" />
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/age_range_slider"
@@ -119,7 +119,7 @@
                 android:valueFrom="0.0"
                 android:valueTo="100.0"
                 style="@style/range_slider"
-                app:values="@{user.Companion.userMutableLiveData.filter.interlocutorAgesRange}" />
+                app:values="@{user.Companion.currentUser.filter.interlocutorAgesRange}" />
         </LinearLayout>
 
         <Button

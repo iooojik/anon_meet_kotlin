@@ -23,28 +23,24 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegistration2Binding.inflate(inflater)
-        setListeners(binding)
+        binding.fragment = this
         return binding.root
     }
 
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.select_birth_date -> {
-                val datePicker = MaterialDatePicker.Builder.datePicker().build()
-                datePicker.addOnPositiveButtonClickListener {
-                    birthDate = Date(it)
-                    val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
-                    User.mBirthDate = formatDate(simpleDateFormat.format(birthDate))
-                    binding.birthdateTextField.editText!!.setText(simpleDateFormat.format(birthDate))
-
-                }
-                datePicker.show(requireActivity().supportFragmentManager, "")
-            }
-            R.id.register_button -> {
-                register(binding, findNavController(), requireActivity())
-            }
-        }
+    fun registerUser(v: View){
+        register(binding, findNavController(), requireActivity())
     }
 
+    fun selectBirthDate(v: View){
+        val datePicker = MaterialDatePicker.Builder.datePicker().build()
+        datePicker.addOnPositiveButtonClickListener {
+            birthDate = Date(it)
+            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
+            User.mBirthDate = formatDate(simpleDateFormat.format(birthDate))
+            binding.birthdateTextField.editText!!.setText(simpleDateFormat.format(birthDate))
+
+        }
+        datePicker.show(requireActivity().supportFragmentManager, "")
+    }
 
 }

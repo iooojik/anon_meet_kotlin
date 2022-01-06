@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Resources
 import android.os.Bundle
+import android.text.ClipboardManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -28,24 +29,29 @@ import iooojik.anon.meet.data.models.*
 import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
+import iooojik.anon.meet.hideKeyBoard
 import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.ConfirmationBottomSheet
+import android.content.ClipData
+import android.os.Build
+import android.widget.Toast
+import iooojik.anon.meet.showSnackbar
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private lateinit var binding: FragmentChatProcessBinding
     private lateinit var adapter: MessagesAdapter
     private lateinit var topChatBarBinding: ChatProcessTopBarBinding
+
     private lateinit var rUuid: String
     private var userListUpdateObserver: Observer<MutableList<MessageModel>> =
         Observer<MutableList<MessageModel>> {
             adapter.updateMessages(it)
             adapter.notifyItemInserted(it.size - 1)
             binding.mainLayout.messagesRecView.scrollToPosition(it.size - 1)
-            //recyclerView.updateUserList(userArrayList)
         }
 
     companion object {
@@ -58,16 +64,24 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     ): View {
         SocketConnections.connectToServer(requireContext())
         binding = FragmentChatProcessBinding.inflate(inflater)
+        binding.mainLayout.fragment = this
+        binding.mainLayout.messageInputLayout.fragment = this
+
         binding.mainLayout.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = MessagesAdapter(layoutInflater, requireContext())
         binding.mainLayout.messagesRecView.adapter = adapter
-        topChatBarBinding = (requireActivity() as MainActivity).binding.appBarMain.topChatBar
+
+        val appBar = (requireActivity() as MainActivity).binding.appBarMain
+        topChatBarBinding = appBar.topChatBar
+        topChatBarBinding.fragment = this
         topChatBarBinding.root.visibility = View.VISIBLE
+        topChatBarBinding.exitChat.setOnClickListener {
+            onExitChatClick(it)
+        }
+
         hideBackButton(requireActivity() as AppCompatActivity)
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
-        setListeners(binding, topChatBarBinding)
-
 
         Intent(requireActivity(), ChatService::class.java).also { intent ->
             val pendingIntent = requireActivity().createPendingResult(100, Intent(), 0)
@@ -118,6 +132,11 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         })
     }
 
+    fun onEmptySpaceClick(v: View?){
+        hideKeyBoard(requireActivity(), binding.root)
+        binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
+    }
+
     override fun onResume() {
         hideToolBar(activity as MainActivity)
         LocalBroadcastManager.getInstance(requireContext())
@@ -153,6 +172,45 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
     }
 
+    fun openInterlocutorProfile(view: View){
+        InterlocutorProfileBottomSheet(User()).show(requireActivity().supportFragmentManager, "tag")
+    }
+
+    fun onSendMessageClick(v: View?){
+        val messageText =
+            binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
+        if (messageText.trim().isNotBlank()) {
+            SocketConnections.sendStompMessage(
+                "/app/send.message.$rUuid",
+                Gson().toJson(
+                    MessageModel(
+                        id = -1,
+                        author = User(),
+                        text = messageText.toString()
+                    )
+                )
+            )
+            binding.mainLayout.messageInputLayout.messageTextField.editText!!.text.clear()
+        }
+    }
+
+    fun onExitChatClick(v: View?){
+        ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
+            val prefs = SharedPreferencesManager(requireContext())
+            prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+            SocketConnections.sendStompMessage(
+                "/app/end.chat.${
+                    prefs.getValue(
+                        SharedPrefsKeys.CHAT_ROOM_UUID,
+                        ""
+                    ).toString()
+                }", Gson().toJson(User())
+            )
+            prefs.clearAll()
+
+        }.show(requireActivity().supportFragmentManager, ConfirmationBottomSheet.TAG)
+    }
+
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(mMessageReceiver)
         super.onDestroy()
@@ -163,48 +221,6 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         topChatBarBinding.root.visibility = View.GONE
         topChatBarBinding.typingMessage.text = " "
         super.onDestroyView()
-    }
-
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.chat_view -> {
-                if (activity != null) hideKeyBoard(requireActivity(), binding.root)
-                binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
-            }
-            R.id.send_message -> {
-                val messageText =
-                    binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
-                if (messageText.trim().isNotBlank()) {
-                    SocketConnections.sendStompMessage(
-                        "/app/send.message.$rUuid",
-                        Gson().toJson(
-                            MessageModel(
-                                id = -1,
-                                author = User(),
-                                text = messageText.toString()
-                            )
-                        )
-                    )
-                    binding.mainLayout.messageInputLayout.messageTextField.editText!!.text.clear()
-                }
-            }
-            R.id.exit_chat -> {
-                ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
-                    val prefs = SharedPreferencesManager(requireContext())
-                    prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-                    SocketConnections.sendStompMessage(
-                        "/app/end.chat.${
-                            prefs.getValue(
-                                SharedPrefsKeys.CHAT_ROOM_UUID,
-                                ""
-                            ).toString()
-                        }", Gson().toJson(User())
-                    )
-                    prefs.clearAll()
-
-                }.show(requireActivity().supportFragmentManager, ConfirmationBottomSheet.TAG)
-            }
-        }
     }
 }
 
@@ -231,6 +247,13 @@ class MessagesAdapter(
         } else {
             holder.itemBinding.myMessageBubble.visibility = View.GONE
             setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
+        }
+        holder.itemBinding.root.setOnLongClickListener {
+            val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clipData = ClipData.newPlainText("anon message content", msgModel.text)
+            clipboardManager.setPrimaryClip(clipData)
+            Toast.makeText(context, context.resources.getString(R.string.copied), Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
         }
     }
 

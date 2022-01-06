@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.RangeSlider
 import com.google.gson.Gson
 import iooojik.anon.meet.AdUtil
@@ -26,6 +27,10 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
     private lateinit var binding: FragmentFiltersBinding
     private val findingBottomSheet = SearchBottomSheet()
 
+    companion object {
+        var tapCounter = 0
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,15 +38,32 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         binding = FragmentFiltersBinding.inflate(inflater)
         binding.lifecycleOwner = this
         hideBackButton(findNavController(), requireActivity() as AppCompatActivity)
+        checkAppFirstStartUp()
         binding.user = ViewModelProvider(this).get(
             UserViewModel::class.java
         )
         binding.adBanner.loadAd(AdRequest.Builder().build())
-
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)
         return binding.root
+    }
+
+    private fun checkAppFirstStartUp() {
+        val prefs = SharedPreferencesManager(requireContext())
+        prefs.initPreferences()
+        val v = prefs.getValue(SharedPrefsKeys.FIRST_START_UP, true)
+        if (v is Boolean && v){
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.first_start_up_title))
+                .setMessage(resources.getString(R.string.first_start_up_message))
+                .setCancelable(false)
+                .setPositiveButton(resources.getString(R.string.okey)) { dialog, _ ->
+                    prefs.saveValue(SharedPrefsKeys.FIRST_START_UP, false)
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -52,13 +74,19 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.search_button -> {
-                findingBottomSheet.show(
-                    requireActivity().supportFragmentManager,
-                    SearchBottomSheet.TAG
-                )
-                SocketConnections.connectToServer(requireContext())
-                SocketConnections.connectToTopic("/topic/${User.mUuid}/find", ::onChatFound)
-                SocketConnections.sendStompMessage("/app/find.${User.mUuid}", Gson().toJson(User()))
+                tapCounter++
+                if (tapCounter % 5 == 0){
+                    AdUtil.showInterstitialAd(requireActivity())
+                    tapCounter = 0
+                } else {
+                    findingBottomSheet.show(
+                        requireActivity().supportFragmentManager,
+                        SearchBottomSheet.TAG
+                    )
+                    SocketConnections.connectToServer(requireContext())
+                    SocketConnections.connectToTopic("/topic/${User.mUuid}/find", ::onChatFound)
+                    SocketConnections.sendStompMessage("/app/find.${User.mUuid}", Gson().toJson(User()))
+                }
             }
         }
     }
@@ -79,7 +107,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         when (slider.id) {
             R.id.age_range_slider -> {
                 val vals = slider.values
-                UserViewModel.changeInterlocutorAges("${vals[0].toInt()}/${vals[1].toInt()}")
+                UserViewModel.changeCurrentInterlocutorAges("${vals[0].toInt()}/${vals[1].toInt()}")
             }
         }
     }

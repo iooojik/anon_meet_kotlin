@@ -19,7 +19,6 @@
         android:orientation="horizontal"
         android:padding="@dimen/message_input_dimen">
 
-
         <LinearLayout
             android:id="@+id/other_message_bubble"
             android:layout_width="wrap_content"
@@ -56,6 +55,7 @@
                     android:background="@android:color/transparent"
                     tools:text="@tools:sample/lorem"
                     android:textColor="@color/white"
+                    android:layout_marginEnd="4dp"
                     android:text="@{message.messageMutableLiveData.date}"
                     android:textSize="12sp" />
 
@@ -107,6 +107,7 @@
                     android:background="@android:color/transparent"
                     tools:text="@tools:sample/lorem"
                     android:textColor="@color/white"
+                    android:layout_marginStart="4dp"
                     android:textSize="12sp" />
 
                 <ImageView

@@ -15,7 +15,7 @@ import iooojik.anon.meet.databinding.FragmentSettingsBinding
 
 
 class SettingsFragment : Fragment(), SettingsFragmentLogic {
-    private lateinit var binding: FragmentSettingsBinding
+    lateinit var binding: FragmentSettingsBinding
 
     companion object {
         var windowOpenedCounter = 0
@@ -26,9 +26,12 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater)
-        binding.user = ViewModelProvider(this).get(
+        val provider = ViewModelProvider(this).get(
             UserViewModel::class.java
         )
+        provider.userLiveData.value = UserViewModel.currentUser.value
+        binding.profileHeader.user = provider
+
         binding.adBanner.loadAd(AdRequest.Builder().build())
         setListeners(binding, resources)
         return binding.root
@@ -37,7 +40,7 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
     override fun onResume() {
         super.onResume()
         windowOpenedCounter++
-        if (windowOpenedCounter % 2 == 0) {
+        if (windowOpenedCounter % 3 == 0) {
             windowOpenedCounter = 0
             AdUtil.loadInterstitialAd(requireActivity(), true)
         }

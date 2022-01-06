@@ -1,51 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1"
-        android:background="?android:attr/listDivider" />
+    <data>
+        <variable
+            name="fragment"
+            type="iooojik.anon.meet.ui.chat.ChatProcessFragment" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/message_text_field"
-            style="@style/message_input_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:layout_weight="1"
-            android:hint="@string/message">
+            android:background="?android:attr/listDivider" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/message_text_field"
+                style="@style/message_input_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine" />
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:hint="@string/message">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/send_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/message_input_dimen"
-            android:contentDescription="@string/send_message"
-            android:elevation="0dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/outline_send_24"
-            app:tint="?attr/hintTextColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/message_input_dimen"
+                android:contentDescription="@string/send_message"
+                android:elevation="0dp"
+                app:fabSize="mini"
+                android:onClick="@{fragment::onSendMessageClick}"
+                app:srcCompat="@drawable/outline_send_24"
+                app:tint="?attr/hintTextColor" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>

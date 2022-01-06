@@ -19,11 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface LoginFragmentLogic : View.OnClickListener {
-    fun setListeners(binding: FragmentLoginBinding) {
-        binding.goToRegistrationButton.setOnClickListener(this)
-        binding.loginButton.setOnClickListener(this)
-    }
+interface LoginFragmentLogic {
 
     fun auth(navController: NavController, activity: Activity, binding: FragmentLoginBinding?) {
         binding?.progressBar?.visibility = View.VISIBLE
@@ -60,7 +56,7 @@ interface LoginFragmentLogic : View.OnClickListener {
         if (response.body() is LoginResponse) {
             val body = response.body() as LoginResponse
             if (response.body() != null)
-                UserViewModel.changeUserInfo(body.user)
+                UserViewModel.changeCurrentUserInfo(body.user)
 
             val prefsManager = SharedPreferencesManager(context)
             prefsManager.initPreferences()

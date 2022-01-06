@@ -86,7 +86,7 @@ interface ActivityMainLogic : ThemeSwitcher {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful) {
                         if (response.body() != null)
-                            UserViewModel.changeUserInfo(response.body()!!)
+                            UserViewModel.changeCurrentUserInfo(response.body()!!)
                     } else log(response.errorBody().toString())
                 }
 

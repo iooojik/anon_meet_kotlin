@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-
     <include
         android:id="@+id/app_bar_main"
         layout="@layout/navigation_routes"

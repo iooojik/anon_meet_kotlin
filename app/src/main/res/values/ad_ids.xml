@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--test ca-app-pub-3940256099942544~3347511713-->
+    <!--test ca-app-pub-3940256099942544~3347511713 original ca-app-pub-6737046334774794~7029402696-->
     <string name="app_id">ca-app-pub-6737046334774794~7029402696</string>
-    <!--test ca-app-pub-3940256099942544/1033173712-->
+    <!--test ca-app-pub-3940256099942544/1033173712 original ca-app-pub-6737046334774794/8707292352-->
     <string name="interstitial_id">ca-app-pub-6737046334774794/8707292352</string>
-    <!--test ca-app-pub-3940256099942544/6300978111-->
+    <!--test ca-app-pub-3940256099942544/6300978111 original ca-app-pub-6737046334774794/3040565533-->
     <string name="banner_id">ca-app-pub-6737046334774794/3040565533</string>
 </resources>

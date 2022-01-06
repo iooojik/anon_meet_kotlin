@@ -12,12 +12,7 @@ import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 
-interface ChatProcessLogic : View.OnClickListener {
-    fun setListeners(binding: FragmentChatProcessBinding, topBarBinding: ChatProcessTopBarBinding) {
-        binding.mainLayout.messageInputLayout.sendMessage.setOnClickListener(this)
-        binding.mainLayout.chatView.setOnClickListener(this)
-        topBarBinding.exitChat.setOnClickListener(this)
-    }
+interface ChatProcessLogic {
 
     fun hideBackButton(activity: AppCompatActivity) {
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
@@ -40,9 +35,5 @@ interface ChatProcessLogic : View.OnClickListener {
         activity.supportActionBar?.show()
     }
 
-    fun hideKeyBoard(activity: Activity, v: View) {
-        val imm: InputMethodManager =
-            activity.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(v.windowToken, 0)
-    }
+
 }

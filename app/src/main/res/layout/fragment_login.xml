@@ -1,89 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".ui.auth.login.LoginFragment">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="scripts"
+            type="iooojik.anon.meet.ScriptsKt" />
+        <variable
+            name="activity"
+            type="androidx.appcompat.app.AppCompatActivity" />
+        <variable
+            name="fragment"
+            type="iooojik.anon.meet.ui.auth.login.LoginFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/standard_margin"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:onClick="@{fragment::hideKeyboardAndClearFocus}"
+        android:id="@+id/login_layout">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nickname_text_field"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/nickname">
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/standard_margin"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/ad_banner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nickname_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxEms="16"
-                android:maxLines="1"
-                android:inputType="text" />
+                android:hint="@string/nickname">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxEms="16"
+                    android:maxLines="1" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_text_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/password"
-            app:endIconMode="password_toggle">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:maxEms="36"
-                android:inputType="textPassword" />
+                android:hint="@string/password"
+                app:endIconMode="password_toggle">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxEms="36"
+                    android:maxLines="1" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/standard_margin"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/login_Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/standard_margin_2"
+                android:onClick="@{fragment::onLoginButtonClick}"
+                android:text="@string/login" />
+
+            <Button
+                android:id="@+id/go_to_registration_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/standard_margin_2"
+                android:onClick="@{fragment::onRegistrationButtonClick}"
+                android:text="@string/register" />
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad_banner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/standard_margin"
-            android:layout_marginBottom="@dimen/standard_margin"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/login_Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/standard_margin_2"
-            android:text="@string/login" />
-
-        <Button
-            android:id="@+id/go_to_registration_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/standard_margin_2"
-            android:text="@string/register" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/standard_margin"
-        android:gravity="bottom"
-        android:text="@string/copyright"
-        android:textColor="@color/kBlue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner_id"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/standard_margin_2"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

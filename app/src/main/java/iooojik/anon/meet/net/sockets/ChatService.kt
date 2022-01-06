@@ -13,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
+import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.data.models.MessageModel
 import iooojik.anon.meet.data.models.SeenModel
 import iooojik.anon.meet.data.models.TypingModel
@@ -108,6 +109,7 @@ class ChatService : Service() {
                     AppDatabase.instance.messageDao.insert(msg)
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
                     if (!isForeground(this)) {
                         val notificationManager = NotificationManagerCompat.from(this)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -122,11 +124,19 @@ class ChatService : Service() {
                             notificationManager.createNotificationChannel(channel)
                         }
 
+                        val pendingIntent = PendingIntent.getActivity(
+                            applicationContext,
+                            NOTIFICATION_ID,
+                            Intent(applicationContext, MainActivity::class.java),
+                            PendingIntent.FLAG_IMMUTABLE
+                        )
+
                         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setContentTitle(msg.author.userLogin)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle(resources.getString(R.string.anonim))
                             .setContentText(msg.text)
                             .setAutoCancel(true)
+                            .setContentIntent(pendingIntent)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
                         with(notificationManager) {
@@ -163,7 +173,7 @@ class ChatService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
         val notification = NotificationCompat.Builder(this, CHANNEL_ID2)
-            .setSmallIcon(R.drawable.ic_anon_icon)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentText(getString(R.string.active_chat)) //.setContentIntent(pendingIntent)
             .build()
         startForeground(NOTIFICATION_ID2, notification)

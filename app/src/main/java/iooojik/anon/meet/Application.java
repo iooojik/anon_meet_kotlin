@@ -1,10 +1,3 @@
-/******************************************************************************
- * Copyright (c) 2021. Created by iooojik.                                    *
- * Telegram: @iooojik                                                         *
- * Email: sbobrov760@gmail.com                                                *
- * All rights reserved. Last modified 17.08.2021, 22:43                       *
- ******************************************************************************/
-
 package iooojik.anon.meet;
 
 import android.content.Context;

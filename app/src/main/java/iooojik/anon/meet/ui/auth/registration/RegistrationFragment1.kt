@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentRegistration1Binding
+import iooojik.anon.meet.hideKeyBoard
 
 
 class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
@@ -19,25 +20,27 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegistration1Binding.inflate(inflater)
-        setListeners(binding)
+        binding.fragment = this
         return binding.root
     }
 
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.go_to_next_page -> {
-                User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
-                User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
-                if (checkNicknameAndPasswordLength(
-                        requireView(),
-                        resources,
-                        binding.passwordTextField.editText!!.text.trim().toString()
-                    )
-                ) {
-                    findNavController().navigate(R.id.action_registrationFragment1_to_registrationFragment2)
-                }
-            }
+    fun goToNextStep(view: View){
+        User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
+        User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
+        if (checkNicknameAndPasswordLength(
+                requireView(),
+                resources,
+                binding.passwordTextField.editText!!.text.trim().toString()
+            )
+        ) {
+            findNavController().navigate(R.id.action_registrationFragment1_to_registrationFragment2)
         }
+    }
+
+    fun onLayoutClick(view: View){
+        hideKeyBoard(requireActivity(), binding.root)
+        binding.passwordTextField.clearFocus()
+        binding.nicknameTextField.clearFocus()
     }
 
 }

@@ -36,4 +36,5 @@ interface FiltersFragmentLogic : View.OnClickListener, RangeSlider.OnChangeListe
         }
         activity.onBackPressedDispatcher.addCallback(fragment.viewLifecycleOwner, callback)
     }
+
 }

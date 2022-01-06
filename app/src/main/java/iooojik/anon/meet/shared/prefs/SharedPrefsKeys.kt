@@ -8,5 +8,6 @@ class SharedPrefsKeys {
         const val CHAT_PREFERENCES_NAME = "chat_preferences"
         const val CHAT_ROOM_UUID = "CHAT_ROOM_UUID"
         const val THEME_MODE = "THEME_MODE"
+        const val FIRST_START_UP = "FIRST_START_UP"
     }
 }

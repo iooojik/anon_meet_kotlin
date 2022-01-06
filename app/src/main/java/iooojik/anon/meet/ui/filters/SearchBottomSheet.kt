@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.ads.AdRequest
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
+import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.SearchBottomSheetLayoutBinding
@@ -20,6 +22,7 @@ class SearchBottomSheet : BottomSheetDialogFragment(), View.OnClickListener {
     ): View {
         binding = SearchBottomSheetLayoutBinding.inflate(inflater)
         binding.cancelSearchButton.setOnClickListener(this)
+        binding.adBanner.loadAd(AdRequest.Builder().build())
         isCancelable = false
         return binding.root
     }
@@ -27,6 +30,7 @@ class SearchBottomSheet : BottomSheetDialogFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.cancel_search_button -> {
+
                 SocketConnections.sendStompMessage(
                     "/app/cancel.chat.${User.mUuid}",
                     Gson().toJson(User())

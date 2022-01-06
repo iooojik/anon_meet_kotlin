@@ -11,11 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface RegistrationFragment2Logic : View.OnClickListener, LoginFragmentLogic {
-    fun setListeners(binding: FragmentRegistration2Binding) {
-        binding.registerButton.setOnClickListener(this)
-        binding.selectBirthDate.setOnClickListener(this)
-    }
+interface RegistrationFragment2Logic : LoginFragmentLogic {
 
     fun register(
         binding: FragmentRegistration2Binding,
