@@ -15,7 +15,11 @@ class User(
     @SerializedName("password")
     val password: String = mPassword,
     @SerializedName("filter")
-    val filter: Filter = mFilter
+    val filter: Filter = mFilter,
+    @SerializedName("positiveReputation")
+    val positiveReputation: Int? = mPositiveReputation,
+    @SerializedName("negativeReputation")
+    val negativeReputation: Int? = mNegativeReputation
 ) {
     companion object {
         @JvmStatic
@@ -38,5 +42,11 @@ class User(
 
         @JvmStatic
         var mFilter: Filter = Filter()
+
+        @JvmStatic
+        var mPositiveReputation: Int? = 0
+
+        @JvmStatic
+        var mNegativeReputation: Int? = 0
     }
 }

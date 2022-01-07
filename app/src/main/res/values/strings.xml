@@ -8,7 +8,7 @@
     <string name="register_fragment_subtitle">Никто, кроме тебя, не будет их знать</string>
     <string name="turn_on_dark_mode">Включить ночной режим</string>
     <string name="turn_off_dark_mode">Выключить ночной режим</string>
-    <string name="turn_on_off_dark_mode">Включить/Выключить ночной режим</string>
+    <string name="turn_on_off_dark_mode">Ночной режим</string>
     <string name="nickname">Никнейм</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
@@ -50,6 +50,19 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="message_seen" translatable="false">message_seen</string>
     <string name="avatar" translatable="false">avatar</string>
+    <string name="registration_info">Пожалуйста, указывайте именно никнейм, и только на латинице. Например, iooojik.</string>
+    <string name="registration_info2">Пожалуйста, указывайте настоящую дату рождения. Дальше вы не сможете изменить её.</string>
+    <string name="registration_info2_2">Регистрируясь, Вы принимаете наше Соглашение
+        об обработке персональных данных и Условия использования. (Нажмите на данное сообщение, чтобы просмотреть их)</string>
+    <string name="about_app">О приложении</string>
+    <string name="logo">Логотип</string>
+    <string name="app_version">Версия %1$s</string>
+    <string name="mark_app">Оценить приложение</string>
+    <string name="policy_conf">Политика конфиденциальности</string>
+    <string name="terms_of_use">Правила пользования</string>
+    <string name="contacts">Контакты</string>
+    <string name="vk">ВКонтакте</string>
+    <string name="telegram" translatable="false">Telegram</string>
 
 
 </resources>

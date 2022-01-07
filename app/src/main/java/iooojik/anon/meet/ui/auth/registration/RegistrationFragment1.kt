@@ -1,6 +1,7 @@
 package iooojik.anon.meet.ui.auth.registration
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,25 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
     ): View {
         binding = FragmentRegistration1Binding.inflate(inflater)
         binding.fragment = this
+        setNicknameFilter()
         return binding.root
     }
 
-    fun goToNextStep(view: View){
+    private fun setNicknameFilter() {
+        binding.nicknameTextField.editText!!.filters =
+            arrayOf(InputFilter { src, _, _, _, _, _ ->
+                if (src.equals("")) {
+                    return@InputFilter src
+                }
+                if (src.toString().matches("[a-zA-Z0-9]+".toRegex())) {
+                    return@InputFilter src
+                }
+                return@InputFilter ""
+            }
+            )
+    }
+
+    fun goToNextStep(view: View) {
         User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
         User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
         if (checkNicknameAndPasswordLength(
@@ -37,7 +53,7 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
         }
     }
 
-    fun onLayoutClick(view: View){
+    fun onLayoutClick(view: View) {
         hideKeyBoard(requireActivity(), binding.root)
         binding.passwordTextField.clearFocus()
         binding.nicknameTextField.clearFocus()

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="user"
             type="iooojik.anon.meet.data.models.UserViewModel" />
@@ -16,8 +15,8 @@
 
         <ImageView
             android:id="@+id/avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/avatar"
@@ -33,7 +32,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:text="@{@string/text_view_age(String.format(`%s`, user.userLiveData.userLogin), String.format(`%s`, user.userLiveData.filter.myAge))}"
-            android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/reputation"
             app:layout_constraintStart_toEndOf="@+id/avatar"

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
@@ -31,16 +32,20 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
         )
         provider.userLiveData.value = UserViewModel.currentUser.value
         binding.profileHeader.user = provider
-
+        binding.fragment = this
         binding.adBanner.loadAd(AdRequest.Builder().build())
         setListeners(binding, resources)
         return binding.root
     }
 
+    fun goToAppInfo(view: View?){
+        findNavController().navigate(R.id.action_settingsFragment_to_aboutAppFragment)
+    }
+
     override fun onResume() {
         super.onResume()
         windowOpenedCounter++
-        if (windowOpenedCounter % 3 == 0) {
+        if (windowOpenedCounter % 5 == 0) {
             windowOpenedCounter = 0
             AdUtil.loadInterstitialAd(requireActivity(), true)
         }

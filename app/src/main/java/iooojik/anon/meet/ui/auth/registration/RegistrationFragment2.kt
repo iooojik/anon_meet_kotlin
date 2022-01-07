@@ -12,6 +12,10 @@ import iooojik.anon.meet.data.models.User
 import iooojik.anon.meet.databinding.FragmentRegistration2Binding
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.Intent
+import android.net.Uri
+import iooojik.anon.meet.net.rest.StaticWeb
+import iooojik.anon.meet.openURL
 
 
 class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
@@ -41,6 +45,10 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
 
         }
         datePicker.show(requireActivity().supportFragmentManager, "")
+    }
+
+    fun showTermsPolicy(v: View){
+        openURL("${StaticWeb.REST_URL}terms_and_policy", requireContext())
     }
 
 }
