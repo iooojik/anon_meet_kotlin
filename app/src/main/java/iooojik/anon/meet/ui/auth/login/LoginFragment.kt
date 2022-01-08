@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.User
+import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.databinding.FragmentLoginBinding
 import iooojik.anon.meet.hideKeyBoard
 

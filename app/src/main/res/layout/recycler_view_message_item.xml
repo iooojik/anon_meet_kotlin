@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="message"
-            type="iooojik.anon.meet.data.models.MessageViewModel" />
+            type="iooojik.anon.meet.data.models.messages.MessageViewModel" />
     </data>
 
 

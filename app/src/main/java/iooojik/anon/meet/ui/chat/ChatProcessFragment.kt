@@ -6,22 +6,18 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Resources
 import android.os.Bundle
-import android.text.ClipboardManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
@@ -36,9 +32,11 @@ import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.ConfirmationBottomSheet
 import android.content.ClipData
-import android.os.Build
 import android.widget.Toast
-import iooojik.anon.meet.showSnackbar
+import iooojik.anon.meet.data.models.messages.MessageModel
+import iooojik.anon.meet.data.models.messages.MessageViewModel
+import iooojik.anon.meet.data.models.messages.MessagesViewModel
+import iooojik.anon.meet.data.models.user.User
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
@@ -156,7 +154,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val typing = intent.extras?.getBoolean("typing")
-            if (typing != null && typing == true) {
+            if (typing != null) {
                 if (typing) {
                     topChatBarBinding.typingMessage.text = resources.getString(R.string.typing)
                 } else {
@@ -194,7 +192,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
     }
 
-    fun onExitChatClick(v: View?){
+    private fun onExitChatClick(v: View?){
         ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
             val prefs = SharedPreferencesManager(requireContext())
             prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)

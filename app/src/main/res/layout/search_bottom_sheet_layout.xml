@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="?attr/colorPrimarySurface"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/standard_margin" />
+    <data>
+        <variable
+            name="searchModel"
+            type="iooojik.anon.meet.data.models.search.SearchStateModel" />
+    </data>
 
-    <Button
-        android:id="@+id/cancel_search_button"
-        style="@style/buttonStyle"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/standard_margin"
-        android:text="@string/cancel" />
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_banner"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:adSize="BANNER"
-        app:adUnitId="@string/banner_id"
-        android:layout_marginTop="@dimen/standard_margin_large"
-        android:layout_marginBottom="@dimen/standard_margin_2"
-        />
+        android:orientation="vertical"
+        android:background="?attr/colorPrimarySurface"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-</LinearLayout>
+
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/standard_margin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/standard_margin_2"
+            android:text="@{@string/users_in_search(String.format(`%s`, searchModel.inSearchUsers))}"/>
+
+        <Button
+            android:id="@+id/cancel_search_button"
+            style="@style/buttonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/standard_margin"
+            android:text="@string/cancel" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad_banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner_id"
+            android:layout_marginTop="@dimen/standard_margin_large"
+            android:layout_marginBottom="@dimen/standard_margin_2"
+            />
+
+    </LinearLayout>
+</layout>

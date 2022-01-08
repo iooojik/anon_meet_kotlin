@@ -13,10 +13,13 @@ import com.google.android.material.slider.RangeSlider
 import com.google.gson.Gson
 import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.StackModel
-import iooojik.anon.meet.data.models.User
-import iooojik.anon.meet.data.models.UserViewModel
+import iooojik.anon.meet.data.models.search.SearchStateModel
+import iooojik.anon.meet.data.models.search.SearchStateViewModel
+import iooojik.anon.meet.data.models.search.StackModel
+import iooojik.anon.meet.data.models.user.User
+import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
+import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
@@ -75,7 +78,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         when (v!!.id) {
             R.id.search_button -> {
                 tapCounter++
-                if (tapCounter % 5 == 0){
+                if (tapCounter % 3 == 0){
                     AdUtil.showInterstitialAd(requireActivity())
                     tapCounter = 0
                 } else {
@@ -94,7 +97,12 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
     private fun onChatFound(topicMessage: StompMessage) {
         val prefs = SharedPreferencesManager(requireContext())
         prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-        if (topicMessage.payload.trim().isNotBlank()) {
+        if (topicMessage.payload.trim().isNotBlank() && topicMessage.payload.contains("inSearchUsers")){
+            val searchStateModel = Gson().fromJson(topicMessage.payload, SearchStateModel::class.java)!!
+            log(searchStateModel.inSearchUsers)
+            SearchBottomSheet.searchModelProvider?.data?.value = searchStateModel
+
+        } else if (topicMessage.payload.trim().isNotBlank()) {
             val foundChatMode = Gson().fromJson(topicMessage.payload, StackModel::class.java)
             prefs.saveValue(SharedPrefsKeys.CHAT_ROOM_UUID, foundChatMode.uuid)
             SocketConnections.resetSubscriptions()

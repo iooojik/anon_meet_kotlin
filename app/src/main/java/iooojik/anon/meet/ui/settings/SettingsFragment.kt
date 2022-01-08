@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.UserViewModel
+import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.FragmentSettingsBinding
 
 

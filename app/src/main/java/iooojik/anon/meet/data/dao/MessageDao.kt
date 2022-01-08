@@ -2,7 +2,7 @@ package iooojik.anon.meet.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import iooojik.anon.meet.data.models.MessageModel
+import iooojik.anon.meet.data.models.messages.MessageModel
 
 
 @Dao

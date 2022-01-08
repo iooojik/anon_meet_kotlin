@@ -3,7 +3,7 @@ package iooojik.anon.meet.ui.auth.registration
 import android.app.Activity
 import android.view.View
 import androidx.navigation.NavController
-import iooojik.anon.meet.data.models.User
+import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.databinding.FragmentRegistration2Binding
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.ui.auth.login.LoginFragmentLogic

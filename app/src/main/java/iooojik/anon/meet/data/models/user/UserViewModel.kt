@@ -1,4 +1,4 @@
-package iooojik.anon.meet.data.models
+package iooojik.anon.meet.data.models.user
 
 import androidx.lifecycle.MutableLiveData
 

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import iooojik.anon.meet.data.dao.MessageDao
-import iooojik.anon.meet.data.models.MessageModel
+import iooojik.anon.meet.data.models.messages.MessageModel
 
 
 @Database(

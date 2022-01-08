@@ -1,4 +1,4 @@
-package iooojik.anon.meet.data.models
+package iooojik.anon.meet.data.models.messages
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import iooojik.anon.meet.data.models.user.User
 
 @Entity(tableName = "messages")
 class MessageModel(

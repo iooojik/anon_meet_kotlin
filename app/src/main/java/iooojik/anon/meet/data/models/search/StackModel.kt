@@ -1,6 +1,7 @@
-package iooojik.anon.meet.data.models
+package iooojik.anon.meet.data.models.search
 
 import com.google.gson.annotations.SerializedName
+import iooojik.anon.meet.data.models.user.User
 
 
 data class StackModel(

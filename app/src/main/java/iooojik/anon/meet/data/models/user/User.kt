@@ -1,13 +1,14 @@
-package iooojik.anon.meet.data.models
+package iooojik.anon.meet.data.models.user
 
 import com.google.gson.annotations.SerializedName
+import iooojik.anon.meet.data.models.Filter
 import iooojik.anon.meet.md5
 
 class User(
     @SerializedName("uuid")
     val uuid: String = mUuid,
     @SerializedName("userLogin")
-    val userLogin: String = mUserLogin,
+    var userLogin: String = mUserLogin,
     @SerializedName("lastLogin")
     val lastLogin: String = mLastLogin,
     @SerializedName("birthDate")

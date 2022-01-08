@@ -1,4 +1,4 @@
-package iooojik.anon.meet.data.models
+package iooojik.anon.meet.data.models.messages
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

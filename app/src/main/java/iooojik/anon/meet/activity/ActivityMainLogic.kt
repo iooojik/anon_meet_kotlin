@@ -10,8 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.User
-import iooojik.anon.meet.data.models.UserViewModel
+import iooojik.anon.meet.data.models.user.User
+import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper

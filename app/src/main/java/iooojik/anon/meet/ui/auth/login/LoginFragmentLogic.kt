@@ -7,8 +7,8 @@ import android.view.View
 import androidx.navigation.NavController
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.LoginResponse
-import iooojik.anon.meet.data.models.User
-import iooojik.anon.meet.data.models.UserViewModel
+import iooojik.anon.meet.data.models.user.User
+import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.FragmentLoginBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
@@ -76,10 +76,10 @@ interface LoginFragmentLogic {
     ): Boolean {
         var r = true
         when {
-            User.mUserLogin.trim().length < 6 -> {
+            !User.mUserLogin.trim().contains('@') -> {
                 showSnackbar(
                     view,
-                    resources.getString(R.string.short_nickname)
+                    resources.getString(R.string.not_acceptable_email)
                 )
                 r = false
             }

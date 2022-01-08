@@ -9,7 +9,7 @@
     <string name="turn_on_dark_mode">Включить ночной режим</string>
     <string name="turn_off_dark_mode">Выключить ночной режим</string>
     <string name="turn_on_off_dark_mode">Ночной режим</string>
-    <string name="nickname">Никнейм</string>
+    <string name="email">Почта</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
     <string name="go_next">Продолжить</string>
@@ -20,7 +20,7 @@
     <string name="send_message">Отправить сообщение</string>
     <string name="message">Сообщение…</string>
     <string name="wrong_nickname">Некорректный никнейм</string>
-    <string name="short_nickname">Короткий никнейм</string>
+    <string name="not_acceptable_email">Неверный email</string>
     <string name="short_password">Короткий пароль</string>
     <string name="male_sex">Мужской</string>
     <string name="female_sex">Женский</string>
@@ -30,6 +30,7 @@
     <string name="interlocutor_age">Возраст собеседника</string>
     <string name="find">Найти</string>
     <string name="text_view_age">%1$s, %2$s лет</string>
+    <string name="users_in_search">Ищут собеседника: %1$s</string>
     <string name="cancel">Отмена</string>
     <string name="finish_chat">Завершить чат</string>
     <string name="yes">Да</string>
@@ -50,7 +51,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="message_seen" translatable="false">message_seen</string>
     <string name="avatar" translatable="false">avatar</string>
-    <string name="registration_info">Пожалуйста, указывайте именно никнейм, и только на латинице. Например, iooojik.</string>
+    <string name="registration_info">Пожалуйста, указывайте именно вашу почту, и только на латинице. Например, admin@iooojik.ru</string>
     <string name="registration_info2">Пожалуйста, указывайте настоящую дату рождения. Дальше вы не сможете изменить её.</string>
     <string name="registration_info2_2">Регистрируясь, Вы принимаете наше Соглашение
         об обработке персональных данных и Условия использования. (Нажмите на данное сообщение, чтобы просмотреть их)</string>
