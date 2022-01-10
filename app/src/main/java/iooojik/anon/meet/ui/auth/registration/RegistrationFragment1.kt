@@ -22,28 +22,13 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
     ): View {
         binding = FragmentRegistration1Binding.inflate(inflater)
         binding.fragment = this
-        setNicknameFilter()
         return binding.root
     }
 
-    private fun setNicknameFilter() {
-        binding.nicknameTextField.editText!!.filters =
-            arrayOf(InputFilter { src, _, _, _, _, _ ->
-                if (src.equals("")) {
-                    return@InputFilter src
-                }
-                if (src.toString().matches("[a-zA-Z0-9]+".toRegex())) {
-                    return@InputFilter src
-                }
-                return@InputFilter ""
-            }
-            )
-    }
-
     fun goToNextStep(view: View) {
-        User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
+        User.mUserLogin = binding.emailTextField.editText!!.text.trim().toString()
         User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
-        if (checkNicknameAndPasswordLength(
+        if (checkEmailAndPassword(
                 requireView(),
                 resources,
                 binding.passwordTextField.editText!!.text.trim().toString()
@@ -56,7 +41,7 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
     fun onLayoutClick(view: View) {
         hideKeyBoard(requireActivity(), binding.root)
         binding.passwordTextField.clearFocus()
-        binding.nicknameTextField.clearFocus()
+        binding.emailTextField.clearFocus()
     }
 
 }

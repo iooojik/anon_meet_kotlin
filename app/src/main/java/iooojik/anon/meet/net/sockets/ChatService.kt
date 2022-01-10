@@ -14,9 +14,9 @@ import com.google.gson.Gson
 import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
-import iooojik.anon.meet.data.models.messages.MessageModel
 import iooojik.anon.meet.data.models.SeenModel
 import iooojik.anon.meet.data.models.TypingModel
+import iooojik.anon.meet.data.models.messages.MessageModel
 import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
@@ -82,6 +82,11 @@ class ChatService : Service() {
                     preferencesManager = SharedPreferencesManager(this)
                     preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
                     preferencesManager.clearAll()
+                    preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                    preferencesManager.saveValue(
+                        SharedPrefsKeys.CHAT_START_UP,
+                        R.id.filtersFragment
+                    )
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     intent.putExtra("endChat", true)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
@@ -89,11 +94,12 @@ class ChatService : Service() {
                     SocketConnections.resetSubscriptions()
                     stopForeground(true)
                     AppDatabase.instance.clearAllTables()
+                    sendNotificationMessage(resources.getString(R.string.chat_was_ended))
                     stopSelf()
                 }
                 topicMessage.payload.contains("seen") -> {
                     val seenModel = Gson().fromJson(topicMessage.payload, SeenModel::class.java)
-                    if (seenModel.seen){
+                    if (seenModel.seen) {
                         AppDatabase.instance.messageDao.getAll().forEach {
                             it.seen = seenModel.seen
                             AppDatabase.instance.messageDao.update(message = it)
@@ -109,52 +115,55 @@ class ChatService : Service() {
                     AppDatabase.instance.messageDao.insert(msg)
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-
-                    if (!isForeground(this)) {
-                        val notificationManager = NotificationManagerCompat.from(this)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            val channel = NotificationChannel(
-                                CHANNEL_ID, "Messages Channel",
-                                NotificationManager.IMPORTANCE_HIGH
-                            )
-                            channel.description = "Messages Channel"
-                            channel.enableLights(true)
-                            channel.lightColor = Color.RED
-                            channel.enableVibration(false)
-                            notificationManager.createNotificationChannel(channel)
-                        }
-
-                        val pendingIntent = PendingIntent.getActivity(
-                            applicationContext,
-                            NOTIFICATION_ID,
-                            Intent(applicationContext, MainActivity::class.java),
-                            PendingIntent.FLAG_IMMUTABLE
-                        )
-
-                        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle(resources.getString(R.string.anonim))
-                            .setContentText(msg.text)
-                            .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-                        with(notificationManager) {
-                            notify(NOTIFICATION_ID, builder.build()) // посылаем уведомление
-                        }
-                    } else{
-                        val preferencesManager = SharedPreferencesManager(this)
-                        preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-                        val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
-                        SocketConnections.sendStompMessage(
-                            "/app/seen.$rUuid",
-                            Gson().toJson(
-                                SeenModel(true)
-                            )
-                        )
-                    }
+                    sendNotificationMessage(msg.text)
                 }
             }
+        }
+    }
+
+    private fun sendNotificationMessage(message: String) {
+        if (!isForeground(this)) {
+            val notificationManager = NotificationManagerCompat.from(this)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    ChatService.CHANNEL_ID, "Messages Channel",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+                channel.description = "Messages Channel"
+                channel.enableLights(true)
+                channel.lightColor = Color.RED
+                channel.enableVibration(false)
+                notificationManager.createNotificationChannel(channel)
+            }
+
+            val pendingIntent = PendingIntent.getActivity(
+                applicationContext,
+                ChatService.NOTIFICATION_ID,
+                Intent(applicationContext, MainActivity::class.java),
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val builder = NotificationCompat.Builder(this, ChatService.CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(resources.getString(R.string.anonim))
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+            with(notificationManager) {
+                notify(ChatService.NOTIFICATION_ID, builder.build()) // посылаем уведомление
+            }
+        } else {
+            val preferencesManager = SharedPreferencesManager(this)
+            preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+            val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
+            SocketConnections.sendStompMessage(
+                "/app/seen.$rUuid",
+                Gson().toJson(
+                    SeenModel(true)
+                )
+            )
         }
     }
 

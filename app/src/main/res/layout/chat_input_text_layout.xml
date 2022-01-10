@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="fragment"
             type="iooojik.anon.meet.ui.chat.ChatProcessFragment" />
@@ -51,8 +52,8 @@
                 android:layout_margin="@dimen/message_input_dimen"
                 android:contentDescription="@string/send_message"
                 android:elevation="0dp"
-                app:fabSize="mini"
                 android:onClick="@{fragment::onSendMessageClick}"
+                app:fabSize="mini"
                 app:srcCompat="@drawable/outline_send_24"
                 app:tint="?attr/hintTextColor" />
 

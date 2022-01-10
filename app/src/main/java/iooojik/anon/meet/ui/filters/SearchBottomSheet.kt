@@ -4,19 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.search.SearchStateModel
 import iooojik.anon.meet.data.models.search.SearchStateViewModel
 import iooojik.anon.meet.data.models.user.User
-import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.SearchBottomSheetLayoutBinding
 import iooojik.anon.meet.net.sockets.SocketConnections
-import okhttp3.internal.notify
 
 class SearchBottomSheet : BottomSheetDialogFragment(), View.OnClickListener {
     private lateinit var binding: SearchBottomSheetLayoutBinding

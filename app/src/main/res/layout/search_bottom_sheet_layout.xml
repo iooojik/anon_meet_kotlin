@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="searchModel"
             type="iooojik.anon.meet.data.models.search.SearchStateModel" />
@@ -11,10 +12,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="?attr/colorPrimarySurface"
+        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
 
 
         <ProgressBar
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/standard_margin_2"
-            android:text="@{@string/users_in_search(String.format(`%s`, searchModel.inSearchUsers))}"/>
+            android:text="@{@string/users_in_search(String.format(`%s`, searchModel.inSearchUsers))}" />
 
         <Button
             android:id="@+id/cancel_search_button"
@@ -45,11 +45,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:adSize="BANNER"
-            app:adUnitId="@string/banner_id"
             android:layout_marginTop="@dimen/standard_margin_large"
             android:layout_marginBottom="@dimen/standard_margin_2"
-            />
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner_id" />
 
     </LinearLayout>
 </layout>

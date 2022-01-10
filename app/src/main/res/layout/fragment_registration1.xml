@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="fragment"
             type="iooojik.anon.meet.ui.auth.registration.RegistrationFragment1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/reg_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/reg_layout"
         android:onClick="@{fragment::onLayoutClick}"
         tools:context=".ui.auth.registration.RegistrationFragment1">
 
@@ -36,7 +37,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nickname_text_field"
+                android:id="@+id/email_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email">

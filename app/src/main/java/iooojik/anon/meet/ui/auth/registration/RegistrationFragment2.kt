@@ -9,10 +9,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.databinding.FragmentRegistration2Binding
-import java.text.SimpleDateFormat
-import java.util.*
 import iooojik.anon.meet.net.rest.StaticWeb
 import iooojik.anon.meet.openURL
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
@@ -28,11 +28,11 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
         return binding.root
     }
 
-    fun registerUser(v: View){
+    fun registerUser(v: View) {
         register(binding, findNavController(), requireActivity())
     }
 
-    fun selectBirthDate(v: View){
+    fun selectBirthDate(v: View) {
         val datePicker = MaterialDatePicker.Builder.datePicker().build()
         datePicker.addOnPositiveButtonClickListener {
             birthDate = Date(it)
@@ -44,7 +44,7 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
         datePicker.show(requireActivity().supportFragmentManager, "")
     }
 
-    fun showTermsPolicy(v: View){
+    fun showTermsPolicy(v: View) {
         openURL("${StaticWeb.REST_URL}terms_and_policy", requireContext())
     }
 

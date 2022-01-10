@@ -5,6 +5,7 @@
     tools:context=".ui.filters.FiltersFragment">
 
     <data>
+
         <variable
             name="fragment"
             type="iooojik.anon.meet.ui.settings.SettingsFragment" />

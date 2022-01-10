@@ -8,8 +8,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class AdUtil {
     companion object {

@@ -1,6 +1,5 @@
 package iooojik.anon.meet.activity
 
-import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
@@ -15,8 +14,10 @@ import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
+import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+import iooojik.anon.meet.showSnackbar
 import iooojik.anon.meet.ui.ThemeSwitcher
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,10 +26,10 @@ import retrofit2.Response
 interface ActivityMainLogic : ThemeSwitcher {
 
     fun checkUserTokenAndAuth(
-        context: Context,
-        navController: NavController
+        navController: NavController,
+        activity: MainActivity
     ) {
-        val preferencesManager = SharedPreferencesManager(context)
+        val preferencesManager = SharedPreferencesManager(activity.applicationContext)
         preferencesManager.initPreferences()
         if (preferencesManager.getValue(
                 SharedPrefsKeys.USER_TOKEN,
@@ -50,7 +51,8 @@ interface ActivityMainLogic : ThemeSwitcher {
                 }", preferencesManager.getValue(
                     SharedPrefsKeys.USER_UUID,
                     ""
-                )!!.toString()
+                )!!.toString(),
+                activity
             )
 
             if (navController.currentDestination?.id == R.id.loginFragment)
@@ -80,14 +82,24 @@ interface ActivityMainLogic : ThemeSwitcher {
         )
     }
 
-    fun authWithUUID(token: String, uuid: String) {
+    fun authWithUUID(token: String, uuid: String, activity: MainActivity) {
         RetrofitHelper.authService.loginWithUUID(token, User(uuid = uuid))
             .enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful) {
+                        SocketConnections.connectToServer(activity.applicationContext)
                         if (response.body() != null)
                             UserViewModel.changeCurrentUserInfo(response.body()!!)
-                    } else log(response.errorBody().toString())
+                    } else {
+                        log(response.errorBody().toString())
+                        showSnackbar(
+                            activity.binding.root,
+                            String.format(
+                                activity.resources.getString(R.string.authorization_error),
+                                ", ${response.code()}"
+                            )
+                        )
+                    }
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {

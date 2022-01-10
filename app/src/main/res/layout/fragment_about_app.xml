@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="fragment"
             type="iooojik.anon.meet.ui.about.app.AboutAppFragment" />
+
         <variable
             name="version"
             type="String" />
@@ -23,12 +25,12 @@
 
             <ImageView
                 android:id="@+id/logo"
-                android:onClick="@{fragment::goToMarkApp}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/logo"
                 android:layout_margin="@dimen/standard_margin_2"
+                android:contentDescription="@string/logo"
+                android:onClick="@{fragment::goToMarkApp}"
                 android:src="@mipmap/ic_launcher_foreground" />
 
             <TextView
@@ -50,26 +52,26 @@
 
             <Button
                 android:id="@+id/mark_app"
-                android:onClick="@{fragment::goToMarkApp}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_margin_2"
+                android:onClick="@{fragment::goToMarkApp}"
                 android:text="@string/mark_app" />
 
             <Button
                 android:id="@+id/policy_conf"
-                android:onClick="@{fragment::goToPolicy}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_margin_2"
+                android:onClick="@{fragment::goToPolicy}"
                 android:text="@string/policy_conf" />
 
             <Button
                 android:id="@+id/terms_of_use"
-                android:onClick="@{fragment::goToTerms}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_margin_2"
+                android:onClick="@{fragment::goToTerms}"
                 android:text="@string/terms_of_use" />
 
             <TextView
@@ -87,20 +89,20 @@
 
                 <ImageView
                     android:id="@+id/vk"
-                    android:onClick="@{fragment::goToVK}"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/vk"
+                    android:onClick="@{fragment::goToVK}"
                     android:src="@drawable/vk_logo" />
 
                 <ImageView
                     android:id="@+id/telegram"
-                    android:onClick="@{fragment::goToTG}"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/telegram"
+                    android:onClick="@{fragment::goToTG}"
                     android:src="@drawable/telegram_logo" />
             </LinearLayout>
 

@@ -7,11 +7,11 @@
 
     <TextView
         android:id="@+id/message"
+        style="@style/subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/subtitle1"
-        android:layout_marginTop="@dimen/standard_margin_2"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/standard_margin_2"
         android:text="@tools:sample/lorem" />
 
     <LinearLayout
@@ -23,17 +23,17 @@
 
         <Button
             android:id="@+id/button_yes"
+            style="@style/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/yes"
-            style="@style/buttonStyle" />
+            android:text="@string/yes" />
 
         <Button
             android:id="@+id/button_no"
+            style="@style/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_margin_large"
-            style="@style/buttonStyle"
             android:text="@string/no" />
     </LinearLayout>
 

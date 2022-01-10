@@ -9,7 +9,6 @@ import iooojik.anon.meet.AppDatabase
 import iooojik.anon.meet.R
 import iooojik.anon.meet.databinding.ActivityMainBinding
 import iooojik.anon.meet.net.rest.RetrofitHelper
-import iooojik.anon.meet.net.sockets.SocketConnections
 
 class MainActivity : AppCompatActivity(), ActivityMainLogic {
 
@@ -30,9 +29,13 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
             findNavController(R.id.nav_host_fragment),
             this
         )
+
         AdUtil.loadInterstitialAd(this)
         //SocketConnections.connectToServer(this)
-        checkUserTokenAndAuth(context = this, findNavController(R.id.nav_host_fragment))
+        checkUserTokenAndAuth(
+            activity = this,
+            navController = findNavController(R.id.nav_host_fragment)
+        )
         ProviderInstaller.installIfNeeded(applicationContext)
         AppDatabase.initDatabase(this)
     }

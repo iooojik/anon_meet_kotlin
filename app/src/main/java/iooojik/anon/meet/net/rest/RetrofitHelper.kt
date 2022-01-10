@@ -69,7 +69,7 @@ class RetrofitHelper {
 
         fun onFailure(t: Throwable, view: View? = null, activity: Activity? = null) {
             log("FAILURE $t", TAG)
-            if (activity != null && view != null){
+            if (activity != null && view != null) {
                 showSnackbar(view, activity.resources.getString(R.string.error_request))
             }
         }

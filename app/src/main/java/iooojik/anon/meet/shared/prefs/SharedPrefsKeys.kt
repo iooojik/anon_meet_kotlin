@@ -9,5 +9,6 @@ class SharedPrefsKeys {
         const val CHAT_ROOM_UUID = "CHAT_ROOM_UUID"
         const val THEME_MODE = "THEME_MODE"
         const val FIRST_START_UP = "FIRST_START_UP"
+        const val CHAT_START_UP = "CHAT_START_UP"
     }
 }

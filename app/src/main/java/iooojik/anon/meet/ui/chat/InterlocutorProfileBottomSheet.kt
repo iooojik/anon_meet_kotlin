@@ -11,7 +11,7 @@ import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.InterlocutorProfileBottomSheetBinding
 
-class InterlocutorProfileBottomSheet(private val interlocutor : User) : BottomSheetDialogFragment(){
+class InterlocutorProfileBottomSheet(private val interlocutor: User) : BottomSheetDialogFragment() {
 
     private lateinit var binding: InterlocutorProfileBottomSheetBinding
 
@@ -24,9 +24,13 @@ class InterlocutorProfileBottomSheet(private val interlocutor : User) : BottomSh
         val provider = ViewModelProvider(this).get(
             UserViewModel::class.java
         )
-        interlocutor.userLogin = resources.getString(R.string.anonim)
         provider.userLiveData.value = interlocutor
-        binding.profileHeader.user = provider
+        provider.userLiveData.observe(this, {
+            it?.let {
+                interlocutor.userLogin = resources.getString(R.string.anonim)
+                binding.profileHeader.user = it
+            }
+        })
         return binding.root
     }
 }

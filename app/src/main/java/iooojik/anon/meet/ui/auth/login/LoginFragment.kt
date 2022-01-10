@@ -27,20 +27,20 @@ class LoginFragment : Fragment(), LoginFragmentLogic {
         return binding.root
     }
 
-    fun hideKeyboardAndClearFocus(view: View){
+    fun hideKeyboardAndClearFocus(view: View) {
         hideKeyBoard(requireActivity(), binding.root)
         binding.passwordTextField.clearFocus()
-        binding.nicknameTextField.clearFocus()
+        binding.emailTextField.clearFocus()
     }
 
-    fun onRegistrationButtonClick(view: View){
+    fun onRegistrationButtonClick(view: View) {
         findNavController().navigate(R.id.action_loginFragment_to_registrationFragment1)
     }
 
-    fun onLoginButtonClick(view: View){
-        User.mUserLogin = binding.nicknameTextField.editText!!.text.trim().toString()
+    fun onLoginButtonClick(view: View) {
+        User.mUserLogin = binding.emailTextField.editText!!.text.trim().toString()
         User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
-        if (checkNicknameAndPasswordLength(
+        if (checkEmailAndPassword(
                 requireView(),
                 resources,
                 binding.passwordTextField.editText!!.text.trim().toString()

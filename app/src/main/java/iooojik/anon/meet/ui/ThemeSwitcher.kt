@@ -7,7 +7,7 @@ import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 
 interface ThemeSwitcher {
-    fun changeTheme(context: Context, isChange: Boolean = true){
+    fun changeTheme(context: Context, isChange: Boolean = true) {
         val prefs = SharedPreferencesManager(context)
         prefs.initPreferences()
         if (isChange) {
@@ -19,7 +19,12 @@ interface ThemeSwitcher {
                 prefs.saveValue(SharedPrefsKeys.THEME_MODE, AppCompatDelegate.MODE_NIGHT_YES)
             }
         } else {
-            AppCompatDelegate.setDefaultNightMode(prefs.getValue(SharedPrefsKeys.THEME_MODE, AppCompatDelegate.MODE_NIGHT_NO)!! as Int)
+            AppCompatDelegate.setDefaultNightMode(
+                prefs.getValue(
+                    SharedPrefsKeys.THEME_MODE,
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )!! as Int
+            )
         }
     }
 }

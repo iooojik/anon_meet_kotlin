@@ -5,7 +5,6 @@ import android.view.*
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,21 +13,23 @@ import com.google.gson.Gson
 import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.search.SearchStateModel
-import iooojik.anon.meet.data.models.search.SearchStateViewModel
 import iooojik.anon.meet.data.models.search.StackModel
 import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.data.models.user.UserViewModel
+import iooojik.anon.meet.data.models.user.UserViewModelProvider
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+import iooojik.anon.meet.showSnackbar
 import ua.naiksoftware.stomp.dto.StompMessage
 
 
 class FiltersFragment : Fragment(), FiltersFragmentLogic {
     private lateinit var binding: FragmentFiltersBinding
     private val findingBottomSheet = SearchBottomSheet()
+    private lateinit var userProvider: UserViewModelProvider
 
     companion object {
         var tapCounter = 0
@@ -39,12 +40,14 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFiltersBinding.inflate(inflater)
-        binding.lifecycleOwner = this
         hideBackButton(findNavController(), requireActivity() as AppCompatActivity)
         checkAppFirstStartUp()
-        binding.user = ViewModelProvider(this).get(
-            UserViewModel::class.java
-        )
+        userProvider = UserViewModelProvider(this)
+        userProvider.liveData.observe(this, {
+            it?.let {
+                binding.user = it
+            }
+        })
         binding.adBanner.loadAd(AdRequest.Builder().build())
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
@@ -56,7 +59,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         val prefs = SharedPreferencesManager(requireContext())
         prefs.initPreferences()
         val v = prefs.getValue(SharedPrefsKeys.FIRST_START_UP, true)
-        if (v is Boolean && v){
+        if (v is Boolean && v) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(resources.getString(R.string.first_start_up_title))
                 .setMessage(resources.getString(R.string.first_start_up_message))
@@ -69,6 +72,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_settings_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -78,18 +82,31 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         when (v!!.id) {
             R.id.search_button -> {
                 tapCounter++
-                if (tapCounter % 3 == 0){
+                if (tapCounter % 3 == 0) {
                     AdUtil.showInterstitialAd(requireActivity())
                     tapCounter = 0
-                } else {
-                    findingBottomSheet.show(
-                        requireActivity().supportFragmentManager,
-                        SearchBottomSheet.TAG
+                } else if (!UserViewModel.currentUser.value?.uuid.isNullOrBlank()) {
+                    try {
+                        findingBottomSheet.show(
+                            requireActivity().supportFragmentManager,
+                            SearchBottomSheet.TAG
+                        )
+                        SocketConnections.connectToTopic("/topic/${User.mUuid}/find", ::onChatFound)
+                        SocketConnections.sendStompMessage(
+                            "/app/find.${User.mUuid}",
+                            Gson().toJson(User())
+                        )
+                    } catch (e: Exception) {
+                        showSnackbar(binding.root, resources.getString(R.string.error_request))
+                        SocketConnections.connectToServer(requireContext())
+                    }
+                } else showSnackbar(
+                    binding.root,
+                    String.format(
+                        resources.getString(R.string.authorization_error),
+                        ""
                     )
-                    SocketConnections.connectToServer(requireContext())
-                    SocketConnections.connectToTopic("/topic/${User.mUuid}/find", ::onChatFound)
-                    SocketConnections.sendStompMessage("/app/find.${User.mUuid}", Gson().toJson(User()))
-                }
+                )
             }
         }
     }
@@ -97,8 +114,11 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
     private fun onChatFound(topicMessage: StompMessage) {
         val prefs = SharedPreferencesManager(requireContext())
         prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-        if (topicMessage.payload.trim().isNotBlank() && topicMessage.payload.contains("inSearchUsers")){
-            val searchStateModel = Gson().fromJson(topicMessage.payload, SearchStateModel::class.java)!!
+        if (topicMessage.payload.trim()
+                .isNotBlank() && topicMessage.payload.contains("inSearchUsers")
+        ) {
+            val searchStateModel =
+                Gson().fromJson(topicMessage.payload, SearchStateModel::class.java)!!
             log(searchStateModel.inSearchUsers)
             SearchBottomSheet.searchModelProvider?.data?.value = searchStateModel
 
@@ -115,7 +135,8 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         when (slider.id) {
             R.id.age_range_slider -> {
                 val vals = slider.values
-                UserViewModel.changeCurrentInterlocutorAges("${vals[0].toInt()}/${vals[1].toInt()}")
+                userProvider.liveData.value!!.changeInterlocutorAges("${vals[0].toInt()}/${vals[1].toInt()}")
+                userProvider.liveData.value = User()
             }
         }
     }

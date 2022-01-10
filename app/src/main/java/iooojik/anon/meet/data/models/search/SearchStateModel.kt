@@ -9,6 +9,8 @@ data class SearchStateModel(
     var inSearchUsers: Int = 0
 )
 
-class SearchStateViewModel(val data: MutableLiveData<SearchStateModel> = MutableLiveData(SearchStateModel(0))) : ViewModel(){
-
-}
+class SearchStateViewModel(
+    val data: MutableLiveData<SearchStateModel> = MutableLiveData(
+        SearchStateModel(0)
+    )
+) : ViewModel()

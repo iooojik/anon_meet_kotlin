@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="fragment"
             type="iooojik.anon.meet.ui.auth.registration.RegistrationFragment2" />
@@ -81,8 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="@{fragment::registerUser}"
                 android:layout_margin="@dimen/standard_margin"
+                android:onClick="@{fragment::registerUser}"
                 android:text="@string/register" />
 
             <TextView
@@ -90,9 +91,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/standard_margin_large"
+                android:onClick="@{fragment::showTermsPolicy}"
                 android:text="@string/registration_info2_2"
                 android:textAlignment="center"
-                android:onClick="@{fragment::showTermsPolicy}"
                 android:textStyle="bold" />
 
         </LinearLayout>

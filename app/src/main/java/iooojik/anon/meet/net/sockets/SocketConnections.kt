@@ -28,10 +28,13 @@ class SocketConnections {
         val topics = mutableMapOf<String, Disposable>()
 
         fun connectToServer(context: Context) {
-            resetSubscriptions()
-            val prefs = SharedPreferencesManager(context)
-            val token = prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "").toString() + " " + prefs.getValue(SharedPrefsKeys.USER_TOKEN, "").toString()
-            stompClient = Stomp.over(
+            if (!(this::stompClient.isInitialized && this.stompClient.isConnected)) {
+                disconnect()
+                resetSubscriptions()
+                val prefs = SharedPreferencesManager(context)
+                val token = prefs.getValue(SharedPrefsKeys.TOKEN_HEADER, "")
+                    .toString() + " " + prefs.getValue(SharedPrefsKeys.USER_TOKEN, "").toString()
+                stompClient = Stomp.over(
                     Stomp.ConnectionProvider.OKHTTP,
                     StaticSockets.SOCKET_URL,
                     mapOf("Authorization" to token),
@@ -39,26 +42,27 @@ class SocketConnections {
                         HttpLoggingInterceptor()
                     ).build()
                 )
-                .withClientHeartbeat(StaticSockets.SERVER_HEARTBEAT)
-            val disposable = stompClient.lifecycle().subscribe ({ lifecycleEvent ->
-                when (lifecycleEvent.type) {
-                    LifecycleEvent.Type.OPENED -> log("Stomp connection opened")
-                    LifecycleEvent.Type.ERROR -> log("Stomp connection error ${lifecycleEvent.exception}")
-                    LifecycleEvent.Type.CLOSED -> log("Stomp connection closed")
-                    else -> {
+                    .withClientHeartbeat(StaticSockets.SERVER_HEARTBEAT)
+                val disposable = stompClient.lifecycle().subscribe({ lifecycleEvent ->
+                    when (lifecycleEvent.type) {
+                        LifecycleEvent.Type.OPENED -> log("Stomp connection opened")
+                        LifecycleEvent.Type.ERROR -> log("Stomp connection error ${lifecycleEvent.exception}")
+                        LifecycleEvent.Type.CLOSED -> log("Stomp connection closed")
+                        else -> {
 
+                        }
                     }
-                }
 
-            }, { throwable -> //log("Error on subscribe topic $throwable")
-                throwable.printStackTrace()
+                }, { throwable -> //log("Error on subscribe topic $throwable")
+                    throwable.printStackTrace()
                 }, {
 
-            }
-            )
+                }
+                )
 
-            compositeDisposable.add(disposable)
-            stompClient.connect()
+                compositeDisposable.add(disposable)
+                stompClient.connect()
+            }
         }
 
         fun connectToTopic(path: String, onSubscribeFun: (topicMessage: StompMessage) -> Unit) {
@@ -87,7 +91,8 @@ class SocketConnections {
 
         fun disconnect() {
             resetSubscriptions()
-            stompClient.disconnect()
+            if (this::stompClient.isInitialized)
+                stompClient.disconnect()
         }
 
         fun resetSubscriptions() {

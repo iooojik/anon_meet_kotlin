@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
-import iooojik.anon.meet.data.models.user.UserViewModel
+import iooojik.anon.meet.data.models.user.UserViewModelProvider
 import iooojik.anon.meet.databinding.FragmentSettingsBinding
+import iooojik.anon.meet.getLoginFromEmail
 
 
 class SettingsFragment : Fragment(), SettingsFragmentLogic {
@@ -27,18 +27,21 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater)
-        val provider = ViewModelProvider(this).get(
-            UserViewModel::class.java
-        )
-        provider.userLiveData.value = UserViewModel.currentUser.value
-        binding.profileHeader.user = provider
+
+        UserViewModelProvider(this).liveData.observe(this, {
+            it?.let {
+                it.userLogin = getLoginFromEmail(it.userLogin)
+                binding.profileHeader.user = it
+            }
+        })
+
         binding.fragment = this
         binding.adBanner.loadAd(AdRequest.Builder().build())
         setListeners(binding, resources)
         return binding.root
     }
 
-    fun goToAppInfo(view: View?){
+    fun goToAppInfo(view: View?) {
         findNavController().navigate(R.id.action_settingsFragment_to_aboutAppFragment)
     }
 

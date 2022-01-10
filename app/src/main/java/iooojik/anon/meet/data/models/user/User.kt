@@ -50,4 +50,8 @@ class User(
         @JvmStatic
         var mNegativeReputation: Int? = 0
     }
+
+    fun changeInterlocutorAges(interlocutorAges: String) {
+        filter.interlocutorAges = interlocutorAges
+    }
 }

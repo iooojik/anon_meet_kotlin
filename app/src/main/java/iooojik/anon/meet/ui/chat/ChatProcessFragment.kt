@@ -1,9 +1,6 @@
 package iooojik.anon.meet.ui.chat
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,6 +20,10 @@ import com.google.gson.Gson
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.data.models.*
+import iooojik.anon.meet.data.models.messages.MessageModel
+import iooojik.anon.meet.data.models.messages.MessageViewModel
+import iooojik.anon.meet.data.models.messages.MessagesViewModel
+import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
@@ -31,12 +33,6 @@ import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.ConfirmationBottomSheet
-import android.content.ClipData
-import android.widget.Toast
-import iooojik.anon.meet.data.models.messages.MessageModel
-import iooojik.anon.meet.data.models.messages.MessageViewModel
-import iooojik.anon.meet.data.models.messages.MessagesViewModel
-import iooojik.anon.meet.data.models.user.User
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
@@ -92,54 +88,69 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         return binding.root
     }
 
-    private fun inputMessageTextWatcher(){
-        binding.mainLayout.messageInputLayout.messageTextField.editText!!.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if (s?.toString().isNullOrBlank()){
-                    SocketConnections.sendStompMessage(
-                        "/app/typing.$rUuid",
-                        Gson().toJson(
-                            TypingModel(false)
+    private fun inputMessageTextWatcher() {
+        binding.mainLayout.messageInputLayout.messageTextField.editText!!.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    if (s?.toString().isNullOrBlank()) {
+                        SocketConnections.sendStompMessage(
+                            "/app/typing.$rUuid",
+                            Gson().toJson(
+                                TypingModel(false)
+                            )
                         )
-                    )
+                    }
                 }
-            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s?.toString().isNullOrBlank()){
-                    SocketConnections.sendStompMessage(
-                        "/app/typing.$rUuid",
-                        Gson().toJson(
-                            TypingModel(true)
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (!s?.toString().isNullOrBlank()) {
+                        SocketConnections.sendStompMessage(
+                            "/app/typing.$rUuid",
+                            Gson().toJson(
+                                TypingModel(true)
+                            )
                         )
-                    )
+                    }
                 }
-            }
 
-            override fun afterTextChanged(s: Editable?) {
-                if (s?.toString().isNullOrBlank()){
-                    SocketConnections.sendStompMessage(
-                        "/app/typing.$rUuid",
-                        Gson().toJson(
-                            TypingModel(false)
+                override fun afterTextChanged(s: Editable?) {
+                    if (s?.toString().isNullOrBlank()) {
+                        SocketConnections.sendStompMessage(
+                            "/app/typing.$rUuid",
+                            Gson().toJson(
+                                TypingModel(false)
+                            )
                         )
-                    )
+                    }
                 }
-            }
 
-        })
+            })
     }
 
-    fun onEmptySpaceClick(v: View?){
+    fun onEmptySpaceClick(v: View?) {
         hideKeyBoard(requireActivity(), binding.root)
         binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
     }
 
     override fun onResume() {
+        val preferencesManager = SharedPreferencesManager(requireContext())
+        preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+        val startFragment = preferencesManager.getValue(SharedPrefsKeys.CHAT_START_UP, -1)
+        if (startFragment != null) {
+            if (startFragment == R.id.filtersFragment) {
+                findNavController().navigate(R.id.action_chatProcessFragment_to_filtersFragment)
+                preferencesManager.clearAll()
+            }
+        }
         hideToolBar(activity as MainActivity)
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(mMessageReceiver, IntentFilter(adapterIntentFilterName))
-        val preferencesManager = SharedPreferencesManager(requireContext())
+
         preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
         rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "") as String
         SocketConnections.sendStompMessage(
@@ -170,11 +181,11 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
     }
 
-    fun openInterlocutorProfile(view: View){
+    fun openInterlocutorProfile(view: View) {
         InterlocutorProfileBottomSheet(User()).show(requireActivity().supportFragmentManager, "tag")
     }
 
-    fun onSendMessageClick(v: View?){
+    fun onSendMessageClick(v: View?) {
         val messageText =
             binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
         if (messageText.trim().isNotBlank()) {
@@ -192,7 +203,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
     }
 
-    private fun onExitChatClick(v: View?){
+    private fun onExitChatClick(v: View?) {
         ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
             val prefs = SharedPreferencesManager(requireContext())
             prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
@@ -247,10 +258,15 @@ class MessagesAdapter(
             setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
         }
         holder.itemBinding.root.setOnLongClickListener {
-            val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clipboardManager =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             val clipData = ClipData.newPlainText("anon message content", msgModel.text)
             clipboardManager.setPrimaryClip(clipData)
-            Toast.makeText(context, context.resources.getString(R.string.copied), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.copied),
+                Toast.LENGTH_SHORT
+            ).show()
             return@setOnLongClickListener true
         }
     }

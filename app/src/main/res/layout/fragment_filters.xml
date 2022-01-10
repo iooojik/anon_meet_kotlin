@@ -5,9 +5,10 @@
     tools:context=".ui.filters.FiltersFragment">
 
     <data>
+
         <variable
             name="user"
-            type="iooojik.anon.meet.data.models.user.UserViewModel" />
+            type="iooojik.anon.meet.data.models.user.User" />
     </data>
 
     <LinearLayout
@@ -26,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/standard_margin_2"
-                android:text="@string/your_sex"/>
+                android:text="@string/your_sex" />
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -36,14 +37,14 @@
                     android:id="@+id/my_sex_male"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.currentUser.filter.mySex.equals(`male`)}"
+                    android:checked="@{user.filter.mySex.equals(`male`)}"
                     android:text="@string/male_sex" />
 
                 <RadioButton
                     android:id="@+id/my_sex_female"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.currentUser.filter.mySex.equals(`female`)}"
+                    android:checked="@{user.filter.mySex.equals(`female`)}"
                     android:text="@string/female_sex" />
             </RadioGroup>
         </LinearLayout>
@@ -54,9 +55,9 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/headline6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/headline6"
                 android:layout_marginBottom="@dimen/standard_margin_2"
                 android:text="@string/interlocutor_sex" />
 
@@ -68,21 +69,21 @@
                     android:id="@+id/interlocutor_sex_male"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.currentUser.filter.interlocutorSex.equals(`male`)}"
+                    android:checked="@{user.filter.interlocutorSex.equals(`male`)}"
                     android:text="@string/male_sex" />
 
                 <RadioButton
                     android:id="@+id/interlocutor_sex_female"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.currentUser.filter.interlocutorSex.equals(`female`)}"
+                    android:checked="@{user.filter.interlocutorSex.equals(`female`)}"
                     android:text="@string/female_sex" />
 
                 <RadioButton
                     android:id="@+id/interlocutor_sex_nm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{user.Companion.currentUser.filter.interlocutorSex.equals(`nm`)}"
+                    android:checked="@{user.filter.interlocutorSex.equals(`nm`)}"
                     android:text="@string/no_matter_sex" />
 
             </RadioGroup>
@@ -96,30 +97,30 @@
 
             <TextView
                 android:id="@+id/textView3"
+                style="@style/headline6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/headline6"
                 android:layout_marginBottom="@dimen/standard_margin_2"
                 android:text="@string/interlocutor_age" />
 
             <TextView
                 android:id="@+id/textView4"
+                style="@style/subtitle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                style="@style/subtitle1"
-                android:text="@{String.format(`%.0f`, user.Companion.currentUser.filter.interlocutorAgesRange[0])+` - `+String.format(`%.0f`, user.Companion.currentUser.filter.interlocutorAgesRange[1])}" />
+                android:text="@{String.format(`%.0f`, user.filter.interlocutorAgesRange[0])+` - `+String.format(`%.0f`, user.filter.interlocutorAgesRange[1])}"
+                android:textAlignment="center" />
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/age_range_slider"
+                style="@style/range_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_margin"
                 android:stepSize="1.0"
                 android:valueFrom="0.0"
                 android:valueTo="100.0"
-                style="@style/range_slider"
-                app:values="@{user.Companion.currentUser.filter.interlocutorAgesRange}" />
+                app:values="@{user.filter.interlocutorAgesRange}" />
         </LinearLayout>
 
         <Button
@@ -129,19 +130,15 @@
             android:layout_margin="@dimen/standard_margin_2"
             android:text="@string/find" />
 
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ad_banner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin_large"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_id"
-            >
-        </com.google.android.gms.ads.AdView>
+            ads:adUnitId="@string/banner_id" />
 
     </LinearLayout>
-
 
 
 </layout>

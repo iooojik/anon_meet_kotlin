@@ -26,8 +26,9 @@ class LoginInstrumentedTest {
 
 
     @Before
-    fun beforeMethod(){
-        prefsManager = SharedPreferencesManager(activityRule.activityTestRule.activity.applicationContext)
+    fun beforeMethod() {
+        prefsManager =
+            SharedPreferencesManager(activityRule.activityTestRule.activity.applicationContext)
         prefsManager.initPreferences()
         prefsManager.clearAll()
     }
@@ -39,10 +40,10 @@ class LoginInstrumentedTest {
     }
 
     @Test
-    fun authTestWithUI(){
-        onView(withId(R.id.nickname_text_field)).check { view, exception ->
+    fun authTestWithUI() {
+        onView(withId(R.id.email_text_field)).check { view, exception ->
             if (view is TextInputLayout) {
-                view.editText!!.setText("iooojik")
+                view.editText!!.setText("iooojik@iooojik.ru")
             } else throw exception
         }
         onView(withId(R.id.password_text_field)).check { view, exception ->

@@ -8,9 +8,9 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.google.android.material.snackbar.Snackbar
-import iooojik.anon.meet.net.rest.StaticWeb
 import java.math.BigInteger
 import java.security.MessageDigest
+import java.util.regex.Pattern
 
 fun log(msg: Any, tag: String = "Programmer log", priority: Int = Log.INFO) {
     Log.println(priority, tag, msg.toString())
@@ -31,7 +31,18 @@ fun hideKeyBoard(activity: Activity, v: View) {
     imm.hideSoftInputFromWindow(v.windowToken, 0)
 }
 
-fun openURL(url: String, context: Context){
+fun openURL(url: String, context: Context) {
     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     context.startActivity(browserIntent)
 }
+
+fun isEmail(toCheck: String): Boolean {
+    val emailRegex =
+        "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+    return if (toCheck.isBlank()) false
+    else return Pattern.compile(emailRegex).matcher(toCheck).matches()
+}
+
+fun getLoginFromEmail(email: String) =
+    email.replace(Regex("@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}\$"), "")
+

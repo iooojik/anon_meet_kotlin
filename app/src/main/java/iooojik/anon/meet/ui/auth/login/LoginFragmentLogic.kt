@@ -10,6 +10,7 @@ import iooojik.anon.meet.data.models.LoginResponse
 import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.FragmentLoginBinding
+import iooojik.anon.meet.isEmail
 import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
@@ -69,14 +70,14 @@ interface LoginFragmentLogic {
         }
     }
 
-    fun checkNicknameAndPasswordLength(
+    fun checkEmailAndPassword(
         view: View,
         resources: Resources,
         originalPassword: String
     ): Boolean {
         var r = true
         when {
-            !User.mUserLogin.trim().contains('@') -> {
+            !isEmail(User.mUserLogin.trim()) -> {
                 showSnackbar(
                     view,
                     resources.getString(R.string.not_acceptable_email)

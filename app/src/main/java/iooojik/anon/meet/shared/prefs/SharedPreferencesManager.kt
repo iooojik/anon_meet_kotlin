@@ -7,7 +7,10 @@ class SharedPreferencesManager(private val context: Context) {
     private val preferencesName = "${context.packageName}.preferences"
     private var preferences: SharedPreferences? = null
 
-    fun initPreferences(prefsName: String = preferencesName, mode: Int = Context.MODE_PRIVATE): SharedPreferences? {
+    fun initPreferences(
+        prefsName: String = preferencesName,
+        mode: Int = Context.MODE_PRIVATE
+    ): SharedPreferences? {
         preferences = context.getSharedPreferences(prefsName, mode)
         return preferences
     }
