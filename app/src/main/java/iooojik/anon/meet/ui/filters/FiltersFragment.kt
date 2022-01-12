@@ -87,6 +87,10 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
                     tapCounter = 0
                 } else if (!UserViewModel.currentUser.value?.uuid.isNullOrBlank()) {
                     try {
+                        val preferencesManager = SharedPreferencesManager(requireContext())
+                        preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                        preferencesManager.clearAll()
+
                         findingBottomSheet.show(
                             requireActivity().supportFragmentManager,
                             SearchBottomSheet.TAG

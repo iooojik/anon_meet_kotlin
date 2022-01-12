@@ -65,5 +65,6 @@
     <string name="telegram" translatable="false">Telegram</string>
     <string name="authorization_error">Ошибка авторизации %1$s</string>
     <string name="chat_was_ended">Чат завершён</string>
+    <string name="deauth_from_account">Выйти из аккаунта</string>
 
 </resources>

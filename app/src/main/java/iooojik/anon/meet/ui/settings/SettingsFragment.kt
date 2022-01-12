@@ -13,6 +13,7 @@ import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.user.UserViewModelProvider
 import iooojik.anon.meet.databinding.FragmentSettingsBinding
 import iooojik.anon.meet.getLoginFromEmail
+import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 
 
 class SettingsFragment : Fragment(), SettingsFragmentLogic {
@@ -43,6 +44,13 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
 
     fun goToAppInfo(view: View?) {
         findNavController().navigate(R.id.action_settingsFragment_to_aboutAppFragment)
+    }
+
+    fun exitFromAccount(view: View?){
+        val prefManager = SharedPreferencesManager(requireContext())
+        prefManager.initPreferences()
+        prefManager.clearAll()
+        findNavController().navigate(R.id.action_global_auth_navigation)
     }
 
     override fun onResume() {

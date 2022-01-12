@@ -76,51 +76,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:background="@drawable/my_message_bubble"
-            android:orientation="vertical"
-            android:visibility="@{message.messageMutableLiveData.mine ? View.VISIBLE : View.GONE}">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/message_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:background="@android:color/transparent"
-                android:padding="5dp"
-                android:text="@{message.messageMutableLiveData.text}"
-                android:textAlignment="textStart"
-                android:textColor="@color/white"
-                tools:text="@tools:sample/lorem" />
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/standard_margin"
+                android:src="@drawable/dotted"
+                android:contentDescription="@string/message_seen"
+                android:visibility="@{message.messageMutableLiveData.seen ? View.GONE : View.VISIBLE}"/>
+
 
             <LinearLayout
+                android:id="@+id/my_message_bubble_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginStart="@dimen/message_input_dimen"
-                android:layout_marginEnd="@dimen/message_input_dimen"
-                android:orientation="horizontal">
+                android:background="@drawable/my_message_bubble"
+                android:orientation="vertical"
+                android:visibility="@{message.messageMutableLiveData.mine ? View.VISIBLE : View.GONE}">
 
                 <TextView
-                    android:id="@+id/time_text"
+                    android:id="@+id/message_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_gravity="start"
                     android:background="@android:color/transparent"
-                    android:text="@{message.messageMutableLiveData.date}"
+                    android:padding="5dp"
+                    android:text="@{message.messageMutableLiveData.text}"
+                    android:textAlignment="textStart"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
                     tools:text="@tools:sample/lorem" />
 
-                <ImageView
-                    android:id="@+id/message_seen_my_bubble"
-                    android:layout_width="0dp"
-                    android:layout_height="12dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/message_seen"
-                    android:src="@{message.messageMutableLiveData.seen ? @drawable/outline_done_all_24 : @drawable/outline_done_24}"
-                    tools:srcCompat="@drawable/outline_done_24" />
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginStart="@dimen/message_input_dimen"
+                    android:layout_marginEnd="@dimen/message_input_dimen"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:background="@android:color/transparent"
+                        android:text="@{message.messageMutableLiveData.date}"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        tools:text="@tools:sample/lorem" />
+
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </layout>

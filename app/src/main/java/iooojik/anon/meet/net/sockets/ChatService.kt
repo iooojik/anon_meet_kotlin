@@ -18,6 +18,7 @@ import iooojik.anon.meet.data.models.SeenModel
 import iooojik.anon.meet.data.models.TypingModel
 import iooojik.anon.meet.data.models.messages.MessageModel
 import iooojik.anon.meet.data.models.user.User
+import iooojik.anon.meet.log
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.chat.ChatProcessFragment
@@ -90,21 +91,22 @@ class ChatService : Service() {
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     intent.putExtra("endChat", true)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-                    AppDatabase.instance.messageDao.clearTable()
+                    AppDatabase.instance.clearAllTables()
                     SocketConnections.resetSubscriptions()
                     stopForeground(true)
-                    AppDatabase.instance.clearAllTables()
                     sendNotificationMessage(resources.getString(R.string.chat_was_ended))
                     stopSelf()
                 }
                 topicMessage.payload.contains("seen") -> {
                     val seenModel = Gson().fromJson(topicMessage.payload, SeenModel::class.java)
-                    if (seenModel.seen) {
+                    if (seenModel.seen && seenModel.seenBy.uuid != User.mUuid) {
                         AppDatabase.instance.messageDao.getAll().forEach {
                             it.seen = seenModel.seen
                             AppDatabase.instance.messageDao.update(message = it)
                         }
                     }
+                    //val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
+                    //LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                 }
                 else -> {
                     //получение сообщения
@@ -116,6 +118,16 @@ class ChatService : Service() {
                     val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     sendNotificationMessage(msg.text)
+                    if (ChatProcessFragment.APPLICATION_STATUS_FLAG == 1){
+                        SocketConnections.sendStompMessage(
+                            "/app/seen.${
+                                preferencesManager.getValue(
+                                    SharedPrefsKeys.CHAT_ROOM_UUID,
+                                    ""
+                                ).toString()
+                            }", Gson().toJson(SeenModel(true))
+                        )
+                    }
                 }
             }
         }
@@ -154,16 +166,6 @@ class ChatService : Service() {
             with(notificationManager) {
                 notify(ChatService.NOTIFICATION_ID, builder.build()) // посылаем уведомление
             }
-        } else {
-            val preferencesManager = SharedPreferencesManager(this)
-            preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-            val rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "")
-            SocketConnections.sendStompMessage(
-                "/app/seen.$rUuid",
-                Gson().toJson(
-                    SeenModel(true)
-                )
-            )
         }
     }
 

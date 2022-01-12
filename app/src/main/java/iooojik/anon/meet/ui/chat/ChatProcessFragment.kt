@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.data.models.*
@@ -28,11 +30,14 @@ import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
 import iooojik.anon.meet.hideKeyBoard
+import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
+import iooojik.anon.meet.showSnackbar
 import iooojik.anon.meet.ui.ConfirmationBottomSheet
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
@@ -50,6 +55,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 
     companion object {
         const val adapterIntentFilterName = "adapterIntentFilter"
+        var APPLICATION_STATUS_FLAG = 0 // 0 - on pause 1 - on resume
     }
 
     override fun onCreateView(
@@ -61,7 +67,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         binding.mainLayout.fragment = this
         binding.mainLayout.messageInputLayout.fragment = this
 
-        binding.mainLayout.messagesRecView.layoutManager = LinearLayoutManager(requireContext())
+        binding.mainLayout.messagesRecView.layoutManager = MessagesLayoutManager(requireContext())
         adapter = MessagesAdapter(layoutInflater, requireContext())
         binding.mainLayout.messagesRecView.adapter = adapter
 
@@ -143,8 +149,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         val startFragment = preferencesManager.getValue(SharedPrefsKeys.CHAT_START_UP, -1)
         if (startFragment != null) {
             if (startFragment == R.id.filtersFragment) {
-                findNavController().navigate(R.id.action_chatProcessFragment_to_filtersFragment)
                 preferencesManager.clearAll()
+                findNavController().navigate(R.id.action_chatProcessFragment_to_filtersFragment)
             }
         }
         hideToolBar(activity as MainActivity)
@@ -153,11 +159,11 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 
         preferencesManager.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
         rUuid = preferencesManager.getValue(SharedPrefsKeys.CHAT_ROOM_UUID, "") as String
+        APPLICATION_STATUS_FLAG = 1
         SocketConnections.sendStompMessage(
-            "/app/seen.$rUuid",
-            Gson().toJson(
-                SeenModel(true)
-            )
+            "/app/seen.${
+                rUuid
+            }", Gson().toJson(SeenModel(true))
         )
         super.onResume()
     }
@@ -231,61 +237,78 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         topChatBarBinding.typingMessage.text = " "
         super.onDestroyView()
     }
+
+    override fun onPause() {
+        APPLICATION_STATUS_FLAG = 0
+        super.onPause()
+    }
+
+    inner class MessagesAdapter(
+        private val inflater: LayoutInflater,
+        private val context: Context
+    ) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
+        var messages: MutableList<MessageModel> = mutableListOf()
+
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): MessagesAdapter.MessagesViewHolder {
+            return MessagesViewHolder(
+                RecyclerViewMessageItemBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+        }
+
+        override fun onBindViewHolder(holder: MessagesAdapter.MessagesViewHolder, position: Int) {
+            val msgModel = messages[position]
+            val messageViewModel = MessageViewModel().updateModel(msgModel)
+            holder.itemBinding.message = messageViewModel
+
+            if (msgModel.isMine) {
+                setBubbleWidth(holder.itemBinding.myMessageBubbleContent, msgModel.text.length)
+            } else {
+                holder.itemBinding.myMessageBubble.visibility = View.GONE
+                setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
+            }
+            holder.itemBinding.root.setOnLongClickListener {
+                val clipboardManager =
+                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("anon message content", msgModel.text)
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.copied),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnLongClickListener true
+            }
+        }
+
+        private fun setBubbleWidth(bubble: View, textLength: Int) {
+            val maxWidth = Resources.getSystem().displayMetrics.widthPixels
+            bubble.layoutParams.width = (maxWidth * (textLength / 100f) + maxWidth / 8).toInt()
+        }
+
+        fun updateMessages(list: MutableList<MessageModel>) {
+            messages = list
+        }
+
+        override fun getItemCount(): Int {
+            return messages.size
+        }
+
+        inner class MessagesViewHolder(val itemBinding: RecyclerViewMessageItemBinding) :
+            RecyclerView.ViewHolder(itemBinding.root)
+
+    }
+
+    inner class MessagesLayoutManager(context: Context) : LinearLayoutManager(context) {
+        override fun supportsPredictiveItemAnimations(): Boolean {
+            return false
+        }
+    }
 }
 
-class MessagesAdapter(
-    private val inflater: LayoutInflater,
-    private val context: Context
-) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
-    var messages: MutableList<MessageModel> = mutableListOf()
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MessagesAdapter.MessagesViewHolder {
-        return MessagesViewHolder(RecyclerViewMessageItemBinding.inflate(inflater, parent, false))
-    }
-
-    override fun onBindViewHolder(holder: MessagesAdapter.MessagesViewHolder, position: Int) {
-        val msgModel = messages[position]
-        val messageViewModel = MessageViewModel().updateModel(msgModel)
-        holder.itemBinding.message = messageViewModel
-        //val msgModel = MessagesViewModel.messages[position]
-        if (msgModel.isMine) {
-            setBubbleWidth(holder.itemBinding.myMessageBubble, msgModel.text.length)
-        } else {
-            holder.itemBinding.myMessageBubble.visibility = View.GONE
-            setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
-        }
-        holder.itemBinding.root.setOnLongClickListener {
-            val clipboardManager =
-                context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-            val clipData = ClipData.newPlainText("anon message content", msgModel.text)
-            clipboardManager.setPrimaryClip(clipData)
-            Toast.makeText(
-                context,
-                context.resources.getString(R.string.copied),
-                Toast.LENGTH_SHORT
-            ).show()
-            return@setOnLongClickListener true
-        }
-    }
-
-    private fun setBubbleWidth(bubble: View, textLength: Int) {
-        val maxWidth = Resources.getSystem().displayMetrics.widthPixels
-        //if (textLength >= 40)
-        bubble.layoutParams.width = (maxWidth * (textLength / 100f) + maxWidth / 8).toInt()
-    }
-
-    fun updateMessages(list: MutableList<MessageModel>) {
-        messages = list
-    }
-
-    override fun getItemCount(): Int {
-        return messages.size
-    }
-
-    inner class MessagesViewHolder(val itemBinding: RecyclerViewMessageItemBinding) :
-        RecyclerView.ViewHolder(itemBinding.root)
-
-}

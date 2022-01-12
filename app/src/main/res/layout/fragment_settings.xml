@@ -50,6 +50,13 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="@{fragment::exitFromAccount}"
+                android:text="@string/deauth_from_account" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="@{fragment::goToAppInfo}"
                 android:text="@string/about_app" />
