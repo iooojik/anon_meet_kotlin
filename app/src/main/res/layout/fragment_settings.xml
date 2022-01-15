@@ -60,15 +60,6 @@
                 android:layout_gravity="center"
                 android:onClick="@{fragment::goToAppInfo}"
                 android:text="@string/about_app" />
-
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/ad_banner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/standard_margin"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_id" />
         </LinearLayout>
 
     </FrameLayout>

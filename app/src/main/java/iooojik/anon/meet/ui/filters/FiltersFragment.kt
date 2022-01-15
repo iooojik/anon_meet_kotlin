@@ -48,7 +48,6 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
                 binding.user = it
             }
         })
-        binding.adBanner.loadAd(AdRequest.Builder().build())
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
         setListeners(binding)

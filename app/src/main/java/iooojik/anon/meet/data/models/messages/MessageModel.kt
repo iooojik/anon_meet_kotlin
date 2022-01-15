@@ -16,6 +16,8 @@ class MessageModel(
     var text: String = "",
     @SerializedName("date")
     var date: String = "",
+    @SerializedName("uuid")
+    var uuid: String = "",
     @SerializedName("author")
     @Ignore
     val author: User,
@@ -23,7 +25,7 @@ class MessageModel(
     @SerializedName("seen")
     var seen: Boolean = false
 ) {
-    constructor() : this(null, "", "", User(), false, false)
+    constructor() : this(null, "", "", "", User(), false, false)
 }
 
 class MessageViewModel : ViewModel() {

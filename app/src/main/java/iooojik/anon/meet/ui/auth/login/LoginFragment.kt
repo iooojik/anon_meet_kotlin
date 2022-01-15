@@ -23,7 +23,6 @@ class LoginFragment : Fragment(), LoginFragmentLogic {
         binding = FragmentLoginBinding.inflate(inflater)
         binding.activity = requireActivity() as AppCompatActivity
         binding.fragment = this
-        binding.adBanner.loadAd(AdRequest.Builder().build())
         return binding.root
     }
 

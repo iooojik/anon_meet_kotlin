@@ -2,17 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "c6611fea3c811013e76dd8a8c5e33b93",
+    "identityHash": "3d789b25b9dc94066465f52f2467b8a3",
     "entities": [
       {
         "tableName": "messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `text` TEXT NOT NULL, `date` TEXT NOT NULL, `isMine` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `text` TEXT NOT NULL, `date` TEXT NOT NULL, `uuid` TEXT NOT NULL, `isMine` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "text",
@@ -27,8 +27,20 @@
             "notNull": true
           },
           {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "isMine",
             "columnName": "isMine",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seen",
+            "columnName": "seen",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -46,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6611fea3c811013e76dd8a8c5e33b93')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3d789b25b9dc94066465f52f2467b8a3')"
     ]
   }
 }

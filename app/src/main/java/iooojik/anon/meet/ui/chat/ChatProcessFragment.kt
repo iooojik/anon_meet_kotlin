@@ -64,7 +64,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     ): View {
         SocketConnections.connectToServer(requireContext())
         binding = FragmentChatProcessBinding.inflate(inflater)
-        binding.mainLayout.fragment = this
+        binding.fragment = this
+
         binding.mainLayout.messageInputLayout.fragment = this
 
         binding.mainLayout.messagesRecView.layoutManager = MessagesLayoutManager(requireContext())
@@ -221,8 +222,6 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                     ).toString()
                 }", Gson().toJson(User())
             )
-            prefs.clearAll()
-
         }.show(requireActivity().supportFragmentManager, ConfirmationBottomSheet.TAG)
     }
 
@@ -247,6 +246,7 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         private val inflater: LayoutInflater,
         private val context: Context
     ) : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
+
         var messages: MutableList<MessageModel> = mutableListOf()
 
         override fun onCreateViewHolder(
@@ -260,6 +260,14 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                     false
                 )
             )
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            return position
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
         }
 
         override fun onBindViewHolder(holder: MessagesAdapter.MessagesViewHolder, position: Int) {

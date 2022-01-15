@@ -37,7 +37,6 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
         })
 
         binding.fragment = this
-        binding.adBanner.loadAd(AdRequest.Builder().build())
         setListeners(binding, resources)
         return binding.root
     }

@@ -114,10 +114,18 @@ class ChatService : Service() {
                     val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
                     msg.date = sdf.format(Date())
                     msg.isMine = User.mUuid == msg.author.uuid
-                    AppDatabase.instance.messageDao.insert(msg)
-                    val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                    var found = false
+                    AppDatabase.instance.messageDao.getAll().forEach {
+                        if (it.uuid == msg.uuid && !found)
+                            found = true
+                    }
+                    if (!found) {
+                        AppDatabase.instance.messageDao.insert(msg)
+                    }
+                    //val intent = Intent(ChatProcessFragment.adapterIntentFilterName)
+                    //LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     sendNotificationMessage(msg.text)
+
                     if (ChatProcessFragment.APPLICATION_STATUS_FLAG == 1){
                         SocketConnections.sendStompMessage(
                             "/app/seen.${
