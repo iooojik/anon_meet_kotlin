@@ -26,12 +26,12 @@ class AdUtil {
                 AdRequest.Builder().build(),
                 object : InterstitialAdLoadCallback() {
                     override fun onAdFailedToLoad(adError: LoadAdError) {
-                        log(adError.message)
+                        log(adError.message, priority = Log.ERROR)
                         mInterstitialAd = null
                     }
 
                     override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                        log("onAdLoaded")
+                        log("onAdLoaded", priority = Log.INFO)
                         mInterstitialAd = interstitialAd
                         if (show)
                             showInterstitialAd(activity)

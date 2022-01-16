@@ -89,7 +89,7 @@ class SocketConnections {
             stompClient.send(path, body).subscribe()
         }
 
-        fun disconnect() {
+        private fun disconnect() {
             resetSubscriptions()
             if (this::stompClient.isInitialized)
                 stompClient.disconnect()

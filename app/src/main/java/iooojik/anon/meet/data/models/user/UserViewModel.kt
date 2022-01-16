@@ -26,9 +26,9 @@ class UserViewModel(
         }
 
 
-        fun newCurrentModel() {
+        /*fun newCurrentModel() {
             currentUser.value = User()
-        }
+        }*/
     }
 
 }

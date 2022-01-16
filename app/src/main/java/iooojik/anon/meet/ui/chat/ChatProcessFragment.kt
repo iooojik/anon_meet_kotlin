@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -18,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
 import iooojik.anon.meet.R
 import iooojik.anon.meet.activity.MainActivity
 import iooojik.anon.meet.data.models.*
@@ -30,14 +28,11 @@ import iooojik.anon.meet.databinding.ChatProcessTopBarBinding
 import iooojik.anon.meet.databinding.FragmentChatProcessBinding
 import iooojik.anon.meet.databinding.RecyclerViewMessageItemBinding
 import iooojik.anon.meet.hideKeyBoard
-import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.ChatService
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
-import iooojik.anon.meet.showSnackbar
 import iooojik.anon.meet.ui.ConfirmationBottomSheet
-import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
 
 class ChatProcessFragment : Fragment(), ChatProcessLogic {
@@ -140,8 +135,10 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
     }
 
     fun onEmptySpaceClick(v: View?) {
-        hideKeyBoard(requireActivity(), binding.root)
-        binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
+        v?.let {
+            hideKeyBoard(requireActivity(), binding.root)
+            binding.mainLayout.messageInputLayout.messageTextField.clearFocus()
+        }
     }
 
     override fun onResume() {
@@ -188,41 +185,50 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
         }
     }
 
-    fun openInterlocutorProfile(view: View) {
-        InterlocutorProfileBottomSheet(User()).show(requireActivity().supportFragmentManager, "tag")
+    fun openInterlocutorProfile(view: View?) {
+        view?.let {
+            InterlocutorProfileBottomSheet(User()).show(
+                requireActivity().supportFragmentManager,
+                "tag"
+            )
+        }
     }
 
     fun onSendMessageClick(v: View?) {
-        val messageText =
-            binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
-        if (messageText.trim().isNotBlank()) {
-            SocketConnections.sendStompMessage(
-                "/app/send.message.$rUuid",
-                Gson().toJson(
-                    MessageModel(
-                        id = -1,
-                        author = User(),
-                        text = messageText.toString()
+        v?.let {
+            val messageText =
+                binding.mainLayout.messageInputLayout.messageTextField.editText!!.text
+            if (messageText.trim().isNotBlank()) {
+                SocketConnections.sendStompMessage(
+                    "/app/send.message.$rUuid",
+                    Gson().toJson(
+                        MessageModel(
+                            id = -1,
+                            author = User(),
+                            text = messageText.toString()
+                        )
                     )
                 )
-            )
-            binding.mainLayout.messageInputLayout.messageTextField.editText!!.text.clear()
+                binding.mainLayout.messageInputLayout.messageTextField.editText!!.text.clear()
+            }
         }
     }
 
     private fun onExitChatClick(v: View?) {
-        ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
-            val prefs = SharedPreferencesManager(requireContext())
-            prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-            SocketConnections.sendStompMessage(
-                "/app/end.chat.${
-                    prefs.getValue(
-                        SharedPrefsKeys.CHAT_ROOM_UUID,
-                        ""
-                    ).toString()
-                }", Gson().toJson(User())
-            )
-        }.show(requireActivity().supportFragmentManager, ConfirmationBottomSheet.TAG)
+        v?.let {
+            ConfirmationBottomSheet(message = resources.getString(R.string.finish_chat_confirmation)) {
+                val prefs = SharedPreferencesManager(requireContext())
+                prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+                SocketConnections.sendStompMessage(
+                    "/app/end.chat.${
+                        prefs.getValue(
+                            SharedPrefsKeys.CHAT_ROOM_UUID,
+                            ""
+                        ).toString()
+                    }", Gson().toJson(User())
+                )
+            }.show(requireActivity().supportFragmentManager, ConfirmationBottomSheet.TAG)
+        }
     }
 
     override fun onDestroy() {

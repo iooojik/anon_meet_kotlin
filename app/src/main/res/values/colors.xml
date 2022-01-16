@@ -2,35 +2,22 @@
 <resources>
     <!-- light mode -->
     <color name="primaryColor">#ffecb3</color>
-    <color name="primaryLightColor">#ffffe5</color>
     <color name="primaryDarkColor">#cbba83</color>
     <color name="secondaryColor">#00897b</color>
     <color name="secondaryLightColor">#4ebaaa</color>
-    <color name="secondaryDarkColor">#005b4f</color>
     <color name="primaryTextColor">#222222</color>
     <color name="secondaryTextColor">#efefef</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="kRed">#FFE46472</color>
-    <color name="kLavender">#FFD5E4FE</color>
     <color name="kBlue">#FF6488E4</color>
-    <color name="kLightGreen">#FFD9E6DC</color>
-    <color name="kGreen">#FF309397</color>
-    <color name="kDarkBlue">#FF0D253F</color>
     <color name="primaryBlue">#ff2972ff</color>
-    <color name="textWhiteGrey">#ff94959b</color>
-    <color name="light_meBubble">#fff1f1f5</color>
-    <color name="light_notMeBubble">#FF309397</color>
     <!-- dark mode -->
     <color name="dark_mode_primary">#ff1f253d</color>
     <color name="dark_mode_primary_variant">#ff201b2c</color>
-    <color name="dark_mode_primary_dark">#ff242333</color>
     <color name="dark_mode_secondary">#ff242333</color>
-    <color name="dark_mode_secondary_variant">#FF309397</color>
-    <color name="kPalePink">#FFFED4D6</color>
     <color name="meBubble">#ff6c5ece</color>
-    <color name="dark_notMeBubble">#FFFFF9EC</color>
     <color name="dark_mode_text_primary">#FFFFFFFF</color>
     <color name="dark_mode_text_secondary">#FFFFFFFF</color>
 

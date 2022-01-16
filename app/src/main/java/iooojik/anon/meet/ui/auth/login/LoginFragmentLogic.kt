@@ -11,7 +11,6 @@ import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.databinding.FragmentLoginBinding
 import iooojik.anon.meet.isEmail
-import iooojik.anon.meet.log
 import iooojik.anon.meet.net.rest.RetrofitHelper
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
@@ -40,7 +39,7 @@ interface LoginFragmentLogic {
                     binding.root,
                     response.errorBody(),
                     activity
-                ) else log(response.errorBody().toString())
+                )
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {

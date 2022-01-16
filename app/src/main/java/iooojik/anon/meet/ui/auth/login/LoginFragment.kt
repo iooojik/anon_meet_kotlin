@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.ads.AdRequest
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.databinding.FragmentLoginBinding
@@ -26,26 +25,32 @@ class LoginFragment : Fragment(), LoginFragmentLogic {
         return binding.root
     }
 
-    fun hideKeyboardAndClearFocus(view: View) {
-        hideKeyBoard(requireActivity(), binding.root)
-        binding.passwordTextField.clearFocus()
-        binding.emailTextField.clearFocus()
+    fun hideKeyboardAndClearFocus(view: View?) {
+        view?.let {
+            hideKeyBoard(requireActivity(), binding.root)
+            binding.passwordTextField.clearFocus()
+            binding.emailTextField.clearFocus()
+        }
     }
 
-    fun onRegistrationButtonClick(view: View) {
-        findNavController().navigate(R.id.action_loginFragment_to_registrationFragment1)
+    fun onRegistrationButtonClick(view: View?) {
+        view?.let {
+            findNavController().navigate(R.id.action_loginFragment_to_registrationFragment1)
+        }
     }
 
-    fun onLoginButtonClick(view: View) {
-        User.mUserLogin = binding.emailTextField.editText!!.text.trim().toString()
-        User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
-        if (checkEmailAndPassword(
-                requireView(),
-                resources,
-                binding.passwordTextField.editText!!.text.trim().toString()
-            )
-        ) {
-            auth(findNavController(), requireActivity(), binding)
+    fun onLoginButtonClick(view: View?) {
+        view?.let {
+            User.mUserLogin = binding.emailTextField.editText!!.text.trim().toString()
+            User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
+            if (checkEmailAndPassword(
+                    requireView(),
+                    resources,
+                    binding.passwordTextField.editText!!.text.trim().toString()
+                )
+            ) {
+                auth(findNavController(), requireActivity(), binding)
+            }
         }
     }
 }

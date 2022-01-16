@@ -1,7 +1,6 @@
 package iooojik.anon.meet.ui.auth.registration
 
 import android.os.Bundle
-import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,23 +24,27 @@ class RegistrationFragment1 : Fragment(), RegistrationFragment1Logic {
         return binding.root
     }
 
-    fun goToNextStep(view: View) {
-        User.mUserLogin = binding.emailTextField.editText!!.text.trim().toString()
-        User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
-        if (checkEmailAndPassword(
-                requireView(),
-                resources,
-                binding.passwordTextField.editText!!.text.trim().toString()
-            )
-        ) {
-            findNavController().navigate(R.id.action_registrationFragment1_to_registrationFragment2)
+    fun goToNextStep(view: View?) {
+        view?.let {
+            User.mUserLogin = binding.emailTextField.editText!!.text.trim().toString()
+            User.mPassword = binding.passwordTextField.editText!!.text.trim().toString()
+            if (checkEmailAndPassword(
+                    requireView(),
+                    resources,
+                    binding.passwordTextField.editText!!.text.trim().toString()
+                )
+            ) {
+                findNavController().navigate(R.id.action_registrationFragment1_to_registrationFragment2)
+            }
         }
     }
 
-    fun onLayoutClick(view: View) {
-        hideKeyBoard(requireActivity(), binding.root)
-        binding.passwordTextField.clearFocus()
-        binding.emailTextField.clearFocus()
+    fun onLayoutClick(view: View?) {
+        view?.let {
+            hideKeyBoard(requireActivity(), binding.root)
+            binding.passwordTextField.clearFocus()
+            binding.emailTextField.clearFocus()
+        }
     }
 
 }

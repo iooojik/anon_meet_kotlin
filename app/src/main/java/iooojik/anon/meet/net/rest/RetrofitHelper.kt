@@ -3,6 +3,7 @@ package iooojik.anon.meet.net.rest
 
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import iooojik.anon.meet.R
@@ -57,18 +58,17 @@ class RetrofitHelper {
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
-                        log(response.string(), TAG)
+
                     }
-                } else if (response != null) {
-                    log(JSONObject(response.string()).getString("errorMessage").toString(), TAG)
                 }
+
             } catch (e: Exception) {
-                log(e, TAG)
+                log(e, TAG, priority = Log.ERROR)
             }
         }
 
         fun onFailure(t: Throwable, view: View? = null, activity: Activity? = null) {
-            log("FAILURE $t", TAG)
+            log("FAILURE $t", TAG, priority = Log.ERROR)
             if (activity != null && view != null) {
                 showSnackbar(view, activity.resources.getString(R.string.error_request))
             }

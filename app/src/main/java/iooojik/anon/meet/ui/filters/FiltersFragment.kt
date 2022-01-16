@@ -6,7 +6,6 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.ads.AdRequest
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.RangeSlider
 import com.google.gson.Gson
@@ -18,7 +17,6 @@ import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.data.models.user.UserViewModel
 import iooojik.anon.meet.data.models.user.UserViewModelProvider
 import iooojik.anon.meet.databinding.FragmentFiltersBinding
-import iooojik.anon.meet.log
 import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
@@ -122,7 +120,6 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         ) {
             val searchStateModel =
                 Gson().fromJson(topicMessage.payload, SearchStateModel::class.java)!!
-            log(searchStateModel.inSearchUsers)
             SearchBottomSheet.searchModelProvider?.data?.value = searchStateModel
 
         } else if (topicMessage.payload.trim().isNotBlank()) {

@@ -3,6 +3,7 @@ package iooojik.anon.meet.activity
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
@@ -91,7 +92,7 @@ interface ActivityMainLogic : ThemeSwitcher {
                         if (response.body() != null)
                             UserViewModel.changeCurrentUserInfo(response.body()!!)
                     } else {
-                        log(response.errorBody().toString())
+                        log(response.errorBody().toString(), priority = Log.DEBUG)
                         showSnackbar(
                             activity.binding.root,
                             String.format(
@@ -156,4 +157,5 @@ interface ActivityMainLogic : ThemeSwitcher {
             R.drawable.outline_dark_mode_24,
             theme
         )!!
+
 }

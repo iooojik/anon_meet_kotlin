@@ -28,24 +28,30 @@ class RegistrationFragment2 : Fragment(), RegistrationFragment2Logic {
         return binding.root
     }
 
-    fun registerUser(v: View) {
-        register(binding, findNavController(), requireActivity())
-    }
-
-    fun selectBirthDate(v: View) {
-        val datePicker = MaterialDatePicker.Builder.datePicker().build()
-        datePicker.addOnPositiveButtonClickListener {
-            birthDate = Date(it)
-            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
-            User.mBirthDate = formatDate(simpleDateFormat.format(birthDate))
-            binding.birthdateTextField.editText!!.setText(simpleDateFormat.format(birthDate))
-
+    fun registerUser(v: View?) {
+        v?.let {
+            register(binding, findNavController(), requireActivity())
         }
-        datePicker.show(requireActivity().supportFragmentManager, "")
     }
 
-    fun showTermsPolicy(v: View) {
-        openURL("${StaticWeb.REST_URL}terms_and_policy", requireContext())
+    fun selectBirthDate(v: View?) {
+        v?.let {
+            val datePicker = MaterialDatePicker.Builder.datePicker().build()
+            datePicker.addOnPositiveButtonClickListener {
+                birthDate = Date(it)
+                val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
+                User.mBirthDate = formatDate(simpleDateFormat.format(birthDate))
+                binding.birthdateTextField.editText!!.setText(simpleDateFormat.format(birthDate))
+
+            }
+            datePicker.show(requireActivity().supportFragmentManager, "")
+        }
+    }
+
+    fun showTermsPolicy(v: View?) {
+        v?.let {
+            openURL("${StaticWeb.REST_URL}terms_and_policy", requireContext())
+        }
     }
 
 }

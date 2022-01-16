@@ -4,9 +4,6 @@
     <string name="register_fragment1_title">Регистрация</string>
     <string name="register_fragment2_title">Регистрация</string>
     <string name="settings_title">Настройки</string>
-    <string name="register_fragment_subtitle">Никто, кроме тебя, не будет их знать</string>
-    <string name="turn_on_dark_mode">Включить ночной режим</string>
-    <string name="turn_off_dark_mode">Выключить ночной режим</string>
     <string name="turn_on_off_dark_mode">Ночной режим</string>
     <string name="email">Почта</string>
     <string name="password">Пароль</string>
@@ -18,7 +15,6 @@
     <string name="copyright">© iooojik</string>
     <string name="send_message">Отправить сообщение</string>
     <string name="message">Сообщение…</string>
-    <string name="wrong_email">Некорректная почта</string>
     <string name="not_acceptable_email">Неверный email</string>
     <string name="short_password">Короткий пароль</string>
     <string name="male_sex">Мужской</string>
@@ -47,7 +43,6 @@
     <string name="error_request">Ошибка выполнения запроса</string>
     <string name="active_chat">У вас есть незавершённый чат</string>
     <string name="image_under_title" translatable="false">image_under_title</string>
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="message_seen" translatable="false">message_seen</string>
     <string name="avatar" translatable="false">avatar</string>
     <string name="registration_info">Пожалуйста, указывайте именно Вашу почту, и только на латинице. Например, admin@iooojik.ru</string>
@@ -66,5 +61,8 @@
     <string name="authorization_error">Ошибка авторизации %1$s</string>
     <string name="chat_was_ended">Чат завершён</string>
     <string name="deauth_from_account">Выйти из аккаунта</string>
+    <string name="error">Ошибка</string>
+    <string name="no_internet_connection">Отсутсвует подключение к интернету.
+        Подключитесь к Wifi или используйте мобильные данные, чтобы использовать приложение.</string>
 
 </resources>

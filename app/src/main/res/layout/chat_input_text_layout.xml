@@ -18,14 +18,12 @@
         <View
             android:id="@+id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
+            android:layout_height="0dp"
             android:background="?android:attr/listDivider" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -34,8 +32,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:hint="@string/message">
+                android:hint="@string/message"
+                app:layout_constraintEnd_toStartOf="@+id/send_message"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -54,10 +54,12 @@
                 android:elevation="0dp"
                 android:onClick="@{fragment::onSendMessageClick}"
                 app:fabSize="mini"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/message_text_field"
                 app:srcCompat="@drawable/outline_send_24"
                 app:tint="?attr/hintTextColor" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

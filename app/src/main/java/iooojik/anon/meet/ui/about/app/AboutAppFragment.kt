@@ -28,24 +28,37 @@ class AboutAppFragment : Fragment() {
         return binding.root
     }
 
-    fun goToVK(view: View) {
-        openURL("https://vk.com/iooojik_blog", requireContext())
+    fun goToVK(view: View?) {
+        view?.let {
+            openURL("https://vk.com/iooojik_blog", requireContext())
+        }
     }
 
-    fun goToTG(view: View) {
-        openURL("https://t.me/iooojik", requireContext())
+    fun goToTG(view: View?) {
+        view?.let {
+            openURL("https://t.me/iooojik", requireContext())
+        }
     }
 
-    fun goToTerms(view: View) {
-        openURL("https://iooojik.ru/anon.api/terms", requireContext())
+    fun goToTerms(view: View?) {
+        view?.let {
+            openURL("https://iooojik.ru/anon.api/terms", requireContext())
+        }
     }
 
-    fun goToPolicy(view: View) {
-        openURL("https://iooojik.ru/anon.api/policy", requireContext())
+    fun goToPolicy(view: View?) {
+        view?.let {
+            openURL("https://iooojik.ru/anon.api/policy", requireContext())
+        }
     }
 
-    fun goToMarkApp(view: View) {
-        openURL("https://play.google.com/store/apps/details?id=iooojik.anon.meet", requireContext())
+    fun goToMarkApp(view: View?) {
+        view?.let {
+            openURL(
+                "https://play.google.com/store/apps/details?id=iooojik.anon.meet",
+                requireContext()
+            )
+        }
     }
 
 

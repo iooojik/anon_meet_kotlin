@@ -18,7 +18,6 @@ import iooojik.anon.meet.data.models.SeenModel
 import iooojik.anon.meet.data.models.TypingModel
 import iooojik.anon.meet.data.models.messages.MessageModel
 import iooojik.anon.meet.data.models.user.User
-import iooojik.anon.meet.log
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.ui.chat.ChatProcessFragment
@@ -126,7 +125,7 @@ class ChatService : Service() {
                     //LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     sendNotificationMessage(msg.text)
 
-                    if (ChatProcessFragment.APPLICATION_STATUS_FLAG == 1){
+                    if (ChatProcessFragment.APPLICATION_STATUS_FLAG == 1) {
                         SocketConnections.sendStompMessage(
                             "/app/seen.${
                                 preferencesManager.getValue(
@@ -146,7 +145,7 @@ class ChatService : Service() {
             val notificationManager = NotificationManagerCompat.from(this)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
-                    ChatService.CHANNEL_ID, "Messages Channel",
+                    CHANNEL_ID, "Messages Channel",
                     NotificationManager.IMPORTANCE_HIGH
                 )
                 channel.description = "Messages Channel"
@@ -158,12 +157,12 @@ class ChatService : Service() {
 
             val pendingIntent = PendingIntent.getActivity(
                 applicationContext,
-                ChatService.NOTIFICATION_ID,
+                NOTIFICATION_ID,
                 Intent(applicationContext, MainActivity::class.java),
                 PendingIntent.FLAG_IMMUTABLE
             )
 
-            val builder = NotificationCompat.Builder(this, ChatService.CHANNEL_ID)
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(resources.getString(R.string.anonim))
                 .setContentText(message)
@@ -172,7 +171,7 @@ class ChatService : Service() {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
             with(notificationManager) {
-                notify(ChatService.NOTIFICATION_ID, builder.build()) // посылаем уведомление
+                notify(NOTIFICATION_ID, builder.build()) // посылаем уведомление
             }
         }
     }

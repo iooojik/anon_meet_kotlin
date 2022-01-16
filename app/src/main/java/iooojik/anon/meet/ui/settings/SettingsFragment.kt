@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.ads.AdRequest
 import iooojik.anon.meet.AdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.user.UserViewModelProvider
@@ -42,14 +41,18 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
     }
 
     fun goToAppInfo(view: View?) {
-        findNavController().navigate(R.id.action_settingsFragment_to_aboutAppFragment)
+        view?.let {
+            findNavController().navigate(R.id.action_settingsFragment_to_aboutAppFragment)
+        }
     }
 
-    fun exitFromAccount(view: View?){
-        val prefManager = SharedPreferencesManager(requireContext())
-        prefManager.initPreferences()
-        prefManager.clearAll()
-        findNavController().navigate(R.id.action_global_auth_navigation)
+    fun exitFromAccount(view: View?) {
+        view?.let {
+            val prefManager = SharedPreferencesManager(requireContext())
+            prefManager.initPreferences()
+            prefManager.clearAll()
+            findNavController().navigate(R.id.action_global_auth_navigation)
+        }
     }
 
     override fun onResume() {
