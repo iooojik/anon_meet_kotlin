@@ -33,7 +33,8 @@ interface LoginFragmentLogic {
                             response = response,
                             context = activity.applicationContext
                         )
-                        navController.navigate(R.id.action_global_filtersFragment)
+                        if (navController.currentDestination?.id == R.id.loginFragment)
+                            navController.navigate(R.id.action_global_filtersFragment)
                     }
                 } else if (binding != null) RetrofitHelper.onUnsuccessfulResponse(
                     binding.root,

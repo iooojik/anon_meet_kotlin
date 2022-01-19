@@ -59,8 +59,10 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
     private fun hideAdOnFragmentsListener(){
         findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
             listOf(R.id.chatProcessFragment, R.id.aboutAppFragment).forEach {
-                if (destination.id == it)
+                if (destination.id == it && binding.appBarMain.include.adBanner.visibility == View.VISIBLE)
                     binding.appBarMain.include.adBanner.visibility = View.GONE
+                else if (binding.appBarMain.include.adBanner.visibility == View.GONE)
+                    binding.appBarMain.include.adBanner.visibility = View.VISIBLE
             }
         }
     }
@@ -101,7 +103,8 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
 
     override fun onStop() {
         super.onStop()
-        networkMonitor.unregister()
+        if (NetworkMonitorUtil.registered)
+            networkMonitor.unregister()
     }
 
     override fun onSupportNavigateUp(): Boolean =

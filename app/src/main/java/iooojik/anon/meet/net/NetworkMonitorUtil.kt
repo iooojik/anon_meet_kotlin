@@ -15,6 +15,10 @@ enum class ConnectionType {
 
 class NetworkMonitorUtil(context: Context) {
 
+    companion object{
+        var registered = false
+    }
+
     private var mContext = context
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
@@ -62,21 +66,25 @@ class NetworkMonitorUtil(context: Context) {
                 }
             }
             connectivityManager.registerDefaultNetworkCallback(networkCallback)
+            registered = true
         } else {
             // Use Intent Filter for Android 8 and below
             val intentFilter = IntentFilter()
             intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
             mContext.registerReceiver(networkChangeReceiver, intentFilter)
+            registered = true
         }
     }
 
     fun unregister() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        registered = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val connectivityManager =
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             connectivityManager.unregisterNetworkCallback(networkCallback)
+            false
         } else {
             mContext.unregisterReceiver(networkChangeReceiver)
+            false
         }
     }
 
