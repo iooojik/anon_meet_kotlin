@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import iooojik.anon.meet.activity.MainActivity
 
 interface ChatProcessLogic {

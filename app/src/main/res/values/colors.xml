@@ -5,6 +5,7 @@
     <color name="primaryDarkColor">#cbba83</color>
     <color name="secondaryColor">#00897b</color>
     <color name="secondaryLightColor">#4ebaaa</color>
+    <color name="colorAccent">#00897b</color>
     <color name="primaryTextColor">#222222</color>
     <color name="secondaryTextColor">#efefef</color>
 
@@ -14,9 +15,10 @@
     <color name="kBlue">#FF6488E4</color>
     <color name="primaryBlue">#ff2972ff</color>
     <!-- dark mode -->
-    <color name="dark_mode_primary">#ff1f253d</color>
+    <color name="dark_mode_primary">#13101e</color>
     <color name="dark_mode_primary_variant">#ff201b2c</color>
-    <color name="dark_mode_secondary">#ff242333</color>
+    <color name="dark_mode_secondary">#465388</color>
+    <color name="dark_mode_secondary_variant">#4B5DA3</color>
     <color name="meBubble">#ff6c5ece</color>
     <color name="dark_mode_text_primary">#FFFFFFFF</color>
     <color name="dark_mode_text_secondary">#FFFFFFFF</color>

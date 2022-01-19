@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import iooojik.anon.meet.AdUtil
+import iooojik.anon.meet.GoogleAdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.user.UserViewModelProvider
 import iooojik.anon.meet.databinding.FragmentSettingsBinding
@@ -60,7 +60,7 @@ class SettingsFragment : Fragment(), SettingsFragmentLogic {
         windowOpenedCounter++
         if (windowOpenedCounter % 5 == 0) {
             windowOpenedCounter = 0
-            AdUtil.loadInterstitialAd(requireActivity(), true)
+            GoogleAdUtil.showInterstitialAd(requireActivity())
         }
     }
 

@@ -7,10 +7,10 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <!-- Status bar color.
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item> -->
         <!-- Customize your theme here. -->
-        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="hintTextColor">@color/secondaryTextColor</item>
         <item name="background">?attr/colorPrimary</item>

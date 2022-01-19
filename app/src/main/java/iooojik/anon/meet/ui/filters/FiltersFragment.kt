@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.RangeSlider
 import com.google.gson.Gson
-import iooojik.anon.meet.AdUtil
+import iooojik.anon.meet.GoogleAdUtil
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.search.SearchStateModel
 import iooojik.anon.meet.data.models.search.StackModel
@@ -21,10 +20,11 @@ import iooojik.anon.meet.net.sockets.SocketConnections
 import iooojik.anon.meet.shared.prefs.SharedPreferencesManager
 import iooojik.anon.meet.shared.prefs.SharedPrefsKeys
 import iooojik.anon.meet.showSnackbar
+import iooojik.anon.meet.ui.CustomFragment
 import ua.naiksoftware.stomp.dto.StompMessage
 
 
-class FiltersFragment : Fragment(), FiltersFragmentLogic {
+class FiltersFragment : CustomFragment(), FiltersFragmentLogic {
     private lateinit var binding: FragmentFiltersBinding
     private val findingBottomSheet = SearchBottomSheet()
     private lateinit var userProvider: UserViewModelProvider
@@ -33,11 +33,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         var tapCounter = 0
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentFiltersBinding.inflate(inflater)
+    override fun setUI() {
         hideBackButton(findNavController(), requireActivity() as AppCompatActivity)
         checkAppFirstStartUp()
         userProvider = UserViewModelProvider(this)
@@ -48,6 +44,14 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
         })
         blockGoBack(requireActivity(), this)
         setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        binding = FragmentFiltersBinding.inflate(inflater)
         setListeners(binding)
         return binding.root
     }
@@ -80,7 +84,7 @@ class FiltersFragment : Fragment(), FiltersFragmentLogic {
             R.id.search_button -> {
                 tapCounter++
                 if (tapCounter % 3 == 0) {
-                    AdUtil.showInterstitialAd(requireActivity())
+                    GoogleAdUtil.showInterstitialAd(requireActivity())
                     tapCounter = 0
                 } else if (!UserViewModel.currentUser.value?.uuid.isNullOrBlank()) {
                     try {

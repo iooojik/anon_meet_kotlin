@@ -32,6 +32,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/standard_margin"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -43,9 +44,11 @@
                 android:hint="@string/email">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    tools:text="2222"
+                    android:inputType="textEmailAddress"
                     android:maxEms="16"
                     android:maxLines="1" />
 
@@ -59,6 +62,7 @@
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"

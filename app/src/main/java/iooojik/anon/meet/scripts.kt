@@ -25,10 +25,13 @@ fun md5(toEncode: String): String {
     return BigInteger(1, md.digest(toEncode.toByteArray())).toString(16).padStart(32, '0')
 }
 
-fun hideKeyBoard(activity: Activity, v: View) {
-    val imm: InputMethodManager =
-        activity.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(v.windowToken, 0)
+fun hideKeyBoard(activity: Activity? = null, v: View, context: Context? = null) {
+    val c = if (activity != null) activity.applicationContext else context
+    if (c != null) {
+        val imm: InputMethodManager =
+            c.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(v.windowToken, 0)
+    }
 }
 
 fun openURL(url: String, context: Context) {

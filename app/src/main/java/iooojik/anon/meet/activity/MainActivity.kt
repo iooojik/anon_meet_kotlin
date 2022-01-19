@@ -9,6 +9,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.security.ProviderInstaller
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import iooojik.anon.meet.AppDatabase
+import iooojik.anon.meet.Application
 import iooojik.anon.meet.R
 import iooojik.anon.meet.data.models.user.User
 import iooojik.anon.meet.databinding.ActivityMainBinding
@@ -20,48 +21,51 @@ import iooojik.anon.meet.net.rest.RetrofitHelper
 class MainActivity : AppCompatActivity(), ActivityMainLogic {
 
     lateinit var binding: ActivityMainBinding
-    private val fragmentsWithNoAd = listOf(R.id.chatProcessFragment, R.id.aboutAppFragment)
     private val networkMonitor = NetworkMonitorUtil(this)
-    private lateinit var noConnectionMessage: AlertDialog
+    private lateinit var noConnectionMessage : AlertDialog
+
+    init {
+        val context = Application.instance().applicationContext
+        RetrofitHelper.doRetrofit()
+        ProviderInstaller.installIfNeeded(context)
+        AppDatabase.initDatabase(context)
+        loadInfo()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        RetrofitHelper.doRetrofit()
-        setUpToolBar(binding, findNavController(R.id.nav_host_fragment), this)
-        setToolBarMenuClickListener(
-            binding,
-            resources,
-            theme,
-            findNavController(R.id.nav_host_fragment),
-            this
-        )
-        loadInfo()
-        findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
-            fragmentsWithNoAd.forEach {
-                if (destination.id == it)
-                    binding.appBarMain.include.adBanner.visibility = View.GONE
-            }
-        }
-        ProviderInstaller.installIfNeeded(applicationContext)
-        AppDatabase.initDatabase(this)
+        setUI()
+        setNetworkMonitorListener()
+    }
+
+    private fun setUI() {
+        getStartDestination(this)
+        setUpToolBar(navController = findNavController(R.id.nav_host_fragment), activity = this)
+        setToolBarMenuClickListener(navController = findNavController(R.id.nav_host_fragment), activity = this)
+        hideAdOnFragmentsListener()
         noConnectionMessage = MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.error))
             .setMessage(resources.getString(R.string.no_internet_connection))
             .setCancelable(false).create()
-        setNetworkMonitor()
-    }
-
-    private fun loadInfo() {
-        checkUserTokenAndAuth(
-            activity = this,
-            navController = findNavController(R.id.nav_host_fragment)
-        )
         binding.appBarMain.include.adBanner.loadAd(AdRequest.Builder().build())
     }
 
-    private fun setNetworkMonitor() {
+    private fun loadInfo() {
+        checkUserTokenAndAuth(activity = this)
+    }
+
+    private fun hideAdOnFragmentsListener(){
+        findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
+            listOf(R.id.chatProcessFragment, R.id.aboutAppFragment).forEach {
+                if (destination.id == it)
+                    binding.appBarMain.include.adBanner.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setNetworkMonitorListener() {
         networkMonitor.result = { isAvailable, type ->
             runOnUiThread {
                 when (isAvailable) {

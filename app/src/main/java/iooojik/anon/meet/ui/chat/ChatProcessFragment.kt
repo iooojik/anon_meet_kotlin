@@ -287,6 +287,9 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
                 holder.itemBinding.myMessageBubble.visibility = View.GONE
                 setBubbleWidth(holder.itemBinding.otherMessageBubble, msgModel.text.length)
             }
+            holder.itemBinding.root.setOnClickListener {
+                hideKeyBoard(context = context, v = it)
+            }
             holder.itemBinding.root.setOnLongClickListener {
                 val clipboardManager =
                     context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

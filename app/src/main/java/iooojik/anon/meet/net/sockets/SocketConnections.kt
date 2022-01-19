@@ -36,13 +36,12 @@ class SocketConnections {
                     .toString() + " " + prefs.getValue(SharedPrefsKeys.USER_TOKEN, "").toString()
                 stompClient = Stomp.over(
                     Stomp.ConnectionProvider.OKHTTP,
-                    StaticSockets.SOCKET_URL,
+                    StaticSockets.SOCKET_SSL_URL,
                     mapOf("Authorization" to token),
                     OkHttpClient.Builder().addInterceptor(
                         HttpLoggingInterceptor()
                     ).build()
-                )
-                    .withClientHeartbeat(StaticSockets.SERVER_HEARTBEAT)
+                ).withClientHeartbeat(StaticSockets.SERVER_HEARTBEAT)
                 val disposable = stompClient.lifecycle().subscribe({ lifecycleEvent ->
                     when (lifecycleEvent.type) {
                         LifecycleEvent.Type.OPENED -> log("Stomp connection opened")
@@ -54,19 +53,18 @@ class SocketConnections {
                     }
 
                 }, { throwable -> //log("Error on subscribe topic $throwable")
-                    throwable.printStackTrace()
+                    throw throwable
+                    //throwable.printStackTrace()
                 }, {
 
                 }
                 )
-
                 compositeDisposable.add(disposable)
                 stompClient.connect()
             }
         }
 
         fun connectToTopic(path: String, onSubscribeFun: (topicMessage: StompMessage) -> Unit) {
-
             val disposableTopic: Disposable = stompClient.topic(path.replace("//", "/"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,10 +74,11 @@ class SocketConnections {
                 .subscribe({ topicMessage ->
                     onSubscribeFun(topicMessage)
                 }, { throwable ->
-                    throwable.printStackTrace()
-
+                    throw throwable
+                    //throwable.printStackTrace()
+                    //log(throwable)
                 }, {
-
+                    log("error")
                 })
             compositeDisposable.add(disposableTopic)
             topics[path] = disposableTopic
