@@ -17,6 +17,10 @@ import iooojik.anon.meet.log
 import iooojik.anon.meet.net.ConnectionType
 import iooojik.anon.meet.net.NetworkMonitorUtil
 import iooojik.anon.meet.net.rest.RetrofitHelper
+import android.app.Activity
+
+
+
 
 class MainActivity : AppCompatActivity(), ActivityMainLogic {
 
@@ -49,7 +53,7 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
             .setTitle(resources.getString(R.string.error))
             .setMessage(resources.getString(R.string.no_internet_connection))
             .setCancelable(false).create()
-        binding.appBarMain.include.adBanner.loadAd(AdRequest.Builder().build())
+        //binding.appBarMain.include.adBanner.loadAd(AdRequest.Builder().build())
     }
 
     private fun loadInfo() {
@@ -82,14 +86,22 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
                             else -> {}
                         }
                         if (noConnectionMessage.isShowing)
-                            noConnectionMessage.hide()
+                            try {
+                                noConnectionMessage.hide()
+                            } catch (e : Exception){
+                                e.printStackTrace()
+                            }
                         if (User.mUuid.isBlank())
                             loadInfo()
                     }
                     false -> {
                         log("NETWORK_MONITOR_STATUS No Connection")
                         if (!noConnectionMessage.isShowing)
-                            noConnectionMessage.show()
+                            try {
+                                noConnectionMessage.show()
+                            } catch (e : Exception){
+                                e.printStackTrace()
+                            }
                     }
                 }
             }
@@ -98,13 +110,21 @@ class MainActivity : AppCompatActivity(), ActivityMainLogic {
 
     override fun onResume() {
         super.onResume()
-        networkMonitor.register()
+        try {
+            networkMonitor.register()
+        } catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 
     override fun onStop() {
         super.onStop()
         if (NetworkMonitorUtil.registered)
-            networkMonitor.unregister()
+            try {
+                networkMonitor.unregister()
+            } catch (e : Exception){
+                e.printStackTrace()
+            }
     }
 
     override fun onSupportNavigateUp(): Boolean =

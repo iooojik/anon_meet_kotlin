@@ -1,5 +1,6 @@
 package iooojik.anon.meet.ui.filters
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.CompoundButton
@@ -28,6 +29,7 @@ class FiltersFragment : CustomFragment(), FiltersFragmentLogic {
     private lateinit var binding: FragmentFiltersBinding
     private val findingBottomSheet = SearchBottomSheet()
     private lateinit var userProvider: UserViewModelProvider
+    private var mContext: Context? = null
 
     companion object {
         var tapCounter = 0
@@ -53,6 +55,7 @@ class FiltersFragment : CustomFragment(), FiltersFragmentLogic {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentFiltersBinding.inflate(inflater)
         setListeners(binding)
+        mContext = this.context
         return binding.root
     }
 
@@ -117,21 +120,23 @@ class FiltersFragment : CustomFragment(), FiltersFragmentLogic {
     }
 
     private fun onChatFound(topicMessage: StompMessage) {
-        val prefs = SharedPreferencesManager(requireContext())
-        prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
-        if (topicMessage.payload.trim()
-                .isNotBlank() && topicMessage.payload.contains("inSearchUsers")
-        ) {
-            val searchStateModel =
-                Gson().fromJson(topicMessage.payload, SearchStateModel::class.java)!!
-            SearchBottomSheet.searchModelProvider?.data?.value = searchStateModel
+        if (mContext != null) {
+            val prefs = SharedPreferencesManager(mContext!!)
+            prefs.initPreferences(SharedPrefsKeys.CHAT_PREFERENCES_NAME)
+            if (topicMessage.payload.trim()
+                    .isNotBlank() && topicMessage.payload.contains("inSearchUsers")
+            ) {
+                val searchStateModel =
+                    Gson().fromJson(topicMessage.payload, SearchStateModel::class.java)!!
+                SearchBottomSheet.searchModelProvider?.data?.value = searchStateModel
 
-        } else if (topicMessage.payload.trim().isNotBlank()) {
-            val foundChatMode = Gson().fromJson(topicMessage.payload, StackModel::class.java)
-            prefs.saveValue(SharedPrefsKeys.CHAT_ROOM_UUID, foundChatMode.uuid)
-            SocketConnections.resetSubscriptions()
-            findingBottomSheet.dismiss()
-            findNavController().navigate(R.id.action_filtersFragment_to_chatProcessFragment)
+            } else if (topicMessage.payload.trim().isNotBlank()) {
+                val foundChatMode = Gson().fromJson(topicMessage.payload, StackModel::class.java)
+                prefs.saveValue(SharedPrefsKeys.CHAT_ROOM_UUID, foundChatMode.uuid)
+                SocketConnections.resetSubscriptions()
+                findingBottomSheet.dismiss()
+                findNavController().navigate(R.id.action_filtersFragment_to_chatProcessFragment)
+            }
         }
     }
 

@@ -87,6 +87,8 @@ class ChatProcessFragment : Fragment(), ChatProcessLogic {
 
         MessagesViewModel.messages.observe(viewLifecycleOwner, userListUpdateObserver)
         inputMessageTextWatcher()
+        (activity as MainActivity).binding.appBarMain.include.adBanner.visibility = View.GONE
+
         return binding.root
     }
 
